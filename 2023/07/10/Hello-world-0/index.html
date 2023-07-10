@@ -193,7 +193,7 @@
   const ipt = document.querySelector('#search-input')
   const btn = document.querySelector('#search-btn')
   const layer = document.querySelector('#search-layer')
-  const posts = JSON.parse(`[{"title":"Hello , world !","cover":true,"path":"2023/07/10/Hello-world-0/"},{"title":"Hello World","path":"2023/07/10/hello-world/"}]`)
+  const posts = JSON.parse(`[{"title":"Hello World","path":"2023/07/10/hello-world/"},{"title":"Hello , world !","cover":true,"path":"2023/07/10/Hello-world-0/"}]`)
   ipt.addEventListener('keyup', e => {
     if (e.key === 'Enter') {
       handleSearch()
@@ -237,22 +237,22 @@
     <div class="main-left--info">
       <img src="/imgs/avatar.jpg"" class="main-left--avatar" />
       <div class="main-left--intro">
-        <p class="main-left--name">Cola.</p>
+        <p class="main-left--name">Tardfyou.</p>
         <div class="main-left--tags">
-          <span class="main-left--tag">中二</span>
-          <span class="main-left--tag">宅</span>
+          <span class="main-left--tag">软妹子</span>
+          <span class="main-left--tag">乐观菜鸟</span>
         </div>
       </div>
     </div>
   
     <div>
       <div class="main-left--motto">
-        <p>“花有重开日，人无再少年”</p>
-        <p>“一个简单普通的男孩”</p>
+        <p>“人来人往中渴望安静，被观赏是幸运或不幸”</p>
+        <p>“Stack overflow”</p>
       </div>
       <div class="main-left--github">
         <span class="line"></span>
-        <a target="_blank" rel="noopener" href="https://github.com/Aizener"><i class="logo iconfont icon-github-fill"></i></a>
+        <a target="_blank" rel="noopener" href="https://github.com/Tardfyou"><i class="logo iconfont icon-github-fill"></i></a>
         <span class="line"></span>
       </div>
       <div class="main-left--statics">
@@ -335,7 +335,7 @@
       </p>
       <p class="main-left--subtitle">
         <span>上线时间：</span>
-        <span>510天</span>
+        <span>1天</span>
       </p>
       <p class="main-left--subtitle">
         <span>当前版本：</span>
@@ -479,7 +479,7 @@ pre:active {
       <i class="iconfont icon-gonggao"></i>
     </div>
     <div class="main-right--content">
-      Hello~大噶好。唔系可乐爱宅着，欢迎你们来到我的博客小站，希望能在这里收获到有用的东西哦！ 
+      嗨！我白天是一名程序猿，晚上是一名有志向的二次元少年，喜欢专研computer science，一生想去一次威尼斯。有点艺术和才艺但不多。 
     </div>
   </div>
 
@@ -503,7 +503,7 @@ pre:active {
       <p>Power By <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/">Hexo</a>.</p>
       <p>Theme：<a target="_blank" rel="noopener" href="https://github.com/Aizener/hexo-theme-cola">Cola.</a></p>
     </div>
-    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index">蜀ICP备2022005384号-1</a> </p>
+    <p class="main-right--refer"><a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/#/Integrated/index">时光真疯狂，我一路执迷于匆忙</a> </p>
   </div>
 </div>
 
@@ -533,7 +533,7 @@ pre:active {
   }
 
   setOperateItem()
-  const musics = JSON.parse(`[{"name":"安河桥","artist":"宋冬野","url":"http://ting6.yymp3.net:82/new25/songdongye/11.mp3","cover":"https://img2.baidu.com/it/u=1260056724,1076343118&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"},{"name":"卡布达","artist":"暂无","url":"music/kabuda.mp3","cover":"https://img2.baidu.com/it/u=705831265,2862720033&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"}]`)
+  const musics = JSON.parse(`[{"name":"带我去找夜生活","artist":"告五人","url":"music/带我去找夜生活.mp3","cover":"https://pic.jitapai.com/wp-content/uploads/2021/09/2021091707372869.jpg"},{"name":"萤火虫之夜","artist":"纯音乐","url":"music/萤火虫之夜.mp3","cover":"https://image.baidu.com/search/down?tn=download&ipn=dwnl&word=download&ie=utf8&fr=result&url=https%3A%2F%2Fgimg2.baidu.com%2Fimage_search%2Fsrc%3Dhttp%253A%252F%252Fsafe-img.xhscdn.com%252Fbw%252F6c02cff6-eeaa-4e5d-b5f7-c800e9baf482%253FimageView2%252F2%252Fw%252F1080%252Fformat%252Fjpg%26refer%3Dhttp%253A%252F%252Fsafe-img.xhscdn.com%26app%3D2002%26size%3Df9999%2C10000%26q%3Da80%26n%3D0%26g%3D0n%26fmt%3Dauto%3Fsec%3D1691553919%26t%3D70a94512c31073c6f65f638607c84403&thumburl=https%3A%2F%2Fimg2.baidu.com%2Fit%2Fu%3D3908469684%2C2224694165%26fm%3D253%26fmt%3Dauto%26app%3D138%26f%3DJPEG%3Fw%3D888%26h%3D500"}]`)
   const ap = new APlayer({
     container: document.querySelector('#aplayer'),
     audio: musics,
