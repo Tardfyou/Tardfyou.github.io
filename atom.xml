@@ -6,7 +6,7 @@
   <link href="https://tardfyou.github.io/atom.xml" rel="self"/>
   
   <link href="https://tardfyou.github.io/"/>
-  <updated>2023-07-10T01:56:07.226Z</updated>
+  <updated>2023-07-11T06:31:28.947Z</updated>
   <id>https://tardfyou.github.io/</id>
   
   <author>
@@ -17,23 +17,27 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="https://tardfyou.github.io/2023/07/10/hello-world/"/>
-    <id>https://tardfyou.github.io/2023/07/10/hello-world/</id>
-    <published>2023-07-10T01:56:07.225Z</published>
-    <updated>2023-07-10T01:56:07.226Z</updated>
+    <title>启程</title>
+    <link href="https://tardfyou.github.io/2023/07/11/%E5%90%AF%E7%A8%8B/"/>
+    <id>https://tardfyou.github.io/2023/07/11/%E5%90%AF%E7%A8%8B/</id>
+    <published>2023-07-11T05:36:27.000Z</published>
+    <updated>2023-07-11T06:31:28.947Z</updated>
     
     
       
       
         
         
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt;</summary>
+    <summary type="html">&lt;h2 id=&quot;启程&quot;&gt;&lt;a href=&quot;#启程&quot; class=&quot;headerlink&quot;</summary>
         
       
     
     
     
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="my_fisrt_blog" scheme="https://tardfyou.github.io/tags/my-fisrt-blog/"/>
     
   </entry>
   
