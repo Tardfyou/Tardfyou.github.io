@@ -5777,3 +5777,19 @@ blockquote.pullquote.right {
   color: #f47466;
   font-weight: bold;
 }
+#veditor {
+  background-image: url("https://i01piccdn.sogoucdn.com/49dae3448c169332");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: right;
+  background-color: rgba(255,255,255,0);
+  resize: vertical;
+}
+#veditor:focus {
+  background-position-y: 200px;
+  -webkit-transition: all 0.2s ease-in-out 0s;
+  -moz-transition: all 0.2s ease-in-out 0s;
+  -o-transition: all 0.2s ease-in-out 0s;
+  -ms-transition: all 0.2s ease-in-out 0s;
+  transition: all 0.2s ease-in-out 0s;
+}
