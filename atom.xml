@@ -6,7 +6,7 @@
   <link href="https://tardfyou.github.io/atom.xml" rel="self"/>
   
   <link href="https://tardfyou.github.io/"/>
-  <updated>2023-07-10T05:58:45.980Z</updated>
+  <updated>2023-07-10T01:56:07.226Z</updated>
   <id>https://tardfyou.github.io/</id>
   
   <author>
@@ -15,25 +15,6 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
-  
-  <entry>
-    <title>My_first_blog</title>
-    <link href="https://tardfyou.github.io/2023/07/10/My-first-blog/"/>
-    <id>https://tardfyou.github.io/2023/07/10/My-first-blog/</id>
-    <published>2023-07-10T05:06:55.000Z</published>
-    <updated>2023-07-10T05:58:45.980Z</updated>
-    
-    
-    
-    
-    <category term="Way of life" scheme="https://tardfyou.github.io/categories/Way-of-life/"/>
-    
-    
-    <category term="hexo" scheme="https://tardfyou.github.io/tags/hexo/"/>
-    
-    <category term="github" scheme="https://tardfyou.github.io/tags/github/"/>
-    
-  </entry>
   
   <entry>
     <title>Hello World</title>
