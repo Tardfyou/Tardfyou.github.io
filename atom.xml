@@ -6,7 +6,7 @@
   <link href="https://tardfyou.github.io/atom.xml" rel="self"/>
   
   <link href="https://tardfyou.github.io/"/>
-  <updated>2023-07-14T13:15:47.017Z</updated>
+  <updated>2023-10-23T12:39:55.934Z</updated>
   <id>https://tardfyou.github.io/</id>
   
   <author>
@@ -15,6 +15,25 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第一次Linux Kernel的patch提交</title>
+    <link href="https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/"/>
+    <id>https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/</id>
+    <published>2023-10-23T11:20:22.000Z</published>
+    <updated>2023-10-23T12:39:55.934Z</updated>
+    
+    
+    <summary type="html">久练则承</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="learning" scheme="https://tardfyou.github.io/tags/learning/"/>
+    
+  </entry>
   
   <entry>
     <title>游泳感悟</title>
