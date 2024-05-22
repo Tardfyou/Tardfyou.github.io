@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>第一次Linux Kernel的patch提交 | Vincent</title><meta name="author" content="Tardfyou"><meta name="copyright" content="Tardfyou"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="久练则承">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一次Linux Kernel的patch提交">
+<meta property="og:url" content="https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/index.html">
+<meta property="og:site_name" content="Vincent">
+<meta property="og:description" content="久练则承">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg">
+<meta property="article:published_time" content="2023-10-23T11:20:22.000Z">
+<meta property="article:modified_time" content="2024-03-01T01:55:38.055Z">
+<meta property="article:author" content="Tardfyou">
+<meta property="article:tag" content="learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第一次Linux Kernel的patch提交',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-01 09:55:38'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/scrollbar.css"><link rel="stylesheet" href="/css/aplayerdiy.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Vincent" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/loading.gif" data-original="/img/header.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Vincent"><span class="site-name">Vincent</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第一次Linux Kernel的patch提交</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-10-23T11:20:22.000Z" title="Created 2023-10-23 19:20:22">2023-10-23</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-03-01T01:55:38.055Z" title="Updated 2024-03-01 09:55:38">2024-03-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/way-of-life/">way of life</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>5min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第一次Linux Kernel的patch提交"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="记录第一次对Linux-Kernel所做的贡献"><a href="#记录第一次对Linux-Kernel所做的贡献" class="headerlink" title="记录第一次对Linux Kernel所做的贡献"></a>记录第一次对Linux Kernel所做的贡献</h1><p>Linux 内核是 Linux 计算机操作系统的核心。内核是计算机硬件与其进程之间的核心接口，确保有可用的内存供 Linux 应用程序运行、优化处理器以及在应用程序间导航系统要求。Linux 内核通过“中断”在硬件和应用程序之间进行通信（摘录自bing）。</p>
+<p><del>通过提交自己的patch可以让代码进入到kernel中，永世保存</del>x<br>修改不良的代码风格和解决相关安全隐患√</p>
+<h2 id="什么是Linux-Kernel的patch？"><a href="#什么是Linux-Kernel的patch？" class="headerlink" title="什么是Linux Kernel的patch？"></a>什么是Linux Kernel的patch？</h2><p>Linux patch 命令 Linux patch 命令用于修补文件。 patch 指令让用户利用设置修补文件的方式，修改，更新原始文件。 倘若一次仅修改一个文件，可直接在指令列中下达指令依序执行。 如果配合修补文件的方式则能一次修补大批文件，这也是 Linux 系统核心的升级方法之一。</p>
+<p>Linux内核作为世界最大的开源软件之一，其开发和维护工作非常重要，需要无数开发者共同努力。<br>向Linux社区贡献代码的最基本方式是邮件向maintainer提交补丁，而不是通过github中的fork和pull request。</p>
+<p>提交patch和submit message需要遵循相关规范，具体可参考相关文档。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/pengdonglin137/p/3341159.html">PATCH 格式</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qianxiaox/p/14110940.html">commit message格式</a></p>
+</blockquote>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>本文基于Windows介绍自己提交的全过程以及遇到的问题，不过这边建议直接用linux或者GBN相关的系统，会少走一些弯路，看到后面就明白了。我因为懒得经常开虚拟机和没有liveUSB去装载外置系统所以还是用的windows。</p>
+<ul>
+<li>版本控制git （一般自带git diff）</li>
+<li>标准bash（一般自带git send-email没有则自己装）</li>
+<li>perl （在bash中一般自带，用perl -v查看）</li>
+</ul>
+<p>git send-email 为发送补丁的第三方客户端，diff比较文件差异，perl用于执行后面提到的patch检查脚本。</p>
+<p>此外，git send-email需要提前配置。<br>就我而言，需要使用校园邮箱，配置示例如下</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[sendemail]</span><br><span class="line">        smtpEncryption = ssl</span><br><span class="line">        smtpServer = mail.hust.edu.cn</span><br><span class="line">        smtpUser = &lt;你的邮箱地址&gt;</span><br><span class="line">        smtpServerPort = 465</span><br><span class="line">        smptAuth = LOGIN</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="进行修改"><a href="#进行修改" class="headerlink" title="进行修改"></a>进行修改</h2><p>首先，通过git clone拷贝官网仓库</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/</span><br></pre></td></tr></tbody></table></figure>
+<p>在进行下一步时，出现了报错<strong>Clone succeeded, but checkout failed. drivers/gpu/drm/nouveau/nvkm/subdev/i2c/aux.c</strong>去stackoverflow查找原因，给我的回答是因为windows的NTFS保护机制造成的报错，解决方案</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config core.protectNTFS false</span><br><span class="line">git reset --hard HEAD</span><br></pre></td></tr></tbody></table></figure>
+<p>解决后我们拿到了kernel源码，准备进行修改，修改前，学校的静态扫描工具已经提前告知我错误位置</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">ERROR: space required after that ',' (ctx:VxV)</span><br><span class="line">#119: FILE: ../linux-next/drivers/media/usb/dvb-usb/dibusb-mc-common.c:119:</span><br><span class="line">+       u8 a,b;</span><br><span class="line">            ^</span><br><span class="line">ERROR: space required after that ',' (ctx:VxV)</span><br><span class="line">#127: FILE: ../linux-next/drivers/media/usb/dvb-usb/dibusb-mc-common.c:127:</span><br><span class="line">+               dibusb_read_eeprom_byte(adap-&gt;dev,0x7E,&amp;a);</span><br><span class="line">                                                 ^</span><br></pre></td></tr></tbody></table></figure>
+<p>这边建议新建一个自己工作的分支，不要影响主分支。<br>后面就是找到文件，根据报错添加空格。</p>
+<h2 id="commit-and-make-patch"><a href="#commit-and-make-patch" class="headerlink" title="commit and make patch"></a>commit and make patch</h2><p>进行commit时，需要描述进行的改动，标题格式参考其他patch，作为新手，我直接使用了下面这条指令</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git commit -asev</span><br></pre></td></tr></tbody></table></figure>
+<p>参数s表示自动添加Signed-off-by： balabala，同时参数e会启动打开vim编辑器。commit message可参考如下示例。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">media: dvb: add space after comma to fix coding style</span><br><span class="line"></span><br><span class="line">checkpacth complains that:</span><br><span class="line"></span><br><span class="line">ERROR: space required after that ',' (ctx:VxV)</span><br><span class="line">#119: FILE: ../linux-next/drivers/media/usb/dvb-usb/dibusb-mc-common.c:119:</span><br><span class="line">+       u8 a,b;</span><br><span class="line">            ^</span><br><span class="line">ERROR: space required after that ',' (ctx:VxV)</span><br><span class="line">#127: FILE: ../linux-next/drivers/media/usb/dvb-usb/dibusb-mc-common.c:127:</span><br><span class="line">+               dibusb_read_eeprom_byte(adap-&gt;dev,0x7E,&amp;a);</span><br><span class="line">                                                 ^</span><br><span class="line">Fix it by adding required spaces after the commas to fix the coding</span><br><span class="line">style issue.</span><br><span class="line"></span><br><span class="line">Signed-off-by: Yalong Zou &lt;yalongz@hust.edu.cn&gt;</span><br></pre></td></tr></tbody></table></figure>
+<p>下面直接利用刚才的commit生成patch</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch -1</span><br></pre></td></tr></tbody></table></figure>
+<p>上述命令直接在当前目录生成了一份包含标准邮件格式的.patch文件，-1表示进包含一个commit。<br>Subject：至Signed-off-by行之间，需要对补丁详细描述，如何发现问题，错误原因，修改方式等。</p>
+<p>最后回到仓库根目录，运行检查脚本，确保没有其他错误。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在内核代码仓库目录下</span><br><span class="line">./scripts/checkpatch.pl &lt;生成的 patch 的文件名&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="发送邮件，等待回复"><a href="#发送邮件，等待回复" class="headerlink" title="发送邮件，等待回复"></a>发送邮件，等待回复</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git send-email --to=收件人邮箱 --cc=抄送的对象 &lt;生成的 patch 的文件名&gt;</span><br></pre></td></tr></tbody></table></figure>
+<p>发送过程中需要完成密码验证，只需更改邮箱设置独立密码即可用于验证。</p>
+<p>在这之前，最后现发给别人看看，不要因为低级错误浪费审核人的时间。比如将收件人邮箱替换为自己的QQ邮箱。<br>发送之后，只需耐心等待，内核维护者们都很勤奋，但不一定及时。加入长时间没人回复可以ping或者resend。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git format-patch -1 --subject-prefix='PING'</span><br><span class="line"># or</span><br><span class="line">git format-patch -1 --subject-prefix='RESEND'</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="修改v2，v3……"><a href="#修改v2，v3……" class="headerlink" title="修改v2，v3……"></a>修改v2，v3……</h2><p>当Re： PATCH到达邮箱大门时，也许只是一句普通的问候，也是是一长串的问题指出。<br>对于新的PATCH v2，应在最初的分支上改动，而不是在Commit基础上提交新的代码。</p>
+<p>按意见更改后，就可以发出PATCH v2了，然后记得在Reviewed by后加上Changelog信息，即进行的修改。如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v1 -&gt; v2: Directed deleted 'base' and its related code based on PATCH v1</span><br></pre></td></tr></tbody></table></figure>
+<p>新的邮件主题也要改</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git format-patch -1 --subject-prefix='PATCH v2'</span><br></pre></td></tr></tbody></table></figure>
+<p>之后一样的发送。</p>
+<h2 id="接受后"><a href="#接受后" class="headerlink" title="接受后"></a>接受后</h2><p>当补丁被maintainer接受后，先被合并到该模块的子树，然后和其他补丁一起交给Linux，最后进入内核主线。自此，完成了对kernel的一次贡献。</p>
+<h2 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h2><ul>
+<li>第二次commit时可以更改一些指令，我还没有具体尝试，等以后会补充更新。</li>
+<li>好懒，以后要勤奋更blog了QAQ，明天是1024程序节，提前祝世界各地的开发者们节日快乐，也祝自己别再掉发了（哭）。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io">Tardfyou</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/">https://tardfyou.github.io/2023/10/23/第一次Linux-Kernel的patch提交/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/learning/">learning</a></div><div class="post_share"><div class="social-share" data-image="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">520和安全一同度过</div></div></a></div><div class="next-post pull-right"><a href="/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/" title="游泳感悟"><img class="cover" src="/img/loading.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">游泳感悟</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-01</div><div class="title">一次博客移植</div></div></a></div><div><a href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-01</div><div class="title">520和安全一同度过</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Tardfyou</div><div class="author-info__description">就一个人挺好</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tardfyou"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Tardfyou" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://qm.qq.com/q/Lu0yjtReYS&amp;personal_qrcode_source=3" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">这里是vincent的博客，欢迎技术交流，本人不参政不论政，只愿在此分享平时的一些发现和生活趣事</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AE%B0%E5%BD%95%E7%AC%AC%E4%B8%80%E6%AC%A1%E5%AF%B9Linux-Kernel%E6%89%80%E5%81%9A%E7%9A%84%E8%B4%A1%E7%8C%AE"><span class="toc-number">1.</span> <span class="toc-text">记录第一次对Linux Kernel所做的贡献</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFLinux-Kernel%E7%9A%84patch%EF%BC%9F"><span class="toc-number">1.1.</span> <span class="toc-text">什么是Linux Kernel的patch？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%89%8D%E6%9C%9F%E5%87%86%E5%A4%87"><span class="toc-number">1.2.</span> <span class="toc-text">前期准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%9B%E8%A1%8C%E4%BF%AE%E6%94%B9"><span class="toc-number">1.3.</span> <span class="toc-text">进行修改</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#commit-and-make-patch"><span class="toc-number">1.4.</span> <span class="toc-text">commit and make patch</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%91%E9%80%81%E9%82%AE%E4%BB%B6%EF%BC%8C%E7%AD%89%E5%BE%85%E5%9B%9E%E5%A4%8D"><span class="toc-number">1.5.</span> <span class="toc-text">发送邮件，等待回复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9v2%EF%BC%8Cv3%E2%80%A6%E2%80%A6"><span class="toc-number">1.6.</span> <span class="toc-text">修改v2，v3……</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A5%E5%8F%97%E5%90%8E"><span class="toc-number">1.7.</span> <span class="toc-text">接受后</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B6%E4%BB%96%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.8.</span> <span class="toc-text">其他注意事项</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一次博客移植"/></a><div class="content"><a class="title" href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植">一次博客移植</a><time datetime="2024-03-01T01:43:35.000Z" title="Created 2024-03-01 09:43:35">2024-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="520和安全一同度过"/></a><div class="content"><a class="title" href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过">520和安全一同度过</a><time datetime="2024-03-01T01:43:35.000Z" title="Created 2024-03-01 09:43:35">2024-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一次Linux Kernel的patch提交"/></a><div class="content"><a class="title" href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交">第一次Linux Kernel的patch提交</a><time datetime="2023-10-23T11:20:22.000Z" title="Created 2023-10-23 19:20:22">2023-10-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/" title="游泳感悟"><img src="/img/loading.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游泳感悟"/></a><div class="content"><a class="title" href="/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/" title="游泳感悟">游泳感悟</a><time datetime="2023-07-14T08:04:28.000Z" title="Created 2023-07-14 16:04:28">2023-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/11/%E5%90%AF%E7%A8%8B/" title="启程"><img src="/img/loading.gif" data-original="https://i03piccdn.sogoucdn.com/37bf8ddad2be8d6b" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="启程"/></a><div class="content"><a class="title" href="/2023/07/11/%E5%90%AF%E7%A8%8B/" title="启程">启程</a><time datetime="2023-07-11T05:36:27.000Z" title="Created 2023-07-11 13:36:27">2023-07-11</time></div></div></div></div></div><div class="card-widget card-pixiv"><div class="card-content"><div class="item-headline"><i class="fa fa-image" aria-hidden="true"></i><span>Pixiv日榜Top50</span></div><iframe src="https://cloud.mokeyjay.com/pixiv" frameborder="0" style="width:99%;height:380px;margin:0;"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Tardfyou</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div id="running-time"></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'ttVuIDH2duSGOGYZrRZIe8xY-gzGzoHsz',
+      appKey: 'VNobzgz4kT6B2u27zgoQj5sF',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  const disqus_config = function () {
+    this.page.url = 'https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/'
+    this.page.identifier = '/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/'
+    this.page.title = '第一次Linux Kernel的patch提交'
+  }
+
+  const disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  btf.addModeChange('disqus', disqusReset)
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script src="/js/ip_content.js"></script><script>setInterval(()=>{let create_time=Math.round(new Date("2020-3-21-20:14:00").getTime()/1000);let timestamp=Math.round((new Date().getTime()+8*60*60*1000)/1000);let second=timestamp-create_time;let time=new Array(0,0,0,0,0);if(second>=365*24*3600){time[0]=parseInt(second/(365*24*3600));second%=365*24*3600}if(second>=24*3600){time[1]=parseInt(second/(24*3600));second%=24*3600}if(second>=3600){time[2]=parseInt(second/3600);second%=3600}if(second>=60){time[3]=parseInt(second/60);second%=60}if(second>0){time[4]=second}currentTimeHtml='小破站已经安全运行 '+time[0]+' 年 '+time[1]+' 天 '+time[2]+' 时 '+time[3]+' 分 '+time[4]+' 秒';var elementById=document.getElementById('running-time');if(elementById){elementById.innerHTML=currentTimeHtml}},1000);</script><script defer src="/live2d-widget/autoload.js"></script><script src="/js/title.js"></script><script src="/js/Mobile_folding.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/03/01/520晚上的攻防浪漫/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-03-01</span><a class="blog-slider__title" href="2024/03/01/520晚上的攻防浪漫/" alt="">520和安全一同度过</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" href="2024/03/01/520晚上的攻防浪漫/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/03/01/一次博客移植/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-03-01</span><a class="blog-slider__title" href="2024/03/01/一次博客移植/" alt="">一次博客移植</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" href="2024/03/01/一次博客移植/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-23</span><a class="blog-slider__title" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt="">第一次Linux Kernel的patch提交</a><div class="blog-slider__text">久练则承</div><a class="blog-slider__button" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/07/14/游泳感悟/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-14</span><a class="blog-slider__title" href="2023/07/14/游泳感悟/" alt="">游泳感悟</a><div class="blog-slider__text">温柔也是一种力量</div><a class="blog-slider__button" href="2023/07/14/游泳感悟/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/07/11/启程/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://i03piccdn.sogoucdn.com/37bf8ddad2be8d6b" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-11</span><a class="blog-slider__title" href="2023/07/11/启程/" alt="">启程</a><div class="blog-slider__text">上路！上路！</div><a class="blog-slider__button" href="2023/07/11/启程/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>

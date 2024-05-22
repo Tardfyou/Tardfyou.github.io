@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Vincent</title>
+  <icon>https://tardfyou.github.io/icon.png</icon>
+  <subtitle>What pains us trains us.</subtitle>
+  <link href="https://tardfyou.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://tardfyou.github.io/"/>
+  <updated>2024-03-01T07:37:03.570Z</updated>
+  <id>https://tardfyou.github.io/</id>
+  
+  <author>
+    <name>Tardfyou</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>一次博客移植</title>
+    <link href="https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/"/>
+    <id>https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/</id>
+    <published>2024-03-01T01:43:35.000Z</published>
+    <updated>2024-03-01T07:37:03.570Z</updated>
+    
+    
+    <summary type="html">继承与磨练</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="learning" scheme="https://tardfyou.github.io/tags/learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>520和安全一同度过</title>
+    <link href="https://tardfyou.github.io/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/"/>
+    <id>https://tardfyou.github.io/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/</id>
+    <published>2024-03-01T01:43:35.000Z</published>
+    <updated>2024-05-22T14:06:05.481Z</updated>
+    
+    
+    <summary type="html">继承与磨练</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="learning" scheme="https://tardfyou.github.io/tags/learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>第一次Linux Kernel的patch提交</title>
+    <link href="https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/"/>
+    <id>https://tardfyou.github.io/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/</id>
+    <published>2023-10-23T11:20:22.000Z</published>
+    <updated>2024-03-01T01:55:38.055Z</updated>
+    
+    
+    <summary type="html">久练则承</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="learning" scheme="https://tardfyou.github.io/tags/learning/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>游泳感悟</title>
+    <link href="https://tardfyou.github.io/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/"/>
+    <id>https://tardfyou.github.io/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/</id>
+    <published>2023-07-14T08:04:28.000Z</published>
+    <updated>2023-10-23T12:47:20.000Z</updated>
+    
+    
+    <summary type="html">温柔也是一种力量</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="enlightenment" scheme="https://tardfyou.github.io/tags/enlightenment/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>启程</title>
+    <link href="https://tardfyou.github.io/2023/07/11/%E5%90%AF%E7%A8%8B/"/>
+    <id>https://tardfyou.github.io/2023/07/11/%E5%90%AF%E7%A8%8B/</id>
+    <published>2023-07-11T05:36:27.000Z</published>
+    <updated>2023-10-23T12:49:30.000Z</updated>
+    
+    
+    <summary type="html">上路！上路！</summary>
+    
+    
+    
+    <category term="way of life" scheme="https://tardfyou.github.io/categories/way-of-life/"/>
+    
+    
+    <category term="my_fisrt_blog" scheme="https://tardfyou.github.io/tags/my-fisrt-blog/"/>
+    
+  </entry>
+  
+</feed>

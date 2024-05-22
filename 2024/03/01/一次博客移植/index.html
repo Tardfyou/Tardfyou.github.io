@@ -1,0 +1,308 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>一次博客移植 | Vincent</title><meta name="author" content="Tardfyou"><meta name="copyright" content="Tardfyou"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="继承与磨练">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次博客移植">
+<meta property="og:url" content="https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/index.html">
+<meta property="og:site_name" content="Vincent">
+<meta property="og:description" content="继承与磨练">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg">
+<meta property="article:published_time" content="2024-03-01T01:43:35.000Z">
+<meta property="article:modified_time" content="2024-03-01T07:37:03.570Z">
+<meta property="article:author" content="Tardfyou">
+<meta property="article:tag" content="learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg"><link rel="shortcut icon" href="/img/favicon.jpg"><link rel="canonical" href="https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '一次博客移植',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-03-01 15:37:03'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/scrollbar.css"><link rel="stylesheet" href="/css/aplayerdiy.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Vincent" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/loading.gif" data-original="/img/header.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg')"><nav id="nav"><span id="blog-info"><a href="/" title="Vincent"><span class="site-name">Vincent</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">一次博客移植</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-03-01T01:43:35.000Z" title="Created 2024-03-01 09:43:35">2024-03-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-03-01T07:37:03.570Z" title="Updated 2024-03-01 15:37:03">2024-03-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/way-of-life/">way of life</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">1.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>5min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="一次博客移植"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="一切的一切"><a href="#一切的一切" class="headerlink" title="一切的一切"></a>一切的一切</h1><p>关于我为什么长时间没更新了这个问题，在23年的12月和1月，我的电脑经历了开机蓝屏的事故，在尝试了几十种方法无果后，我放弃了。但是，却听从了售后的建议重置了系统，这直接导致我的blog仓库和github连接切断。我预先保存好了blog的一切文件，在搜寻了一些网上教程后，重新密钥连接了github仓库和我的本地机后台，索性直接写一篇来讲一下我是怎么做的，以及遇到的问题。o(＝•𖥦＜=)o★～<br><img src="/img/loading.gif" data-original="/images/image.png"></p>
+<h1 id="不断尝试"><a href="#不断尝试" class="headerlink" title="不断尝试"></a>不断尝试</h1><h2 id="寻找MyBlog"><a href="#寻找MyBlog" class="headerlink" title="寻找MyBlog"></a>寻找MyBlog</h2><p>最开始，我从OneDrive中保存到桌面，但是文件数量过多导致下载统计极度缓慢。我的解决方案是，利用everything文件资源管理器，快速查找我的四个盘中的文件然后快速复制到桌面上。</p>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><p>对于以前的环境，现在都需要重新配置，主要包括hexo的下载和nmp的安装（因为hexo需要npm才能装）</p>
+<h3 id="git准备"><a href="#git准备" class="headerlink" title="git准备"></a>git准备</h3><p>对于git的安装，可以直接去官网，或者利用腾讯管家的软件市场一步到位完成，只需注意环境变量的配置，然后能正常使用git bash即可。注意，一定要配置好环境变量，否则后面使用hexo会报错。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://git-scm.com/downloads">git 下载链接</a><br>配置上，主要包括两个信息。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config --global user.name "你的名字"（注意前边是“- -global”，有两个横线）</span><br><span class="line">git config --global user.email "你的邮箱"</span><br></pre></td></tr></tbody></table></figure>
+<p>然后，去配置ssh：<br>首先，检查是否存在.ssh文件夹，如果有，选cd，没有则mkdir</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh/</span><br><span class="line">// mkdir ~/.ssh （无.ssh）</span><br><span class="line">ssh-kengen -t rsa -C "youremail"</span><br></pre></td></tr></tbody></table></figure>
+<p>不需要设置密码的话，一路回车就行。<br>然后在.ssh/ 目录下将id_rsa.pub的内容复制到github，具体位置在设置-SSH keys中，新建一个密钥把内容粘贴进去。</p>
+<h3 id="npm安装"><a href="#npm安装" class="headerlink" title="npm安装"></a>npm安装</h3><p>网上有npm（实际上是nodejs）的详细教程，对于不学vue的小白来说，不需要全部照做，我在此只把hexo移植需要的步骤写下来，具体流程放在下面，需要者自取。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/panpan_Yang/article/details/130284726">npm安装-详细教程</a></p>
+</blockquote>
+<h4 id="npm是什么"><a href="#npm是什么" class="headerlink" title="npm是什么"></a>npm是什么</h4><p>npm 是 NodeJS 下的包管理器，vue-cli脚手架模板就是基于 node 下的 npm 来完成安装的。<br>相关介绍~<br>webpack: 它的主要用途是通过CommonJS的语法把所有浏览器端需要发布的静态资源做相应的准备，比如资源的合并和打包。<br>vue-cli：官方提供的一个脚手架，用于快速生成一个 vue 的项目模板。</p>
+<h4 id="安装，配置环境变量"><a href="#安装，配置环境变量" class="headerlink" title="安装，配置环境变量"></a>安装，配置环境变量</h4><p>windows下的NodeJS安装是比较方便的（v0.6.0版本之后，支持windows native），只需要直接访问官网，这里我们可以选择 Windows 安装包 (.msi)-64位 进行安装。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://nodejs.cn/download/">npm下载官网</a><br>安装过程一路next即可，会默认添加到环境变量里。<br>对于安装的确认，win+R输入cmd打开命令行，输入node -v检查，有版本号即可。<br>可以选择给你的npm换成淘宝源，下载东西更快。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm config set registry https://registry.npm.taobao.org/</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="安装hexo"><a href="#安装hexo" class="headerlink" title="安装hexo"></a>安装hexo</h3><p>首先打开git bash，执行下面的语句安装hexo。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-cli -g</span><br></pre></td></tr></tbody></table></figure>
+<p>用hexo -v检查是否安装成功。<br>当时，我遇到了一个报错：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br><span class="line">npm WARN tarball tarball data for gifsicle@https://registry.npmmirror.com/gifsicle/-/gifsicle-5.3.0.tgz (sha512-9ewIQQCAnSmkU2DhuWafd1DdsgzAkKqIWnY+023xBLSiK9Az2TDUozWQW+SyRQgFMclbe6RQldUk/49TRO3Aqw==) seems to be corrupted. Trying again.</span><br><span class="line">npm ERR! code EINTEGRITY</span><br><span class="line">npm ERR! sha512-9ewIQQCAnSmkU2DhuWafd1DdsgzAkKqIWnY+023xBLSiK9Az2TDUozWQW+SyRQgFMclbe6RQldUk/49TRO3Aqw== integrity checksum failed when using sha512: wanted sha512-9ewIQQCAnSmkU2DhuWafd1DdsgzAkKqIWnY+023xBLSiK9Az2TDUozWQW+SyRQgFMclbe6RQldUk/49TRO3Aqw== but got sha512-FJTpgdj1Ow/FITB7SVza5HlzXa+/lqEY0tHQazAJbuAdvyJtkH4wIdsR2K414oaTwRXHFLLF+tYbipj+OpYg+Q==. (578258 bytes)</span><br><span class="line"></span><br><span class="line">npm ERR! A complete log of this run can be found in: C:\Users\31435\AppData\Local\npm-cache\_logs\2024-02-29T14_53_32_988Z-debug-0.log</span><br></pre></td></tr></tbody></table></figure>
+<p>这个错误表明在下载 gifsicle 软件包时出现了问题，导致校验和不匹配。这可能是由于网络问题或者 npm 源的问题引起的。<br>我找到了一些网上的解决方案：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">// 1.清除npm缓存并重试</span><br><span class="line">npm cache clean --force</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line">// 2.更改 npm 源：尝试切换到其他 npm 源，例如官方源。</span><br><span class="line">npm config set registry https://registry.npmjs.org/</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line"></span><br><span class="line">// 3.手动安装 gifsicle：直接下载 gifsicle 的压缩包并手动安装。</span><br><span class="line">npm install gifsicle@latest --save</span><br><span class="line"></span><br><span class="line">//如果以上方法都无法解决问题，建议等待一段时间后再尝试安装，可能是 npm 源的临时问题。</span><br></pre></td></tr></tbody></table></figure>
+<p>𖦹ࡇ𖦹.ᐟ.ᐟ<br>当然，这些对我都没起作用，我直接用了以前下载的nodejs，在系统盘彻底重置后，缺少了很多依赖dll，在重装并设置新源后解决了。</p>
+<h2 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h2><h3 id="本地try"><a href="#本地try" class="headerlink" title="本地try"></a>本地try</h3><p>把你之前的库文件夹复制到你的工作文件夹下，然后进入库根目录，右键打开git bash<br>直接尝试</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo c &amp;&amp; hexo d &amp;&amp; hexo s</span><br></pre></td></tr></tbody></table></figure>
+<p>然后去浏览器local：指定端口查看。</p>
+<h3 id="除此之外"><a href="#除此之外" class="headerlink" title="除此之外"></a>除此之外</h3><p>以上方案是针对你的库没有丢失任何文件的，如果你选择保留node_modules以外的文件，就要在最终步前，根目录下执行</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-deployer-git --save</span><br></pre></td></tr></tbody></table></figure>
+<p>当然，你也可以选择只保留</p>
+<ul>
+<li>_config.yml</li>
+<li>package.json</li>
+<li>scaffolds/</li>
+<li>source/</li>
+<li>themes/<br>然后，由一句话变成四句<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install</span><br><span class="line">npm install hexo-deployer-git --save</span><br><span class="line">npm install hexo-generator-feed --save</span><br><span class="line">npm install hexo-generator-sitemap --save</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>好了，到这一步，我们的blog就彻底完成移植工作了，如果执行hexo d的时候报权限禁止了，就检查下你的密钥复制对了没，git配置对了没。<br>新学期了，祝大家能够活出自我，一直向前，朝着理想中的自己不断前进。♡&gt;𖥦&lt;)!!</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io">Tardfyou</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/">https://tardfyou.github.io/2024/03/01/一次博客移植/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/learning/">learning</a></div><div class="post_share"><div class="social-share" data-image="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">520和安全一同度过</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-23</div><div class="title">第一次Linux Kernel的patch提交</div></div></a></div><div><a href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img class="cover" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-01</div><div class="title">520和安全一同度过</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/loading.gif" data-original="/img/header.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Tardfyou</div><div class="author-info__description">就一个人挺好</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">1</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tardfyou"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Tardfyou" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://qm.qq.com/q/Lu0yjtReYS&amp;personal_qrcode_source=3" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">这里是vincent的博客，欢迎技术交流，本人不参政不论政，只愿在此分享平时的一些发现和生活趣事</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E5%88%87%E7%9A%84%E4%B8%80%E5%88%87"><span class="toc-number">1.</span> <span class="toc-text">一切的一切</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E6%96%AD%E5%B0%9D%E8%AF%95"><span class="toc-number">2.</span> <span class="toc-text">不断尝试</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AF%BB%E6%89%BEMyBlog"><span class="toc-number">2.1.</span> <span class="toc-text">寻找MyBlog</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">2.2.</span> <span class="toc-text">环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#git%E5%87%86%E5%A4%87"><span class="toc-number">2.2.1.</span> <span class="toc-text">git准备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#npm%E5%AE%89%E8%A3%85"><span class="toc-number">2.2.2.</span> <span class="toc-text">npm安装</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#npm%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">npm是什么</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%EF%BC%8C%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">安装，配置环境变量</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85hexo"><span class="toc-number">2.2.3.</span> <span class="toc-text">安装hexo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E7%BB%88"><span class="toc-number">2.3.</span> <span class="toc-text">最终</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0try"><span class="toc-number">2.3.1.</span> <span class="toc-text">本地try</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%A4%E6%AD%A4%E4%B9%8B%E5%A4%96"><span class="toc-number">2.3.2.</span> <span class="toc-text">除此之外</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="一次博客移植"/></a><div class="content"><a class="title" href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植">一次博客移植</a><time datetime="2024-03-01T01:43:35.000Z" title="Created 2024-03-01 09:43:35">2024-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="520和安全一同度过"/></a><div class="content"><a class="title" href="/2024/03/01/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过">520和安全一同度过</a><time datetime="2024-03-01T01:43:35.000Z" title="Created 2024-03-01 09:43:35">2024-03-01</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交"><img src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="第一次Linux Kernel的patch提交"/></a><div class="content"><a class="title" href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交">第一次Linux Kernel的patch提交</a><time datetime="2023-10-23T11:20:22.000Z" title="Created 2023-10-23 19:20:22">2023-10-23</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/" title="游泳感悟"><img src="/img/loading.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="游泳感悟"/></a><div class="content"><a class="title" href="/2023/07/14/%E6%B8%B8%E6%B3%B3%E6%84%9F%E6%82%9F/" title="游泳感悟">游泳感悟</a><time datetime="2023-07-14T08:04:28.000Z" title="Created 2023-07-14 16:04:28">2023-07-14</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2023/07/11/%E5%90%AF%E7%A8%8B/" title="启程"><img src="/img/loading.gif" data-original="https://i03piccdn.sogoucdn.com/37bf8ddad2be8d6b" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="启程"/></a><div class="content"><a class="title" href="/2023/07/11/%E5%90%AF%E7%A8%8B/" title="启程">启程</a><time datetime="2023-07-11T05:36:27.000Z" title="Created 2023-07-11 13:36:27">2023-07-11</time></div></div></div></div></div><div class="card-widget card-pixiv"><div class="card-content"><div class="item-headline"><i class="fa fa-image" aria-hidden="true"></i><span>Pixiv日榜Top50</span></div><iframe src="https://cloud.mokeyjay.com/pixiv" frameborder="0" style="width:99%;height:380px;margin:0;"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By Tardfyou</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div id="running-time"></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'ttVuIDH2duSGOGYZrRZIe8xY-gzGzoHsz',
+      appKey: 'VNobzgz4kT6B2u27zgoQj5sF',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  const disqus_config = function () {
+    this.page.url = 'https://tardfyou.github.io/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/'
+    this.page.identifier = '/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/'
+    this.page.title = '一次博客移植'
+  }
+
+  const disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  btf.addModeChange('disqus', disqusReset)
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script src="/js/ip_content.js"></script><script>setInterval(()=>{let create_time=Math.round(new Date("2020-3-21-20:14:00").getTime()/1000);let timestamp=Math.round((new Date().getTime()+8*60*60*1000)/1000);let second=timestamp-create_time;let time=new Array(0,0,0,0,0);if(second>=365*24*3600){time[0]=parseInt(second/(365*24*3600));second%=365*24*3600}if(second>=24*3600){time[1]=parseInt(second/(24*3600));second%=24*3600}if(second>=3600){time[2]=parseInt(second/3600);second%=3600}if(second>=60){time[3]=parseInt(second/60);second%=60}if(second>0){time[4]=second}currentTimeHtml='小破站已经安全运行 '+time[0]+' 年 '+time[1]+' 天 '+time[2]+' 时 '+time[3]+' 分 '+time[4]+' 秒';var elementById=document.getElementById('running-time');if(elementById){elementById.innerHTML=currentTimeHtml}},1000);</script><script defer src="/live2d-widget/autoload.js"></script><script src="/js/title.js"></script><script src="/js/Mobile_folding.js"></script><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/03/01/520晚上的攻防浪漫/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-03-01</span><a class="blog-slider__title" href="2024/03/01/520晚上的攻防浪漫/" alt="">520和安全一同度过</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" href="2024/03/01/520晚上的攻防浪漫/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2024/03/01/一次博客移植/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-03-01</span><a class="blog-slider__title" href="2024/03/01/一次博客移植/" alt="">一次博客移植</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" href="2024/03/01/一次博客移植/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-23</span><a class="blog-slider__title" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt="">第一次Linux Kernel的patch提交</a><div class="blog-slider__text">久练则承</div><a class="blog-slider__button" href="2023/10/23/第一次Linux-Kernel的patch提交/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/07/14/游泳感悟/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-14</span><a class="blog-slider__title" href="2023/07/14/游泳感悟/" alt="">游泳感悟</a><div class="blog-slider__text">温柔也是一种力量</div><a class="blog-slider__button" href="2023/07/14/游泳感悟/" alt="">详情   </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" href="2023/07/11/启程/" alt=""><img width="48" height="48" src="/img/loading.gif" data-original="https://i03piccdn.sogoucdn.com/37bf8ddad2be8d6b" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-11</span><a class="blog-slider__title" href="2023/07/11/启程/" alt="">启程</a><div class="blog-slider__text">上路！上路！</div><a class="blog-slider__button" href="2023/07/11/启程/" alt="">详情   </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
