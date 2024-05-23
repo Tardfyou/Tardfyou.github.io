@@ -1,0 +1,11 @@
+<div class="aplayer no-destroy" data-id="1441758494" data-server="netease" data-type="song" data-mini="true" data-autoplay="true" data-lrcType="-1"> </div>
+
+{% meting "7422861869" "netease" "playlist" "autoplay" "mutex:false" "listmaxheight:400px" "preload:none" "theme:#ad7a86"%}
+
+常用的选项如下所示:
+server可选：netease（网易云音乐），tencent（QQ音乐），kugou（酷狗音乐），xiami（虾米音乐），baidu（百度音乐）。建议网易云
+type可选：song（歌曲），playlist（歌单），album（专辑），search（搜索关键字），artist（歌手）。添加单曲选的歌曲，歌单选择playlist，可以自行尝试。
+id获取示例: 打开网易云音乐，选择喜欢的歌单，在网页版打开，获取歌单list，填入即可。使用的时候将上边的ID号换为自己喜欢的歌单即可。注意歌单中不能包括VIP音乐，否则无法解析。建议单独建立一个歌单，以后有喜欢的音乐添加进去，网页也会自动同步添加。
+lrcType设置为 -1默认显示歌词，放在fixed模式下比较合适。
+
+基本上修改的参数以上就已经足够了。ID获取的方式如下。完整的参数表见附录，也可以去参考链接中查看。
