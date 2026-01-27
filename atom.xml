@@ -6,7 +6,7 @@
   <link href="https://tardfyou.github.io/atom.xml" rel="self"/>
   
   <link href="https://tardfyou.github.io/"/>
-  <updated>2024-12-11T09:04:37.061Z</updated>
+  <updated>2026-01-27T09:25:04.794Z</updated>
   <id>https://tardfyou.github.io/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>埋藏于工位之诗</title>
+    <link href="https://tardfyou.github.io/2026/01/27/%E5%9F%8B%E8%97%8F%E4%BA%8E%E5%B7%A5%E4%BD%8D%E4%B9%8B%E8%AF%97/"/>
+    <id>https://tardfyou.github.io/2026/01/27/%E5%9F%8B%E8%97%8F%E4%BA%8E%E5%B7%A5%E4%BD%8D%E4%B9%8B%E8%AF%97/</id>
+    <published>2026-01-27T09:10:04.000Z</published>
+    <updated>2026-01-27T09:25:04.794Z</updated>
+    
+    
+    <summary type="html">成长&amp;思考</summary>
+    
+    
+    
+    
+    <category term="story" scheme="https://tardfyou.github.io/tags/story/"/>
+    
+  </entry>
   
   <entry>
     <title>云安全：CICD靶场实操</title>
