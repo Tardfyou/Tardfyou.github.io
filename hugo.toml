@@ -1,9 +1,9 @@
 baseURL = "https://tardfyou.github.io/"
-languageCode = "zh-CN"
-defaultContentLanguage = "zh-cn"
-hasCJKLanguage = true
 title = "Vincent"
 theme = "LoveIt"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+hasCJKLanguage = true
 enableRobotsTXT = true
 enableGitInfo = false
 enableEmoji = true
@@ -27,29 +27,73 @@ copyright = "Tardfyou"
     [markup.goldmark.renderer]
       unsafe = true
 
-[menu]
-  [[menu.main]]
+[languages]
+  [languages.en]
     weight = 1
-    identifier = "posts"
-    name = "文章"
-    url = "/posts/"
-  [[menu.main]]
+    languageCode = "en-US"
+    languageName = "English"
+    title = "Vincent"
+
+    [[languages.en.menu.main]]
+      weight = 1
+      identifier = "posts"
+      name = "Posts"
+      url = "/posts/"
+
+    [[languages.en.menu.main]]
+      weight = 2
+      identifier = "tags"
+      name = "Tags"
+      url = "/tags/"
+
+    [[languages.en.menu.main]]
+      weight = 3
+      identifier = "categories"
+      name = "Categories"
+      url = "/categories/"
+
+    [[languages.en.menu.main]]
+      weight = 4
+      identifier = "messageboard"
+      name = "Message Board"
+      url = "/messageboard/"
+
+  [languages.zh-cn]
     weight = 2
-    identifier = "tags"
-    name = "标签"
-    url = "/tags/"
-  [[menu.main]]
-    weight = 3
-    identifier = "categories"
-    name = "分类"
-    url = "/categories/"
+    languageCode = "zh-CN"
+    languageName = "简体中文"
+    title = "Vincent"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 1
+      identifier = "posts"
+      name = "文章"
+      url = "/posts/"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 2
+      identifier = "tags"
+      name = "标签"
+      url = "/tags/"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 3
+      identifier = "categories"
+      name = "分类"
+      url = "/categories/"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 4
+      identifier = "messageboard"
+      name = "留言板"
+      url = "/messageboard/"
 
 [params]
   defaultTheme = "auto"
   dateFormat = "2006-01-02"
   title = "Vincent"
   description = "Vincent's Blog"
-  images = ["/img/train1.png"]
+  images = ["/img/cat.jpg"]
 
   [params.author]
     name = "Tardfyou"
@@ -59,6 +103,7 @@ copyright = "Tardfyou"
   [params.header]
     desktopMode = "fixed"
     mobileMode = "auto"
+
     [params.header.title]
       name = "Vincent"
       typeit = false
@@ -97,6 +142,7 @@ copyright = "Tardfyou"
     snippetLength = 30
     highlightTag = "em"
     absoluteURL = false
+
     [params.search.fuse]
       isCaseSensitive = false
       minMatchCharLength = 2
@@ -108,14 +154,16 @@ copyright = "Tardfyou"
 
   [params.home]
     rss = 10
+
     [params.home.profile]
       enable = true
-      avatarURL = "/img/train1.png"
+      avatarURL = "/img/cat.jpg"
       title = "Vincent"
-      subtitle = "What pains us trains us."
+      subtitle = "that transcends dimensions of time and ving… "
       typeit = false
       social = true
       disclaimer = ""
+
     [params.home.posts]
       enable = true
       paginate = 6
@@ -131,16 +179,29 @@ copyright = "Tardfyou"
     lightgallery = true
     linkToMarkdown = false
     rssFullText = false
+
     [params.page.toc]
       enable = true
       keepStatic = false
       auto = true
+
     [params.page.code]
       copy = true
       maxShownLines = 100
+
     [params.page.math]
       enable = false
+
     [params.page.share]
       enable = false
+
     [params.page.comment]
-      enable = false
+      enable = true
+
+      [params.page.comment.utterances]
+        enable = true
+        repo = "Tardfyou/Tardfyou.github.io"
+        issueTerm = "pathname"
+        label = "comment"
+        lightTheme = "github-light"
+        darkTheme = "github-dark"

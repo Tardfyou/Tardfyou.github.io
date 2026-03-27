@@ -1,3 +1,43 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Noto+Serif+SC:wght@400;500;700&display=swap');
 
 $global-font-family: Noto Serif SC, serif;
+
+.home .home-profile .home-subtitle {
+  font-family: "Great Vibes", "Times New Roman", cursive;
+  font-size: 1.85rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+
+.page.single .content pre {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.page.single .content pre > code {
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+.page.single .content .code-block .highlight {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.page.single .content .code-block .highlight pre,
+.page.single .content .code-block .highlight code {
+  width: max-content;
+  min-width: 100%;
+  max-width: none;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}

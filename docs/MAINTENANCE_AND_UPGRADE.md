@@ -130,3 +130,27 @@ hugo --minify --cleanDestinationDir
 - `layouts/tags/`
 
 它们不是冗余文件，是当前站点正常输出文章页、栏目页和标签页的兼容层。
+
+## 8. 评论系统维护
+
+当前评论系统使用的是 `utterances`。
+
+配置入口在：
+
+- `hugo.toml`
+
+对应字段：
+
+- `[params.page.comment]`
+- `[params.page.comment.utterances]`
+
+如果后续你要换成 `giscus`，需要额外提供：
+
+- repoId
+- category
+- categoryId
+
+而 `utterances` 只需要：
+
+- GitHub 仓库名
+- 给仓库安装 utterances App
