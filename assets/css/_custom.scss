@@ -92,6 +92,188 @@
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
+.page.single .single-title {
+  margin: 2.35rem 0 0.7rem;
+  font-size: clamp(2rem, 3.1vw, 2.55rem);
+  line-height: 1.22;
+  letter-spacing: 0.015em;
+}
+
+.page.single .post-meta {
+  margin-bottom: 1.45rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(45, 150, 189, 0.12);
+}
+
+[theme=dark] .page.single .post-meta {
+  border-bottom-color: rgba(85, 189, 226, 0.14);
+}
+
+.page.single .content {
+  font-size: 1.02rem;
+  line-height: 1.9;
+  color: #2b241d;
+  text-rendering: optimizeLegibility;
+}
+
+[theme=dark] .page.single .content {
+  color: #c7c2bc;
+}
+
+.page.single .content > p {
+  margin: 0.9rem 0 1.15rem;
+}
+
+.page.single .content > p:first-of-type {
+  font-size: 1.08rem;
+  color: #1f1913;
+}
+
+[theme=dark] .page.single .content > p:first-of-type {
+  color: #ebe5de;
+}
+
+.page.single .content > h2,
+.page.single .content > h3,
+.page.single .content > h4 {
+  margin-top: 2rem;
+  margin-bottom: 0.9rem;
+  letter-spacing: 0.01em;
+}
+
+.page.single .content > h2 {
+  font-size: 1.58rem;
+}
+
+.page.single .content > h3 {
+  font-size: 1.28rem;
+}
+
+.page.single .content a {
+  text-decoration: underline;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+  text-decoration-color: rgba(45, 150, 189, 0.28);
+}
+
+[theme=dark] .page.single .content a {
+  text-decoration-color: rgba(189, 235, 252, 0.26);
+}
+
+.page.single .content a:hover {
+  text-decoration-color: rgba(239, 57, 130, 0.42);
+}
+
+[theme=dark] .page.single .content a:hover {
+  text-decoration-color: rgba(189, 235, 252, 0.48);
+}
+
+.page.single .content code:not(pre code) {
+  padding: 0.16rem 0.48rem;
+  border: 1px solid rgba(45, 150, 189, 0.1);
+  border-radius: 0.55rem;
+  background: rgba(45, 150, 189, 0.06);
+}
+
+[theme=dark] .page.single .content code:not(pre code) {
+  border-color: rgba(85, 189, 226, 0.12);
+  background: rgba(85, 189, 226, 0.08);
+}
+
+.page.single .content ul,
+.page.single .content ol {
+  margin: 0.85rem 0 1.2rem;
+}
+
+.page.single .content li + li {
+  margin-top: 0.35rem;
+}
+
+.page.single .content blockquote {
+  margin: 1.3rem 0;
+  padding: 0.8rem 1rem;
+  border-left-width: 0.22rem;
+  border-radius: 0 0.95rem 0.95rem 0;
+  background: linear-gradient(135deg, rgba(107, 214, 253, 0.12), rgba(107, 214, 253, 0.04));
+}
+
+.page.single .content hr {
+  width: 4.5rem;
+  margin: 2rem auto;
+  border-top: 1px solid rgba(45, 150, 189, 0.28);
+}
+
+.page.single .content figure {
+  margin: 1.5rem auto 1.8rem;
+}
+
+.page.single .content figure img {
+  border-radius: 1rem;
+  box-shadow: 0 1rem 2.6rem rgba(18, 35, 48, 0.14);
+}
+
+.page.single .content figure .image-caption {
+  min-width: unset;
+  max-width: 100%;
+  padding: 0.55rem 0.4rem 0;
+  font-size: 0.92rem;
+  color: #6f7a82;
+  letter-spacing: 0.01em;
+}
+
+[theme=dark] .page.single .content blockquote {
+  background: linear-gradient(135deg, rgba(89, 197, 236, 0.18), rgba(89, 197, 236, 0.05));
+}
+
+[theme=dark] .page.single .content hr {
+  border-top-color: rgba(85, 189, 226, 0.24);
+}
+
+[theme=dark] .page.single .content figure img {
+  box-shadow: 0 1rem 2.8rem rgba(0, 0, 0, 0.28);
+}
+
+[theme=dark] .page.single .content figure .image-caption {
+  color: #8e99a1;
+}
+
+.page.single .content table {
+  display: block;
+  overflow-x: auto;
+  border: 1px solid rgba(45, 150, 189, 0.12);
+  border-radius: 1rem;
+  box-shadow: 0 1rem 2.5rem rgba(18, 35, 48, 0.08);
+}
+
+.page.single .content table thead th {
+  font-weight: 700;
+}
+
+.page.single .content table th,
+.page.single .content table td {
+  min-width: 7rem;
+}
+
+[theme=dark] .page.single .content table {
+  border-color: rgba(85, 189, 226, 0.12);
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.2);
+}
+
+.page.single .content .footnotes {
+  margin-top: 2.1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(45, 150, 189, 0.12);
+  font-size: 0.94rem;
+}
+
+.page.single .content .footnotes ol {
+  padding-left: 1.35rem;
+}
+
+[theme=dark] .page.single .content .footnotes {
+  border-top-color: rgba(85, 189, 226, 0.14);
+}
+
 .language-switcher {
   position: relative;
 }
@@ -143,6 +325,12 @@
 #header-desktop .language-switcher {
   display: inline-flex;
   margin-left: 0.15rem;
+}
+
+#header-desktop .header-wrapper,
+#header-desktop .header-wrapper .menu,
+#header-desktop .header-wrapper .menu .menu-inner {
+  overflow: visible;
 }
 
 #header-desktop .language-switcher .language-trigger {
