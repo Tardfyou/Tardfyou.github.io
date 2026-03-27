@@ -89,7 +89,7 @@ copyright = "Tardfyou"
       url = "/messageboard/"
 
 [params]
-  defaultTheme = "auto"
+  defaultTheme = "dark"
   dateFormat = "2006-01-02"
   title = "Vincent"
   description = "Vincent's Blog"
@@ -129,7 +129,7 @@ copyright = "Tardfyou"
   [params.app]
     title = "Vincent"
     noFavicon = true
-    themeColor = "#ffffff"
+    themeColor = "#111418"
     iconColor = "#5bbad5"
     tileColor = "#da532c"
 

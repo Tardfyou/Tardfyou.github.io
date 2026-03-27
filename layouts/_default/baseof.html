@@ -18,7 +18,9 @@
         <script>
           const query = window.matchMedia('(prefers-color-scheme: dark)');
           function applyTheme() {
-            let theme = window.localStorage?.getItem('theme') || '{{ $theme }}';
+            const defaultTheme = '{{ $theme }}';
+            const storedTheme = window.localStorage?.getItem('theme');
+            let theme = defaultTheme === 'auto' && storedTheme ? storedTheme : defaultTheme;
             let isDark = theme === 'dark' || (theme === 'auto' && query.matches);
             document.body.setAttribute('theme', isDark? 'dark' : 'light');
             document.body.setAttribute('cfg-theme', theme);

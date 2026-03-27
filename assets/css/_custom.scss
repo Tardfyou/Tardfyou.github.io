@@ -42,14 +42,22 @@
 }
 
 @media only screen and (max-width: 960px) {
+  .wrapper main .container {
+    padding: 0 0.85rem;
+  }
+
   .page {
-    width: calc(100% - 2rem);
+    width: 100%;
   }
 }
 
 @media only screen and (max-width: 680px) {
+  .wrapper main .container {
+    padding: 0 0.65rem;
+  }
+
   .page {
-    width: calc(100% - 1rem);
+    width: 100%;
   }
 }
 
@@ -468,4 +476,199 @@
 [theme=dark] #header-mobile .language-switcher .language-option.active {
   background: linear-gradient(135deg, rgba(85, 189, 226, 0.18), rgba(189, 235, 252, 0.08));
   color: #f2fbff;
+}
+
+:root {
+  --ios-motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --ios-motion-fast: 220ms;
+  --ios-motion-medium: 460ms;
+  --ios-motion-slow: 720ms;
+}
+
+@keyframes ios-soft-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0) scale(0.988);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+header {
+  backdrop-filter: saturate(160%) blur(18px);
+  transition:
+    box-shadow var(--ios-motion-medium) var(--ios-motion-ease),
+    background-color var(--ios-motion-medium) var(--ios-motion-ease),
+    backdrop-filter var(--ios-motion-medium) var(--ios-motion-ease);
+}
+
+#header-desktop .header-title,
+#header-mobile .header-title,
+#header-desktop .menu .menu-item:not(.delimiter),
+#header-mobile .menu .menu-item,
+#header-desktop .theme-switch,
+#header-mobile .theme-switch,
+#header-desktop .language-switcher .language-trigger,
+#header-mobile .language-switcher .language-trigger {
+  transition:
+    transform var(--ios-motion-fast) var(--ios-motion-ease),
+    opacity var(--ios-motion-fast) var(--ios-motion-ease),
+    box-shadow var(--ios-motion-medium) var(--ios-motion-ease),
+    background-color var(--ios-motion-medium) var(--ios-motion-ease);
+}
+
+#header-desktop .header-title:hover,
+#header-mobile .header-title:hover,
+#header-desktop .menu .menu-item:not(.delimiter):hover,
+#header-mobile .menu .menu-item:hover,
+#header-desktop .theme-switch:hover,
+#header-mobile .theme-switch:hover,
+#header-desktop .language-switcher .language-trigger:hover,
+#header-mobile .language-switcher .language-trigger:hover {
+  transform: translate3d(0, -1.5px, 0);
+}
+
+.home .home-profile .home-avatar img,
+.home .home-profile .home-title,
+.home .home-profile .home-subtitle,
+.home .home-profile .links,
+.home .home-profile .home-disclaimer {
+  opacity: 0;
+  animation: ios-soft-rise var(--ios-motion-slow) var(--ios-motion-ease) both;
+}
+
+.home .home-profile .home-avatar img {
+  animation-delay: 40ms;
+}
+
+.home .home-profile .home-title {
+  animation-delay: 100ms;
+}
+
+.home .home-profile .home-subtitle {
+  animation-delay: 160ms;
+}
+
+.home .home-profile .links {
+  animation-delay: 220ms;
+}
+
+.home .home-profile .home-disclaimer {
+  animation-delay: 280ms;
+}
+
+.home[data-home=posts] .summary,
+.categories-card .card-item,
+.archive-item {
+  opacity: 0;
+  animation: ios-soft-rise var(--ios-motion-medium) var(--ios-motion-ease) both;
+}
+
+.home[data-home=posts] .summary:nth-of-type(1),
+.categories-card .card-item:nth-of-type(1),
+.archive-item:nth-of-type(1) {
+  animation-delay: 40ms;
+}
+
+.home[data-home=posts] .summary:nth-of-type(2),
+.categories-card .card-item:nth-of-type(2),
+.archive-item:nth-of-type(2) {
+  animation-delay: 90ms;
+}
+
+.home[data-home=posts] .summary:nth-of-type(3),
+.categories-card .card-item:nth-of-type(3),
+.archive-item:nth-of-type(3) {
+  animation-delay: 140ms;
+}
+
+.home[data-home=posts] .summary:nth-of-type(4),
+.categories-card .card-item:nth-of-type(4),
+.archive-item:nth-of-type(4) {
+  animation-delay: 190ms;
+}
+
+.home[data-home=posts] .summary .featured-image-preview,
+.page.single .content figure img,
+.page.single .content pre,
+.page.single .content table {
+  transition:
+    transform var(--ios-motion-medium) var(--ios-motion-ease),
+    box-shadow var(--ios-motion-medium) var(--ios-motion-ease),
+    border-color var(--ios-motion-medium) var(--ios-motion-ease);
+}
+
+.page.single .content figure img:hover,
+.page.single .content pre:hover,
+.page.single .content table:hover {
+  transform: translate3d(0, -2px, 0);
+}
+
+.page.single .content figure img:hover {
+  box-shadow: 0 1.35rem 3rem rgba(18, 35, 48, 0.18);
+}
+
+[theme=dark] .page.single .content figure img:hover {
+  box-shadow: 0 1.45rem 3.2rem rgba(0, 0, 0, 0.34);
+}
+
+.page.single .content pre:hover,
+.page.single .content table:hover {
+  box-shadow: 0 1rem 2.6rem rgba(18, 35, 48, 0.12);
+}
+
+[theme=dark] .page.single .content pre:hover,
+[theme=dark] .page.single .content table:hover {
+  box-shadow: 0 1.1rem 2.8rem rgba(0, 0, 0, 0.24);
+}
+
+.page.single .content .code-block .copy,
+.page.single .content a,
+.page.single .content code:not(pre code) {
+  transition:
+    color var(--ios-motion-fast) var(--ios-motion-ease),
+    background-color var(--ios-motion-fast) var(--ios-motion-ease),
+    border-color var(--ios-motion-fast) var(--ios-motion-ease),
+    transform var(--ios-motion-fast) var(--ios-motion-ease);
+}
+
+.page.single .content a:hover,
+.page.single .content .code-block .copy:hover {
+  transform: translate3d(0, -1px, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home .home-profile .home-avatar img,
+  .home .home-profile .home-title,
+  .home .home-profile .home-subtitle,
+  .home .home-profile .links,
+  .home .home-profile .home-disclaimer,
+  .home[data-home=posts] .summary,
+  .categories-card .card-item,
+  .archive-item {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  header,
+  #header-desktop .header-title,
+  #header-mobile .header-title,
+  #header-desktop .menu .menu-item:not(.delimiter),
+  #header-mobile .menu .menu-item,
+  #header-desktop .theme-switch,
+  #header-mobile .theme-switch,
+  #header-desktop .language-switcher .language-trigger,
+  #header-mobile .language-switcher .language-trigger,
+  .home[data-home=posts] .summary .featured-image-preview,
+  .page.single .content figure img,
+  .page.single .content pre,
+  .page.single .content table,
+  .page.single .content .code-block .copy,
+  .page.single .content a,
+  .page.single .content code:not(pre code) {
+    transition-duration: 1ms !important;
+  }
 }
