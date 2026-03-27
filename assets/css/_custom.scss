@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
+
+.home .home-profile .home-subtitle,
+.home[data-home=posts] .home-profile .home-subtitle {
+  display: inline-block;
+  padding: 0.1rem 0.9rem 0.35rem;
+  font-family: "Mea Culpa", "Great Vibes", cursive !important;
+  font-size: clamp(2.6rem, 5vw, 4.1rem);
+  font-weight: 400 !important;
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-shadow: 0.03em 0.03em 0 rgba(0, 0, 0, 0.08);
+  transform: rotate(-3deg);
+}
+
+[theme=dark] .home .home-profile .home-subtitle,
+[theme=dark] .home[data-home=posts] .home-profile .home-subtitle {
+  text-shadow: 0.03em 0.03em 0 rgba(255, 255, 255, 0.08);
+}
