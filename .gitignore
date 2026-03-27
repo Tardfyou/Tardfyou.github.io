@@ -1,0 +1,8 @@
+public/
+resources/
+.hugo_build.lock
+页面参数.txt
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store
