@@ -640,6 +640,30 @@ header {
   transform: translate3d(0, -1px, 0);
 }
 
+.page.single .content .mermaid {
+  margin: 1.4rem auto 1.8rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.page.single .content .mermaid svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.page.single .content .katex-display {
+  margin: 1.2rem 0;
+  padding: 0.1rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.page.single .content .katex-display > .katex {
+  min-width: max-content;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home .home-profile .home-avatar img,
   .home .home-profile .home-title,

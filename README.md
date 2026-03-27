@@ -1,76 +1,81 @@
 # Tardfyou.github.io
 
-这是博客的 Hugo 源码仓库，当前技术栈为 `Hugo + LoveIt`。
+A small digital salon for essays, notes, experiments, and quiet obsessions.
 
-仓库已经完成两件事：
+This repository contains the Hugo source for the site, currently composed with `Hugo + LoveIt`, then tailored in-repo rather than treated as an untouched theme install.
 
-1. 旧 Hexo 静态导出目录已清理，不再混放在根目录。
-2. 旧博客文章已经迁入 Hugo 内容目录，可直接继续维护和发布。
+## The Maison
 
-## 目录结构
+Two structural changes have already been completed:
+
+1. The old Hexo-style static export has been cleared out of the repository root.
+2. Existing posts have been moved into Hugo's content structure, so publishing and maintenance now happen from one coherent source.
+
+## Floor Plan
 
 ```text
 .
-├─ .github/              GitHub Pages 工作流
-├─ assets/               项目级样式覆写
-├─ content/              文章内容
-├─ layouts/              项目级模板覆写
-├─ scripts/              迁移脚本
-├─ static/               静态资源
-├─ themes/LoveIt/        vendored 主题
-├─ .gitignore
-├─ hugo.toml
-└─ README.md
+|-- .github/              GitHub Pages workflow
+|-- assets/               Project-level style overrides
+|-- content/              Posts and pages
+|-- docs/                 Maintenance and migration notes
+|-- layouts/              Project-level template overrides
+|-- scripts/              Migration and rebuild utilities
+|-- static/               Static assets
+|-- themes/LoveIt/        Vendored theme source
+|-- hugo.toml
+`-- README.md
 ```
 
-## 常用命令
+## The Atelier
 
-本地预览：
+Local preview:
 
 ```powershell
 hugo server
 ```
 
-带草稿预览：
+Preview including drafts:
 
 ```powershell
 hugo server --buildDrafts
 ```
 
-正式构建：
+Production build:
 
 ```powershell
 hugo --minify --cleanDestinationDir
 ```
 
-## 发布方式
+## Service
 
-仓库使用 GitHub Actions 发布，工作流文件在 `.github/workflows/hugo.yml`。
+Deployment is handled through GitHub Actions. The workflow lives at `.github/workflows/hugo.yml`.
 
-GitHub Pages 设置里应选择：
+For GitHub Pages, use:
 
 - `Build and deployment`
 - `Source: GitHub Actions`
 
-不要再使用“从分支根目录直接发布”的旧方式。
+The old branch-root publishing approach should stay retired.
 
-## 维护文档
+## House Documents
 
-- 环境设置见 `docs/ENVIRONMENT_SETUP.md`
-- 日常维护与升级见 `docs/MAINTENANCE_AND_UPGRADE.md`
-- 迁移与再导入见 `docs/CONTENT_MIGRATION.md`
+- Environment setup: `docs/ENVIRONMENT_SETUP.md`
+- Maintenance and upgrades: `docs/MAINTENANCE_AND_UPGRADE.md`
+- Content migration and rebuild notes: `docs/CONTENT_MIGRATION.md`
 
-## 当前定制点
+## If The Theme Is Touched
 
-后续升级主题时，优先保留这些项目级文件：
+During a LoveIt upgrade, preserve the project-owned layers first:
 
 - `hugo.toml`
 - `assets/css/_override.scss`
+- `assets/css/_custom.scss`
 - `layouts/`
 - `content/`
 - `scripts/`
 - `.github/workflows/hugo.yml`
 
-## 备注
+## One Final Note
 
-`themes/LoveIt/` 是 vendored 主题目录，不依赖 git submodule。
+`themes/LoveIt/` is vendored into the repository. It is not managed as a git submodule.

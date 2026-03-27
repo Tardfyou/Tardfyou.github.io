@@ -134,8 +134,8 @@ copyright = "Tardfyou"
     tileColor = "#da532c"
 
   [params.search]
-    enable = false
-    type = "fuse"
+    enable = true
+    type = "pagefind"
     contentLength = 4000
     placeholder = ""
     maxResultLength = 10
@@ -143,14 +143,8 @@ copyright = "Tardfyou"
     highlightTag = "em"
     absoluteURL = false
 
-    [params.search.fuse]
-      isCaseSensitive = false
-      minMatchCharLength = 2
-      findAllMatches = false
-      location = 0
-      threshold = 0.3
-      distance = 100
-      ignoreLocation = false
+    [params.search.pagefind]
+      basePath = "/_pagefind/"
 
   [params.home]
     rss = 10
@@ -190,7 +184,9 @@ copyright = "Tardfyou"
       maxShownLines = 100
 
     [params.page.math]
-      enable = false
+      enable = true
+      copyTex = true
+      mhchem = true
 
     [params.page.share]
       enable = false
