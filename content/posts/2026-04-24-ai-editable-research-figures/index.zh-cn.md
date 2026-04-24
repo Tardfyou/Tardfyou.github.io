@@ -23,32 +23,80 @@ lightgallery: true
 ---
 # How to Make High-End, Editable Research Figures with AI
 
-> As of April 24, 2026, the best workflow for research figures is not "ask an image model for the final figure and hope." The durable workflow is "plan in structure, render with AI, and ship in an editable format."
+> As of April 24, 2026, the strongest workflow is not "ask an image model for the final figure." It is "plan in structure, render with AI, and ship an editable artifact."
 
 ![](/images/ai-editable-research-figures/hero-workflow.svg)
 
 ## Short answer
 
-If the goal is a figure that looks polished **and** can still be edited in PowerPoint, HTML, or SVG, the strongest workflow today is:
+If the target is a figure that looks polished **and** remains editable in PowerPoint, HTML, or Word, the best default is:
 
-1. Use a frontier multimodal reasoning model as a **prompt compiler**.
-2. Feed it paper screenshots, your sketch, sample figures, and field-specific constraints.
-3. Ask it to emit **three outputs in parallel**:
+1. Use a multimodal reasoning model as a **prompt compiler**.
+2. Feed it your sketch, paper excerpt, and reference figures.
+3. Ask it for parallel outputs:
    - an image-model prompt,
-   - an editable structural spec (`SVG`, `HTML/CSS`, `Mermaid`, `Typst`, or `draw.io`),
-   - a caption and label set.
-4. Use an image model such as **OpenAI `gpt-image-2`** or **Google Gemini image generation**. In Google's product line, many users will encounter this through the **Nano Banana / Nano Banana Pro** naming.
-5. Rebuild the final deliverable as vector or code, then do the last 10% of manual cleanup in PowerPoint, Figma, draw.io, or raw SVG.
+   - a structured editable output such as `SVG`, `HTML/CSS`, `Mermaid`, `Typst`, or `draw.io`,
+   - caption and label text.
+4. Use an image model such as **OpenAI `gpt-image-2`** or **Google Gemini image generation**. In Google's product line, many users will meet this through the **Nano Banana / Nano Banana Pro** naming.
+5. Finish the final deliverable in vector, code, or Office-native form.
 
-That is the core conclusion. Image models are now very good at **taste, composition, style transfer, and reference-conditioned rendering**. They are still less reliable at **strictly editable academic diagrams** with dense labels, exact topology, and reproducible layout.
+That is the practical conclusion. Image models are now very good at **composition, taste, style transfer, and reference-conditioned rendering**. They are still less reliable at **dense labels, exact topology, and repeatable scientific layout**.
 
-## The best stack in 2026
+## The strongest stack in 2026
 
-### 1. A prompt compiler, not just a prompt
+There are really two figure classes:
 
-Your initial idea is correct, but it should be upgraded.
+| Figure class | Best default | Why |
+| --- | --- | --- |
+| Architecture diagrams, pipelines, threat models, method overviews, dashboards | `SVG` / `HTML` / `Mermaid` / `Typst` first | These need trustworthy text and easy revision |
+| Teaser art, stylized concepts, scene-like panels, background visuals | Image model first | These benefit from texture, depth, and visual atmosphere |
 
-Do not manually write one big free-form prompt for the image model. Instead, use a reasoning model to convert your source material into a **structured figure brief**:
+For most CS, security, AI, and software engineering papers, the strongest overall workflow is:
+
+1. Gather source material: sketch, paper paragraph, and one or two reference figures.
+2. Ask a reasoning model to extract entities, relations, labels, reading order, and field constraints.
+3. Ask for both:
+   - a polished image-model prompt,
+   - an editable structural artifact.
+4. Use the image model for the beauty pass, but keep the structured artifact as the editable truth.
+
+This hybrid approach is stronger than pure image generation because current official docs still make the limits clear:
+
+- OpenAI's image guide notes that `gpt-image-2` does **not** support transparent backgrounds and is weaker on some precise layout-sensitive compositions.
+- Google's Gemini image-generation guide likewise notes that transparent background is not supported, and for accurate text it recommends generating the text first and then using it in the image workflow.
+
+So the durable rule is simple:
+
+- let the image model control the **look**,
+- let the structured output control the **meaning**.
+
+![](/images/ai-editable-research-figures/decision-matrix.svg)
+
+## What should be structure-first
+
+Good candidates for direct `SVG`, `HTML`, `Mermaid`, `draw.io`, or `Typst` generation:
+
+- system pipelines,
+- method overview figures,
+- attack graphs and trust-boundary diagrams,
+- training and inference workflows,
+- software architecture figures,
+- result-summary dashboards,
+- algorithm overview posters.
+
+Bad candidates for image-only delivery:
+
+- figures with many small labels,
+- exact network topologies,
+- equations that must stay editable,
+- pseudocode reviewers may inspect line by line,
+- tables that will be revised after advisor feedback.
+
+If the text matters, ship a structured artifact.
+
+## Prompting pattern that actually works
+
+The best prompt is not one long paragraph. It is a compact figure brief with explicit outputs.
 
 ```yaml
 field: network security
@@ -61,108 +109,23 @@ deliverables:
   - caption
 style:
   background: white
-  visual_tone: clean, premium, restrained, publication-ready
+  visual_tone: clean, premium, restrained
   palette: slate, deep blue, teal, soft orange
-  typography: short labels, no paragraph text
-  line_style: thin but confident, rounded corners
+  typography: short labels only
 layout:
   reading_order: left-to-right
   panels: 4
-  avoid: fake code, tiny text, photorealism, clutter
-domain_constraints:
-  - correct attack/defense arrows
-  - label trust boundaries
-  - use actual pipeline semantics
+avoid:
+  - fake code
+  - tiny unreadable text
+  - photorealism
+  - clutter
 editable_target:
   primary: svg
   secondary: html
 ```
 
-This is the biggest practical shift. Once the planning model emits a strict brief, you can branch into multiple outputs without reinventing the figure each time.
-
-### 2. Split the workflow into two tracks
-
-There are really two different figure classes:
-
-| Figure class | Best default | Why |
-| --- | --- | --- |
-| System architecture, pipelines, ablation summaries, threat models, method overviews | `SVG` / `HTML` / `Mermaid` / `Typst` first | These need editability, alignment, and trustworthy text |
-| Concept art, teaser figures, biological-style illustrations, scene-like panels, background visuals | Image model first | These benefit from texture, lighting, material cues, and reference blending |
-
-The mistake is to treat both classes as if they were the same.
-
-### 3. Use image models for polish, not for the final semantic authority
-
-OpenAI's current image guide explicitly notes that `gpt-image-2` does **not** support transparent backgrounds and still struggles with some **precise, layout-sensitive compositions**. Google's Gemini image-generation guide likewise notes that transparent background is not supported, and for accurate text inside images it recommends generating the text first and then using it in the image workflow.
-
-That is exactly why the strongest academic workflow is hybrid:
-
-- Let the image model decide the **look**.
-- Let the structured output decide the **meaning**.
-
-## The practical recommendation
-
-### Best overall workflow
-
-For computer science, cybersecurity, AI, and software engineering papers, the best default is:
-
-1. Collect source material.
-   - a rough hand sketch,
-   - one or two reference figures,
-   - one paragraph from the paper,
-   - a target venue style if you have one.
-2. Ask a multimodal reasoning model to extract:
-   - entities,
-   - relations,
-   - reading order,
-   - caption,
-   - field-specific visual constraints.
-3. Ask the same model to output:
-   - one premium image prompt for `gpt-image-2` or Gemini,
-   - one exact `SVG`,
-   - one exact `HTML/CSS` version,
-   - optional `Mermaid` or `draw.io` text if the figure is mostly a diagram.
-4. Generate the beauty pass with the image model.
-5. Reconstruct or refine the final asset in vector.
-6. Import SVG into PowerPoint and, when needed, convert it to shapes for last-mile editing.
-
-This gives you both:
-
-- the "high-end" visual feeling,
-- and the "I can still fix this 30 minutes before submission" safety margin.
-
-![](/images/ai-editable-research-figures/decision-matrix.svg)
-
-## What to generate directly, and what not to
-
-### Good candidates for direct SVG or HTML generation
-
-- system pipelines,
-- method overview figures,
-- training/inference workflows,
-- security attack graphs,
-- trust-boundary diagrams,
-- software architecture figures,
-- benchmark comparison panels,
-- result-summary dashboards,
-- algorithm overview posters.
-
-### Bad candidates for direct image-only generation
-
-- any figure with lots of tiny labels,
-- exact network topologies,
-- tables that must survive copy-editing,
-- pseudocode that reviewers may inspect line by line,
-- equations that must remain mathematically editable,
-- figures that will be revised repeatedly after advisor feedback.
-
-If the text matters, ship a structured artifact.
-
-## A field-aware prompt pattern that works
-
-The best prompts are not poetic. They are operational.
-
-### Prompt compiler template
+A useful prompt-compiler instruction looks like this:
 
 ```text
 You are preparing a publication-quality research figure.
@@ -175,94 +138,174 @@ Inputs:
 - target medium: paper + slides + web
 
 Tasks:
-1. Extract the core semantic objects and their relations.
+1. Extract semantic objects and relations.
 2. Decide whether this figure should be image-first or structure-first.
 3. Produce:
    a. one concise image-model prompt,
    b. one fully editable SVG,
    c. one HTML/CSS figure with the same structure,
-   d. one 1-2 sentence caption,
+   d. one short caption,
    e. one label inventory.
 
 Global style constraints:
 - white background
-- premium, modern, restrained academic aesthetic
-- no photorealistic humans
+- premium academic aesthetic
+- short real terminology
+- consistent spacing and alignment
 - no fake source code
 - no dense paragraphs inside the figure
-- consistent spacing and alignment
-- short labels with real terminology
-- suitable for CS / security / AI / software engineering papers
 ```
 
-### Image-model prompt template
+That single compiler prompt is usually enough. You do not need three different long prompts unless the figure is unusually complex.
+
+## Word-ready equations, pseudocode, and tables
+
+This is the part that most "AI figure" workflows underspecify. If your lab edits heavily in Word, the model must output **synchronized document assets**, not one screenshot.
+
+![](/images/ai-editable-research-figures/document-assets.svg)
+
+### 1. Equations for Word
+
+Microsoft Word officially supports **linear equations** in both `UnicodeMath` and `LaTeX`. In practice, the clean workflow is:
+
+1. Press `Alt +=` in Word.
+2. Paste the `LaTeX` or `UnicodeMath` form.
+3. Convert or display it in Professional format if needed.
+
+So do not ask the model for "an equation image." Ask for this package:
+
+- `word_latex`
+- `word_unicodemath`
+- `svg_equation`
+- `variable_legend`
+
+Prompt template:
 
 ```text
-Create a publication-ready research figure on a white background.
-Style: premium academic infographic, clean vector-like geometry, soft depth, restrained palette, subtle shadows, precise alignment.
-Field: network security.
-Content: four-stage attack-defense pipeline with threat boundary, telemetry collection, detection model, response orchestration.
-Composition: left-to-right, generous whitespace, clean labels, no clutter.
-Typography: short legible labels only.
-Avoid: watermark, fake code, tiny unreadable text, photorealism, stock-illustration look, 3D gimmicks.
-Deliver a single centered figure with clear panel separation and reviewer-friendly clarity.
+Generate a Word-usable equation package.
+
+Return exactly:
+1. Word LaTeX input
+2. Word UnicodeMath input
+3. SVG version for PowerPoint
+4. Variable legend
+
+Constraints:
+- The LaTeX must be directly pasteable into Microsoft Word after pressing Alt+=
+- The UnicodeMath must also be directly pasteable into Word
+- Do not use unsupported macros or custom packages
+- Prefer Word-friendly constructs such as \frac, \sqrt, \sum, matrices, subscripts, and superscripts
+- Keep the expression on one logical line
 ```
 
-### SVG-generation prompt template
+This is much safer than generating a bitmap, and it gives you one representation for Word, one for slides, and one for explanation.
+
+### 2. Pseudocode for Word
+
+Pseudocode is where many AI outputs become annoying. The model often writes acceptable algorithm text but traps it in a non-editable image or in LaTeX only.
+
+The reliable approach is to ask for four parallel outputs:
+
+- `plain_text_pseudocode`
+- `word_table_tsv`
+- `latex_algorithm2e`
+- `svg_panel`
+
+The most useful of these is `word_table_tsv`, because Word can convert delimited text into a table. That makes revision much easier than editing a screenshot.
+
+Prompt template:
 
 ```text
-Generate a single self-contained SVG figure.
-Requirements:
-- white background
-- all text editable
-- no embedded raster images
-- use grouped layers and readable ids
-- preserve consistent stroke width
-- layout optimized for PowerPoint import
-- 1600x900 viewBox
-- use short labels only
-- include title area, four panels, arrows, and caption slot
+Generate publication-ready pseudocode in four synchronized formats:
+1. Plain-text pseudocode
+2. Word-ready TSV table
+3. LaTeX algorithm2e version
+4. SVG panel version
+
+Constraints:
+- The Word-ready version must use TAB as the column separator
+- Each row must map cleanly into a Word table
+- Use short lines and stable indentation
+- Keep step numbers explicit
+- Avoid exotic symbols that render poorly in Word
 ```
 
-## Style presets by field
+A practical Word layout is a two-column table:
 
-The same model behaves much better when the field style is explicit.
+- `Line`
+- `Action`
 
-### Computer security
+Example:
 
-- white background,
-- deep blue, charcoal, muted red accents,
-- trust boundaries as dashed containers,
-- explicit attacker, defender, asset, log, and control-plane roles,
-- emphasize flow and boundary crossings,
-- avoid playful icons.
+```text
+Line	Action
+1	Initialize memory M and score S
+2	For each sample x in batch B
+3	Compute embedding h = f_theta(x)
+4	Update score S using h
+5	Return top-k results
+```
 
-### AI systems / ML infra
+Paste that into Word, then use **Convert Text to Table**. This is far more editable than a code screenshot.
 
-- cool neutrals with one accent color,
-- data, model, serving, feedback, and evaluation shown as distinct stages,
-- use tensor/dataflow semantics, not generic business blocks,
-- keep model variants and training stages clearly separated.
+### 3. Data tables for Word
 
-### Software engineering / architecture
+Tables should almost never exist only as images. If you expect revisions, ask for three editable forms and one presentation form:
 
-- slate, teal, sand accents,
-- service blocks with interface labels,
-- clear dev/test/prod or build/deploy/run separation,
-- fewer arrows, cleaner hierarchy, stronger grouping.
+- `csv`
+- `tsv`
+- `markdown_table` or `html_table`
+- `svg_snapshot`
 
-## The strongest editable outputs
+Prompt template:
 
-### 1. SVG is still the best universal target
+```text
+Generate a paper-ready result table in multiple editable formats.
 
-SVG is the most practical final format when you need one asset to survive:
+Return:
+1. CSV
+2. TSV for direct paste into Word
+3. Markdown table
+4. A compact caption
+5. Notes on units, rounding, and abbreviations
 
-- the paper,
-- the slides,
-- the blog,
-- and last-minute edits.
+Constraints:
+- Do not return the table as an image only
+- Keep numeric precision consistent
+- Use explicit column names
+- Mark best values in a note or dedicated field, not only by visual styling
+- Ensure the TSV version can be converted in Word using Convert Text to Table
+```
 
-Microsoft 365 officially supports editing SVG graphics, including converting them into shapes for deeper modification. That makes SVG the safest "final delivery" format for this use case.
+This structure separates:
+
+- the **data source**,
+- the **Word-editable form**,
+- the **paper snapshot**.
+
+That separation is what keeps last-minute revisions manageable.
+
+### One rule for all Word-facing assets
+
+For equations, pseudocode, and tables, never ask AI for only a visual result. Ask for:
+
+- one semantic source form,
+- one Word-ready editable form,
+- one slide-ready or web-ready visual form.
+
+That is the difference between a nice demo and a usable academic workflow.
+
+## The strongest editable targets
+
+For most labs, the most practical final targets are:
+
+- `SVG` for PowerPoint and general reuse,
+- `HTML/CSS` for blogs, notes, and fast iteration,
+- `Mermaid` or `draw.io` for structured diagrams,
+- `Typst` for equations, algorithms, and table-adjacent assets,
+- Word-native `LaTeX` / `UnicodeMath` / `TSV` for document editing.
+
+SVG is still the safest universal final format because Microsoft 365 officially supports editing SVG graphics and converting them into shapes for deeper modification.
 
 You can also open the editable assets created for this post directly:
 
@@ -271,113 +314,19 @@ You can also open the editable assets created for this post directly:
 - [Document-assets SVG](/images/ai-editable-research-figures/document-assets.svg)
 - [Editable HTML demo](/images/ai-editable-research-figures/editable-figure-template.html)
 
-### 2. HTML/CSS is underrated
+## Bottom line
 
-For web publication, tutorials, course notes, and rapid iteration, HTML/CSS is often better than forcing everything through an image model.
+If I had to recommend one workflow to a lab today, it would be:
 
-Why:
+- for research diagrams: `multimodal LLM -> SVG / HTML / Mermaid / draw.io -> manual polish`
+- for teaser visuals: `multimodal LLM -> image prompt -> gpt-image-2 or Gemini / Nano Banana -> rebuild final deliverable in SVG`
+- for Word-facing assets: `multimodal LLM -> LaTeX / UnicodeMath / TSV / CSV / SVG`
 
-- labels stay selectable,
-- colors and spacing are easy to adjust,
-- you can animate or progressively reveal the figure,
-- the same structure can be exported to screenshot, PDF, or SVG later.
-
-For blog-first or slide-first workflows, HTML is often the fastest editable intermediate.
-
-### 3. Mermaid and draw.io are excellent for structured diagrams
-
-If the figure is mostly topology and flow, Mermaid and draw.io are strong options:
-
-- Mermaid is plain text, versionable, and easy to regenerate.
-- draw.io supports diagram generation from text descriptions and also supports mathematical typesetting in labels.
-
-So for method pipelines and architecture figures, a very strong workflow is:
-
-`LLM -> Mermaid / draw.io text -> draw.io or SVG -> PowerPoint`
-
-### 4. Typst is strong for equations, tables, and figure-adjacent assets
-
-Typst can export directly to SVG, PNG, PDF, and HTML. That makes it especially useful for:
-
-- equations you want as vector graphics,
-- algorithm blocks,
-- styled tables,
-- theorem or notation panels,
-- multi-panel figure supplements.
-
-If your lab already uses LaTeX-like workflows but wants faster editing, Typst is one of the best current bridges between AI-assisted authoring and clean final assets.
-
-![](/images/ai-editable-research-figures/document-assets.svg)
-
-## Equations, pseudocode, and tables for Word
-
-This is where many AI figure workflows break. The solution is to ask for **multiple synchronized representations**.
-
-### Equations
-
-Ask the model for all of the following:
-
-- LaTeX,
-- a Word-friendly linear equation form,
-- an SVG export version,
-- a plain-language variable legend.
-
-That way:
-
-- Word users can paste the linear or LaTeX form into the equation editor,
-- slide users can drop the SVG into PowerPoint,
-- blog users can render KaTeX or MathJax.
-
-### Pseudocode
-
-Ask for:
-
-- `algorithm2e` or `algorithmicx` LaTeX,
-- a monospace plain-text fallback,
-- a two-column Word table version,
-- an SVG panel version for slides.
-
-This avoids the common failure mode where the model writes decent pseudocode but the output is trapped inside an unusable bitmap.
-
-### Tables
-
-Ask for three parallel outputs:
-
-- `CSV` for the data source,
-- Markdown or HTML for the editable table,
-- SVG only for the presentation snapshot.
-
-The table should never exist only as an image if you expect revisions.
-
-## My current strongest recommendation
-
-If I had to recommend one workflow to a lab today, it would be this:
-
-### For polished research diagrams
-
-`multimodal LLM -> SVG / HTML / Mermaid / draw.io -> manual polish in SVG or PowerPoint`
-
-This is the best default for architecture figures, method overviews, security diagrams, and paper-ready panels.
-
-### For teaser art or style exploration
-
-`multimodal LLM -> image prompt -> gpt-image-2 or Gemini / Nano Banana -> rebuild final deliverable in SVG`
-
-This is the best default for figures where visual atmosphere matters more than exact editability.
-
-### For equations, algorithms, and tables
-
-`multimodal LLM -> LaTeX / Typst / HTML / CSV -> Word / PowerPoint / SVG export`
-
-This is the cleanest bridge between AI generation and document editing.
-
-## The most important rule
-
-The final artifact should match the kind of editing you expect later:
+The final artifact should match the editing you expect later:
 
 - if you expect semantic edits, generate structure;
 - if you expect stylistic edits, generate image references;
-- if you expect submission-night chaos, keep an SVG and a text source.
+- if you expect submission-night chaos, keep both an editable text source and an editable SVG.
 
 That is the difference between "AI made a nice picture" and "AI accelerated a real research workflow."
 
@@ -389,6 +338,8 @@ The recommendations above were grounded in the current official documentation an
 - [OpenAI Images API reference](https://platform.openai.com/docs/api-reference/images/generate)
 - [Google Gemini image generation guide](https://ai.google.dev/gemini-api/docs/image-generation)
 - [Google: Nano Banana Pro overview](https://blog.google/technology/ai/nano-banana-pro/)
+- [Microsoft Word: Linear format equations using UnicodeMath and LaTeX](https://support.microsoft.com/en-us/office/linear-format-equations-using-unicodemath-and-latex-in-word-2e00618d-b1fd-49d8-8cb4-8d17f25754f8)
+- [Microsoft Word: Convert text to a table or a table to text](https://support.microsoft.com/en-us/office/convert-text-to-a-table-or-a-table-to-text-b5ce45db-52d5-4fe3-8e9c-e04b62f189e1)
 - [Microsoft 365: Edit SVG images](https://support.microsoft.com/en-us/office/edit-svg-images-in-microsoft-365-69f29d39-194a-4072-8c35-dbe5e7ea528c)
 - [Typst documentation](https://typst.app/docs/)
 - [draw.io features](https://www.drawio.com/features.html)
