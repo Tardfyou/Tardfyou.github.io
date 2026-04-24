@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-labelledby="title desc">
+  <title id="title">Word and slide assets generated with AI</title>
+  <desc id="desc">A diagram showing synchronized outputs for equations, pseudocode, and tables across LaTeX, Word, CSV, SVG, and HTML.</desc>
+  <defs>
+    <linearGradient id="bg3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f7f5f1"/>
+      <stop offset="100%" stop-color="#eef3f8"/>
+    </linearGradient>
+    <filter id="shadow3" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#263544" flood-opacity="0.14"/>
+    </filter>
+    <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6a7d8f"/>
+    </marker>
+  </defs>
+  <rect width="1400" height="900" fill="url(#bg3)"/>
+  <rect x="90" y="70" width="1220" height="760" rx="34" fill="#ffffff" filter="url(#shadow3)"/>
+  <text x="130" y="135" fill="#112236" font-size="38" font-weight="700" font-family="Aptos, Segoe UI, Arial, sans-serif">Do not let equations, pseudocode, and tables get trapped in bitmaps</text>
+  <text x="130" y="176" fill="#657482" font-size="22" font-family="Aptos, Segoe UI, Arial, sans-serif">Ask AI for synchronized document assets, not one screenshot.</text>
+  <g transform="translate(130 245)">
+    <rect width="290" height="460" rx="28" fill="#eef4f8" stroke="#d6dde4"/>
+    <text x="28" y="52" fill="#183147" font-size="28" font-weight="700" font-family="Aptos, Segoe UI, Arial, sans-serif">Equation bundle</text>
+    <rect x="28" y="90" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6dde4"/>
+    <text x="48" y="128" fill="#395166" font-size="20" font-family="Consolas, Menlo, monospace">LaTeX</text>
+    <rect x="28" y="170" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6dde4"/>
+    <text x="48" y="208" fill="#395166" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Word linear form</text>
+    <rect x="28" y="250" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6dde4"/>
+    <text x="48" y="288" fill="#395166" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">SVG export</text>
+    <rect x="28" y="330" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6dde4"/>
+    <text x="48" y="368" fill="#395166" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Variable legend</text>
+  </g>
+  <g transform="translate(475 245)">
+    <rect width="290" height="460" rx="28" fill="#edf7f5" stroke="#d6e6e1"/>
+    <text x="28" y="52" fill="#123d39" font-size="28" font-weight="700" font-family="Aptos, Segoe UI, Arial, sans-serif">Pseudocode bundle</text>
+    <rect x="28" y="90" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6e6e1"/>
+    <text x="48" y="128" fill="#375b57" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">algorithm2e</text>
+    <rect x="28" y="170" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6e6e1"/>
+    <text x="48" y="208" fill="#375b57" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Plain-text fallback</text>
+    <rect x="28" y="250" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6e6e1"/>
+    <text x="48" y="288" fill="#375b57" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Word table version</text>
+    <rect x="28" y="330" width="234" height="62" rx="16" fill="#ffffff" stroke="#d6e6e1"/>
+    <text x="48" y="368" fill="#375b57" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Slide SVG panel</text>
+  </g>
+  <g transform="translate(820 245)">
+    <rect width="290" height="460" rx="28" fill="#fbf1e9" stroke="#ead9c9"/>
+    <text x="28" y="52" fill="#5d3b24" font-size="28" font-weight="700" font-family="Aptos, Segoe UI, Arial, sans-serif">Table bundle</text>
+    <rect x="28" y="90" width="234" height="62" rx="16" fill="#ffffff" stroke="#ead9c9"/>
+    <text x="48" y="128" fill="#6c513d" font-size="20" font-family="Consolas, Menlo, monospace">CSV</text>
+    <rect x="28" y="170" width="234" height="62" rx="16" fill="#ffffff" stroke="#ead9c9"/>
+    <text x="48" y="208" fill="#6c513d" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Markdown or HTML</text>
+    <rect x="28" y="250" width="234" height="62" rx="16" fill="#ffffff" stroke="#ead9c9"/>
+    <text x="48" y="288" fill="#6c513d" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">SVG snapshot</text>
+    <rect x="28" y="330" width="234" height="62" rx="16" fill="#ffffff" stroke="#ead9c9"/>
+    <text x="48" y="368" fill="#6c513d" font-size="20" font-family="Aptos, Segoe UI, Arial, sans-serif">Caption + notes</text>
+  </g>
+  <g transform="translate(1150 300)">
+    <rect width="120" height="270" rx="24" fill="#16354f" filter="url(#shadow3)"/>
+    <text x="25" y="55" fill="#ffffff" font-size="24" font-weight="700" font-family="Aptos, Segoe UI, Arial, sans-serif">Use in</text>
+    <text x="25" y="105" fill="#d6e7f7" font-size="18" font-family="Aptos, Segoe UI, Arial, sans-serif">Word</text>
+    <text x="25" y="145" fill="#d6e7f7" font-size="18" font-family="Aptos, Segoe UI, Arial, sans-serif">PPT</text>
+    <text x="25" y="185" fill="#d6e7f7" font-size="18" font-family="Aptos, Segoe UI, Arial, sans-serif">HTML</text>
+    <text x="25" y="225" fill="#d6e7f7" font-size="18" font-family="Aptos, Segoe UI, Arial, sans-serif">Paper</text>
+  </g>
+  <path d="M420 470 H465" stroke="#6a7d8f" stroke-width="4" fill="none" marker-end="url(#arrow3)"/>
+  <path d="M765 470 H810" stroke="#6a7d8f" stroke-width="4" fill="none" marker-end="url(#arrow3)"/>
+  <path d="M1110 470 H1145" stroke="#6a7d8f" stroke-width="4" fill="none" marker-end="url(#arrow3)"/>
+  <rect x="130" y="730" width="1140" height="64" rx="18" fill="#f5f7f9" stroke="#dbe3ea"/>
+  <text x="164" y="771" fill="#44596a" font-size="22" font-family="Aptos, Segoe UI, Arial, sans-serif">Best practice: every AI-generated document asset should exist in both a semantic source format and a presentation-ready visual format.</text>
+</svg>

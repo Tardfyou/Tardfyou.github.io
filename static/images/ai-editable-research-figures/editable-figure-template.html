@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Editable Research Figure Template</title>
+  <style>
+    :root {
+      --bg: #f5f4ef;
+      --paper: #ffffff;
+      --ink: #142637;
+      --muted: #647483;
+      --line: #dbe3ea;
+      --blue: #0f4c81;
+      --teal: #12756d;
+      --amber: #cb7a42;
+      --slate: #edf3f7;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #f7f6f2 0%, #eef4f8 100%);
+      color: var(--ink);
+      font: 16px/1.45 "Aptos", "Segoe UI", Arial, sans-serif;
+    }
+    .frame {
+      width: min(1200px, calc(100vw - 32px));
+      margin: 32px auto;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      padding: 36px;
+      box-shadow: 0 18px 44px rgba(24, 45, 63, 0.12);
+    }
+    .eyebrow {
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.1;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin: 0 0 28px;
+      max-width: 860px;
+      font-size: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+      align-items: stretch;
+    }
+    .card {
+      position: relative;
+      padding: 20px;
+      border-radius: 22px;
+      min-height: 280px;
+      border: 1px solid var(--line);
+      background: var(--slate);
+    }
+    .card h2 {
+      margin: 0 0 14px;
+      font-size: 24px;
+      line-height: 1.15;
+    }
+    .card p,
+    .card li {
+      color: var(--muted);
+    }
+    .accent-blue {
+      background: linear-gradient(160deg, #0f4c81, #2f6f96);
+      color: #fff;
+      border-color: transparent;
+    }
+    .accent-blue p,
+    .accent-blue li {
+      color: #dce9f5;
+    }
+    .accent-teal {
+      background: linear-gradient(160deg, #12756d, #1e9186);
+      color: #fff;
+      border-color: transparent;
+    }
+    .accent-teal p,
+    .accent-teal li {
+      color: #def5f1;
+    }
+    .accent-amber {
+      background: linear-gradient(160deg, #cb7a42, #df9558);
+      color: #fff;
+      border-color: transparent;
+    }
+    .accent-amber p,
+    .accent-amber li {
+      color: #fff0e4;
+    }
+    .mini {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      color: var(--ink);
+      font-size: 14px;
+    }
+    .accent-blue .mini,
+    .accent-teal .mini,
+    .accent-amber .mini {
+      background: rgba(255, 255, 255, 0.14);
+      color: #fff;
+    }
+    .note {
+      margin-top: 22px;
+      padding: 16px 18px;
+      border-radius: 16px;
+      background: #f8f3ec;
+      color: #5f4d3f;
+      border: 1px solid #e8dac8;
+      font-size: 17px;
+    }
+    ul { margin: 0; padding-left: 18px; }
+    @media (max-width: 980px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .frame { padding: 22px; }
+      .grid { grid-template-columns: 1fr; }
+      .card { min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="eyebrow">Editable HTML Research Figure</div>
+    <h1>Hybrid AI Workflow for Publication-Grade Figures</h1>
+    <p class="subtitle">This HTML template mirrors the workflow recommended in the article. It is deliberately simple to edit by hand, easy to restyle, and easy to screenshot or convert into another visual format.</p>
+    <section class="grid" aria-label="Workflow">
+      <article class="card">
+        <h2>1. Source Material</h2>
+        <ul>
+          <li>paper excerpt</li>
+          <li>sketch or whiteboard</li>
+          <li>reference figures</li>
+          <li>venue style constraints</li>
+        </ul>
+        <div class="mini">Inputs should be multimodal, not only text.</div>
+      </article>
+      <article class="card accent-blue">
+        <h2>2. Prompt Compiler</h2>
+        <p>Use a reasoning model to extract entities, relations, reading order, labels, and field-specific design constraints.</p>
+        <div class="mini">Outputs: image prompt, SVG, HTML, caption.</div>
+      </article>
+      <article class="card accent-teal">
+        <h2>3. Image Model</h2>
+        <p>Use for style exploration, premium tone, soft depth, and reference-conditioned polish.</p>
+        <div class="mini">Do not let this become the only semantic source.</div>
+      </article>
+      <article class="card accent-amber">
+        <h2>4. Final Deliverables</h2>
+        <ul>
+          <li>SVG for PowerPoint</li>
+          <li>HTML for blog or docs</li>
+          <li>Mermaid or Typst source</li>
+          <li>Word-ready tables and equations</li>
+        </ul>
+      </article>
+    </section>
+    <div class="note">Rule: use image models for visual polish and structure-first outputs for the final editable truth.</div>
+  </main>
+</body>
+</html>
