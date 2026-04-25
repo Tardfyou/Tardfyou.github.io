@@ -664,6 +664,227 @@ header {
   min-width: max-content;
 }
 
+.music-page {
+  max-width: 1120px;
+  width: 92vw;
+}
+
+.music-page .single-title,
+.music-page .content {
+  max-width: 760px;
+}
+
+.music-shelf {
+  margin-top: 2rem;
+}
+
+.music-shelf__header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(45, 150, 189, 0.16);
+}
+
+.music-shelf__eyebrow {
+  margin: 0 0 0.25rem;
+  color: #a36578;
+  font-family: "Great Vibes", "Times New Roman", cursive;
+  font-size: 1.86rem;
+  line-height: 1;
+}
+
+.music-shelf__header h2 {
+  margin: 0;
+  color: #2b241d;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.music-shelf__intro {
+  max-width: 38rem;
+  margin: 0.55rem 0 0;
+  color: #736963;
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.music-shelf__tracks {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.music-track {
+  display: grid;
+  grid-template-columns: 5.4rem minmax(0, 1fr);
+  gap: 0.85rem;
+  min-width: 0;
+  padding: 0.72rem;
+  border: 1px solid rgba(45, 150, 189, 0.12);
+  border-radius: 0.5rem;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(249, 247, 243, 0.84)),
+    linear-gradient(90deg, rgba(45, 150, 189, 0.12), rgba(239, 57, 130, 0.1));
+  box-shadow: 0 1rem 2.4rem rgba(18, 35, 48, 0.1);
+  transition:
+    transform var(--ios-motion-fast) var(--ios-motion-ease),
+    border-color var(--ios-motion-fast) var(--ios-motion-ease),
+    box-shadow var(--ios-motion-medium) var(--ios-motion-ease);
+}
+
+.music-track:hover {
+  border-color: rgba(163, 101, 120, 0.28);
+  box-shadow: 0 1.2rem 2.8rem rgba(18, 35, 48, 0.14);
+  transform: translate3d(0, -2px, 0);
+}
+
+.music-track__cover {
+  display: block;
+  width: 5.4rem;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 0.36rem;
+  box-shadow: 0 0.75rem 1.5rem rgba(31, 28, 25, 0.16);
+}
+
+.music-track__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.music-track__body {
+  display: grid;
+  gap: 0.52rem;
+  min-width: 0;
+}
+
+.music-track__meta h3,
+.music-track__meta p {
+  margin: 0;
+}
+
+.music-track__meta h3 {
+  overflow: hidden;
+  color: #1f1913;
+  font-size: 1rem;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-track__meta p {
+  overflow: hidden;
+  color: #736963;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.music-track__audio {
+  width: 100%;
+  height: 2rem;
+  color-scheme: light;
+}
+
+.music-track__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  justify-self: start;
+  color: #855367;
+  font-size: 0.78rem;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.music-track__link:hover {
+  color: #0f6f90;
+}
+
+.music-shelf__note {
+  margin: 1rem 0 0;
+  color: #7b746d;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+[theme=dark] .music-shelf__header {
+  border-bottom-color: rgba(85, 189, 226, 0.15);
+}
+
+[theme=dark] .music-shelf__eyebrow {
+  color: #e8a7bc;
+}
+
+[theme=dark] .music-shelf__header h2,
+[theme=dark] .music-track__meta h3 {
+  color: #ebe5de;
+}
+
+[theme=dark] .music-track {
+  border-color: rgba(85, 189, 226, 0.12);
+  background:
+    linear-gradient(135deg, rgba(39, 44, 52, 0.96), rgba(31, 37, 43, 0.92)),
+    linear-gradient(90deg, rgba(85, 189, 226, 0.14), rgba(189, 235, 252, 0.06));
+  box-shadow: 0 1rem 2.6rem rgba(0, 0, 0, 0.22);
+}
+
+[theme=dark] .music-track:hover {
+  border-color: rgba(232, 167, 188, 0.26);
+  box-shadow: 0 1.2rem 2.9rem rgba(0, 0, 0, 0.32);
+}
+
+[theme=dark] .music-track__cover {
+  box-shadow: 0 0.8rem 1.7rem rgba(0, 0, 0, 0.34);
+}
+
+[theme=dark] .music-track__meta p,
+[theme=dark] .music-shelf__intro,
+[theme=dark] .music-shelf__note {
+  color: #a9a19a;
+}
+
+[theme=dark] .music-track__link {
+  color: #e8a7bc;
+}
+
+[theme=dark] .music-track__link:hover {
+  color: #bdebfc;
+}
+
+[theme=dark] .music-track__audio {
+  color-scheme: dark;
+}
+
+@media only screen and (max-width: 1080px) {
+  .music-page {
+    max-width: 860px;
+    width: 94vw;
+  }
+
+  .music-shelf__tracks {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media only screen and (max-width: 680px) {
+  .music-page {
+    width: 100%;
+  }
+
+  .music-track {
+    grid-template-columns: 4.9rem minmax(0, 1fr);
+  }
+
+  .music-track__cover {
+    width: 4.9rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home .home-profile .home-avatar img,
   .home .home-profile .home-title,

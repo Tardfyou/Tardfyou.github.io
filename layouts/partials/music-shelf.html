@@ -1,0 +1,39 @@
+{{- $music := index hugo.Data "music" -}}
+{{- with $music -}}
+    <section class="music-shelf" aria-label="Music shelf">
+        <div class="music-shelf__header">
+            <p class="music-shelf__eyebrow">{{ .eyebrow }}</p>
+            <h2>{{ .title }}</h2>
+            {{- with .intro -}}
+                <p class="music-shelf__intro">{{ . }}</p>
+            {{- end -}}
+        </div>
+
+        <div class="music-shelf__tracks">
+            {{- range .tracks -}}
+                <article class="music-track">
+                    <a class="music-track__cover" href="{{ .link }}" target="_blank" rel="noopener">
+                        <img src="{{ .cover | relURL }}" alt="{{ .album }} album cover" loading="lazy">
+                    </a>
+                    <div class="music-track__body">
+                        <div class="music-track__meta">
+                            <h3>{{ .title }}</h3>
+                            <p>{{ .artist }} · {{ .album }}</p>
+                        </div>
+                        {{- with .audio -}}
+                            <audio class="music-track__audio" controls preload="none" src="{{ . | relURL }}"></audio>
+                        {{- end -}}
+                        <a class="music-track__link" href="{{ .link }}" target="_blank" rel="noopener">
+                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                            Apple Music
+                        </a>
+                    </div>
+                </article>
+            {{- end -}}
+        </div>
+
+        {{- with .note -}}
+            <p class="music-shelf__note">{{ . }}</p>
+        {{- end -}}
+    </section>
+{{- end -}}

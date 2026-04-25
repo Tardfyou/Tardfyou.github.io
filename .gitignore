@@ -1,6 +1,8 @@
 public/
 resources/
 .hugo_build.lock
+static/music/source/
+static/music/stefanie-sun/audio/
 页面参数.txt
 .vscode/
 .idea/

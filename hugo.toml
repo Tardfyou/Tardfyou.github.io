@@ -54,6 +54,12 @@ copyright = "Tardfyou"
 
     [[languages.en.menu.main]]
       weight = 4
+      identifier = "music"
+      name = "Music"
+      url = "/music/"
+
+    [[languages.en.menu.main]]
+      weight = 5
       identifier = "messageboard"
       name = "Message Board"
       url = "/messageboard/"
@@ -84,6 +90,12 @@ copyright = "Tardfyou"
 
     [[languages.zh-cn.menu.main]]
       weight = 4
+      identifier = "music"
+      name = "音乐"
+      url = "/music/"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 5
       identifier = "messageboard"
       name = "留言板"
       url = "/messageboard/"

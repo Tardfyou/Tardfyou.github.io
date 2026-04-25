@@ -1,107 +1,121 @@
-# 环境设置教程
+# 环境搭建与发布流程
 
-## 1. 依赖要求
+这个仓库是 Hugo 博客，主题为 `LoveIt`，部署到 GitHub Pages。日常只需要维护源码，`public/` 构建产物不会提交。
 
-最小依赖：
+## 1. 必要工具
 
 - Git
 - Hugo Extended
+- Node.js LTS
 
-可选依赖：
-
-- Node.js
-  仅当你后续要自己写复杂前端工具、批处理脚本或做额外资源处理时才需要。
-
-当前仓库本身不再依赖 Hexo，也不需要 npm 才能构建。
-
-## 2. 安装建议
-
-推荐安装一个全局可用的 `hugo` 命令，并确认是 Extended 版本。
-
-验证命令：
+当前已验证版本：
 
 ```powershell
 hugo version
+node --version
+npm --version
 ```
 
-输出里应包含 `extended`。
-
-## 3. 克隆仓库
+本机安装命令：
 
 ```powershell
-git clone <你的仓库地址>
-cd Tardfyou.github.io
+winget install --id Hugo.Hugo.Extended --exact --source winget
+winget install --id OpenJS.NodeJS.LTS --exact --source winget
 ```
 
-## 4. 本地预览
+安装后如果当前终端找不到 `hugo` 或 `node`，关闭终端重新打开即可。仓库内脚本也会自动补充常见安装路径。
+
+## 2. 本地开发环境
+
+启动本地预览：
 
 ```powershell
-hugo server
+.\scripts\dev.cmd
 ```
 
-默认访问：
+浏览器访问：
 
 ```text
 http://localhost:1313/
 ```
 
-如果你要连草稿一起看：
+包含草稿一起预览：
 
 ```powershell
-hugo server --buildDrafts
+.\scripts\dev.cmd -Drafts
 ```
 
-## 5. 正式构建
+指定端口：
 
 ```powershell
-hugo --minify --cleanDestinationDir
+.\scripts\dev.cmd -Port 1314
 ```
 
-构建产物会输出到 `public/`，但这个目录不需要提交。
+## 3. 本地构建检查
 
-## 6. GitHub Pages 部署
+发布前建议先跑完整构建：
 
-仓库已经带好了 GitHub Actions 工作流。
+```powershell
+.\scripts\build.cmd
+```
 
-首次使用时确认两件事：
+这个脚本会执行：
 
-1. 仓库根目录包含 `.github/workflows/hugo.yml`
-2. GitHub Pages 的 Source 选择 `GitHub Actions`
+1. `hugo --minify --cleanDestinationDir`
+2. `npx -y pagefind@1.5.2 --site public --output-subdir _pagefind`
 
-之后正常 `git push` 即可自动发布。
+如果只想检查 Hugo 构建，不生成搜索索引：
 
-## 7. 常见问题
+```powershell
+.\scripts\build.cmd -SkipPagefind
+```
 
-### Hugo 不是 Extended 版本
+## 4. 推送发布环境
 
-现象：
+一键构建、提交并推送：
 
-- 构建时报 SCSS 相关错误
-- 样式资源无法生成
+```powershell
+.\scripts\publish.cmd -Message "Update blog"
+```
 
-处理：
+脚本会先跑本地构建，构建成功后执行：
 
-- 卸载普通 Hugo
-- 改装 Hugo Extended
+```powershell
+git add --all
+git commit -m "Update blog"
+git push origin HEAD
+```
 
-### 本地能开，线上没更新
+推送到 `master` 或 `main` 后，GitHub Actions 会自动构建并发布到 GitHub Pages。
+
+## 5. GitHub Pages 设置
+
+在 GitHub 仓库页面确认：
+
+- `Settings -> Pages`
+- `Build and deployment`
+- `Source: GitHub Actions`
+
+工作流文件位于：
+
+```text
+.github/workflows/hugo.yml
+```
+
+## 6. 常见问题
+
+### PowerShell 无法运行 npx.ps1
+
+日常使用 `.cmd` 入口即可，它会用 `ExecutionPolicy Bypass` 运行仓库内脚本；同时脚本会优先调用 `npx.cmd`，通常不需要修改系统执行策略。
+
+### Hugo 报 SCSS 相关错误
+
+通常是安装了普通版 Hugo。请卸载后安装 Hugo Extended。
+
+### 本地能打开，线上没有更新
 
 优先检查：
 
-1. Actions 是否运行成功
-2. Pages Source 是否仍然指向旧的 branch deployment
-
-### 中文内容显示正常，但 PowerShell 终端看起来乱码
-
-这通常是终端编码显示问题，不一定是文件编码问题。
-只要 Hugo 构建正常、页面中文正常，就不一定需要改文件。
-
-### 评论框不显示
-
-当前站点使用 `utterances` 作为评论系统。
-
-如果页面里没有评论框，优先检查：
-
-1. 仓库是否已经安装 `utterances` GitHub App
-2. 当前页面是否允许加载第三方脚本
-3. 本地预览时是否被浏览器插件拦截
+1. GitHub Actions 是否运行成功
+2. GitHub Pages Source 是否为 `GitHub Actions`
+3. 推送分支是否为 `master` 或 `main`

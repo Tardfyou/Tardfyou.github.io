@@ -32,19 +32,25 @@ Two structural changes have already been completed:
 Local preview:
 
 ```powershell
-hugo server
+.\scripts\dev.cmd
 ```
 
 Preview including drafts:
 
 ```powershell
-hugo server --buildDrafts
+.\scripts\dev.cmd -Drafts
 ```
 
 Production build:
 
 ```powershell
-hugo --minify --cleanDestinationDir
+.\scripts\build.cmd
+```
+
+Build, commit, and push:
+
+```powershell
+.\scripts\publish.cmd -Message "Update blog"
 ```
 
 ## Service

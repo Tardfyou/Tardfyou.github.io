@@ -1,0 +1,36 @@
+eyebrow = "Salon de musique"
+title = "Sunlight after rain"
+intro = "A small listening room for songs that keep their light even after the weather changes."
+note = "Local audio files are used for playback. Apple Music links remain available for the official release pages."
+
+[[tracks]]
+title = "逆光"
+artist = "孙燕姿"
+album = "逆光"
+cover = "/music/stefanie-sun/covers/ni-guang.jpg"
+audio = "/music/stefanie-sun/audio/ni-guang.mp3"
+link = "https://music.apple.com/cn/album/%E9%80%86%E5%85%89/905226289?i=905226302&uo=4"
+
+[[tracks]]
+title = "我不难过"
+artist = "孙燕姿"
+album = "未完成"
+cover = "/music/stefanie-sun/covers/wo-bu-nan-guo.jpg"
+audio = "/music/stefanie-sun/audio/wo-bu-nan-guo.mp3"
+link = "https://music.apple.com/cn/album/%E6%88%91%E4%B8%8D%E9%9A%BE%E8%BF%87/255920420?i=255921025&uo=4"
+
+[[tracks]]
+title = "雨天"
+artist = "孙燕姿"
+album = "My Story (2006 新歌+精选)"
+cover = "/music/stefanie-sun/covers/yu-tian.jpg"
+audio = "/music/stefanie-sun/audio/yu-tian.mp3"
+link = "https://music.apple.com/cn/album/%E9%9B%A8%E5%A4%A9/280798610?i=280798617&uo=4"
+
+[[tracks]]
+title = "风筝"
+artist = "孙燕姿"
+album = "风箏"
+cover = "/music/stefanie-sun/covers/feng-zheng.jpg"
+audio = "/music/stefanie-sun/audio/feng-zheng.mp3"
+link = "https://music.apple.com/cn/album/%E9%A3%8E%E7%AD%9D/297994281?i=297994319&uo=4"
