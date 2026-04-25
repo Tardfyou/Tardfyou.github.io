@@ -9,4 +9,6 @@ hiddenFromHomePage: true
 layout: music
 ---
 
-A small listening room for the songs currently staying on the desk.
+A few songs that have been staying close to the desk. This is not a chart and not a serious playlist, more like a set of private bookmarks: a melody can bring back an afternoon, a walk at night, or a mood that never learned how to introduce itself.
+
+Later this room will probably make space for Khalil Fong, Ding Shiguang, more R&B, and whatever else the day happens to ask for.

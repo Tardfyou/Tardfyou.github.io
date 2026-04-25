@@ -6,8 +6,9 @@ draft: false
 toc: false
 comment: true
 hiddenFromHomePage: true
+layout: messageboard
 ---
 
-Leave a message here.
+If you pass by, leaving a sentence would be lovely.
 
-If the comment box does not load, make sure this repository has the `utterances` GitHub App installed.
+It can be a hello, a suggestion, a stray thought, or just a small "I was here." No need to make it formal; a note by the door is enough.

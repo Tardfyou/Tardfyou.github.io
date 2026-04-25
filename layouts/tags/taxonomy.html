@@ -1,23 +1,62 @@
 {{- define "title" -}}
-    {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+    {{- $terms := slice -}}
+    {{- with .Data.Terms -}}
+        {{- $terms = .ByCount -}}
+    {{- end -}}
+    {{- if gt (len $terms) 0 -}}
+        {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+    {{- else -}}
+        {{- .Title }} - {{ T .Data.Singular | default .Data.Singular }} - {{ .Site.Title -}}
+    {{- end -}}
 {{- end -}}
 
 {{- define "content" -}}
     {{- $taxonomies := .Data.Plural -}}
-    {{- $terms := .Data.Terms.ByCount -}}
-    {{- $type := .Type -}}
+    {{- $terms := slice -}}
+    {{- with .Data.Terms -}}
+        {{- $terms = .ByCount -}}
+    {{- end -}}
 
     <div class="page archive">
-        {{- /* Title */ -}}
         <h2 class="single-title animate__animated animate__pulse animate__faster">
-            {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
+            {{- if gt (len $terms) 0 -}}
+                {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
+            {{- else -}}
+                <i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+            {{- end -}}
         </h2>
 
-        {{- /* Tag Cloud Page */ -}}
-        <div class="tag-cloud-tags">
-            {{- range $.Site.Taxonomies.tags.ByCount -}}
-                <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+        {{- if gt (len $terms) 0 -}}
+            <div class="tag-cloud-tags">
+                {{- range $.Site.Taxonomies.tags.ByCount -}}
+                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+                {{- end -}}
+            </div>
+        {{- else if .Pages -}}
+            {{- $pages := .Pages.GroupByDate "2006" -}}
+            {{- with .Site.Params.list.paginate | default .Site.Params.paginate -}}
+                {{- $pages = $.Paginate $pages . -}}
+            {{- else -}}
+                {{- $pages = .Paginate $pages -}}
             {{- end -}}
-        </div>
+            {{- range $pages.PageGroups -}}
+                <h3 class="group-title">{{ .Key }}</h3>
+                {{- range .Pages -}}
+                    <article class="archive-item">
+                        <a href="{{ .RelPermalink }}" class="archive-item-link">
+                            {{- .Title | emojify -}}
+                        </a>
+                        <span class="archive-item-date">
+                            {{- $.Site.Params.list.dateFormat | default "01-02" | .Date.Format -}}
+                        </span>
+                    </article>
+                {{- end -}}
+            {{- end -}}
+            {{- partial "paginator.html" . -}}
+        {{- else -}}
+            <div class="content">
+                <p>{{ if eq .Site.Language.Lang "zh-cn" }}这个标签下暂时没有文章。{{ else }}No posts are filed under this tag yet.{{ end }}</p>
+            </div>
+        {{- end -}}
     </div>
 {{- end -}}

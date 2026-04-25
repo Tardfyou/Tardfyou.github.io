@@ -12,7 +12,8 @@
         {{- partial "head/link.html" . -}}
         {{- partial "head/seo.html" . -}}
     </head>
-    <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}">
+    {{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
+    <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}" data-petals="light">
         {{- /* Check theme isDark before body rendering */ -}}
         {{- $theme := .Site.Params.defaulttheme -}}
         <script>
@@ -29,6 +30,32 @@
         </script>
 
         <div id="mask"></div>
+        <div class="petal-screen" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
 
         {{- /* Body wrapper */ -}}
         <div class="wrapper">
@@ -54,6 +81,37 @@
                 <i class="fas fa-comment" aria-hidden="true"></i>
             </a>
         </div>
+
+        <button class="petal-toggle" type="button" aria-label="{{ if $isZh }}切换花瓣强度{{ else }}Toggle petal intensity{{ end }}">
+            <i class="far fa-snowflake" aria-hidden="true"></i>
+            <span data-label-quiet="{{ if $isZh }}静{{ else }}Still{{ end }}" data-label-light="{{ if $isZh }}轻落{{ else }}Light{{ end }}" data-label-full="{{ if $isZh }}满屏{{ else }}Full{{ end }}">
+                {{ if $isZh }}轻落{{ else }}Light{{ end }}
+            </span>
+        </button>
+
+        <script>
+          (() => {
+            const body = document.body;
+            const toggle = document.querySelector(".petal-toggle");
+            const label = toggle?.querySelector("span");
+            const modes = ["quiet", "light", "full"];
+            const saved = window.localStorage?.getItem("petal-intensity") || window.localStorage?.getItem("guestbook-petals");
+            let mode = modes.includes(saved) ? saved : body.dataset.petals || "light";
+
+            const setMode = (next) => {
+              mode = next;
+              body.dataset.petals = mode;
+              if (label) label.textContent = label.dataset[`label${mode[0].toUpperCase()}${mode.slice(1)}`] || mode;
+              window.localStorage?.setItem("petal-intensity", mode);
+            };
+
+            setMode(mode);
+            toggle?.addEventListener("click", () => {
+              const next = modes[(modes.indexOf(mode) + 1) % modes.length];
+              setMode(next);
+            });
+          })();
+        </script>
 
         {{- /* Load JavaScript scripts and CSS */ -}}
         {{- partial "assets.html" . -}}

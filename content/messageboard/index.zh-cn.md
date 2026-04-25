@@ -6,8 +6,9 @@ draft: false
 toc: false
 comment: true
 hiddenFromHomePage: true
+layout: messageboard
 ---
 
-这里可以留言。
+路过的话，留一句话也很好。
 
-如果评论框没有显示，请先确认仓库已经安装 `utterances` GitHub App。
+可以是问候、建议、随手想到的东西，或者只是一枚“我来过”。不用写得很正式，像在门口贴一张小纸条就行。

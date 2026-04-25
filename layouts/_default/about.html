@@ -1,0 +1,36 @@
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    {{- $params := .Scratch.Get "params" -}}
+    {{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
+    <div class="page single special about-page">
+        <div class="about-hero">
+            <p class="about-hero__eyebrow">Maison Vincent</p>
+            <h1 class="single-title animate__animated animate__pulse animate__faster">
+                {{- .Title -}}
+            </h1>
+            {{- with $params.subtitle -}}
+                <h2 class="single-subtitle">{{ . }}</h2>
+            {{- end -}}
+        </div>
+
+        <div class="content" id="content">
+            {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+        </div>
+
+        <nav class="about-links" aria-label="About links">
+            <a href="https://github.com/Tardfyou" target="_blank" rel="noopener">
+                <span>GitHub</span>
+                <small>{{ if $isZh }}代码与项目主页{{ else }}Code and project home{{ end }}</small>
+            </a>
+            <a href="#future-pdf">
+                <span>{{ if $isZh }}未来 PDF{{ else }}Future PDFs{{ end }}</span>
+                <small>{{ if $isZh }}先留一个空入口{{ else }}An empty shelf for now{{ end }}</small>
+            </a>
+            <a href="{{ ("/messageboard/" | relLangURL) }}">
+                <span>{{ if $isZh }}留言板{{ else }}Guest Book{{ end }}</span>
+                <small>{{ if $isZh }}路过留一句话{{ else }}Leave a sentence{{ end }}</small>
+            </a>
+        </nav>
+    </div>
+{{- end -}}

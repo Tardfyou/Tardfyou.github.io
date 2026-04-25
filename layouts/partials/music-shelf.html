@@ -1,4 +1,5 @@
 {{- $music := index hugo.Data "music" -}}
+{{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
 {{- with $music -}}
     <section class="music-shelf" aria-label="Music shelf">
         <div class="music-shelf__header">
@@ -16,13 +17,26 @@
                         <img src="{{ .cover | relURL }}" alt="{{ .album }} album cover" loading="lazy">
                     </a>
                     <div class="music-track__body">
+                        <span class="music-track__status">Now Playing</span>
                         <div class="music-track__meta">
                             <h3>{{ .title }}</h3>
-                            <p>{{ .artist }} · {{ .album }}</p>
+                            <p>{{ .artist }} &middot; {{ .album }}</p>
                         </div>
-                        {{- with .audio -}}
-                            <audio class="music-track__audio" controls preload="none" src="{{ . | relURL }}"></audio>
+                        {{- $memo := .memo -}}
+                        {{- if not $isZh -}}
+                            {{- $memo = .memo_en | default .memo -}}
                         {{- end -}}
+                        {{- with $memo -}}
+                            <p class="music-track__memo">{{ . }}</p>
+                        {{- end -}}
+                        <audio class="music-track__audio" controls preload="none">
+                            {{- with .audio -}}
+                                <source src="{{ . | relURL }}" type="audio/mpeg">
+                            {{- end -}}
+                            {{- with .preview -}}
+                                <source src="{{ . }}" type="audio/mp4">
+                            {{- end -}}
+                        </audio>
                         <a class="music-track__link" href="{{ .link }}" target="_blank" rel="noopener">
                             <i class="fas fa-external-link-alt" aria-hidden="true"></i>
                             Apple Music
@@ -36,4 +50,29 @@
             <p class="music-shelf__note">{{ . }}</p>
         {{- end -}}
     </section>
+    <script>
+      (() => {
+        const shelf = document.currentScript.previousElementSibling;
+        if (!shelf) return;
+        const audios = shelf.querySelectorAll(".music-track__audio");
+        audios.forEach((audio) => {
+          const track = audio.closest(".music-track");
+          audio.addEventListener("play", () => {
+            audios.forEach((other) => {
+              if (other !== audio) other.pause();
+            });
+            shelf.querySelectorAll(".music-track.is-playing").forEach((item) => {
+              item.classList.remove("is-playing");
+            });
+            track?.classList.add("is-playing");
+          });
+          audio.addEventListener("pause", () => {
+            track?.classList.remove("is-playing");
+          });
+          audio.addEventListener("ended", () => {
+            track?.classList.remove("is-playing");
+          });
+        });
+      })();
+    </script>
 {{- end -}}

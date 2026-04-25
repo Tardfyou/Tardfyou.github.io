@@ -60,6 +60,12 @@ copyright = "Tardfyou"
 
     [[languages.en.menu.main]]
       weight = 5
+      identifier = "about"
+      name = "About"
+      url = "/about/"
+
+    [[languages.en.menu.main]]
+      weight = 6
       identifier = "messageboard"
       name = "Message Board"
       url = "/messageboard/"
@@ -96,6 +102,12 @@ copyright = "Tardfyou"
 
     [[languages.zh-cn.menu.main]]
       weight = 5
+      identifier = "about"
+      name = "关于"
+      url = "/about/"
+
+    [[languages.zh-cn.menu.main]]
+      weight = 6
       identifier = "messageboard"
       name = "留言板"
       url = "/messageboard/"
@@ -165,7 +177,7 @@ copyright = "Tardfyou"
       enable = true
       avatarURL = "/img/cat.jpg"
       title = "Vincent"
-      subtitle = "that transcends dimensions of time and ving… "
+      subtitle = "notes, music, and quiet experiments"
       typeit = false
       social = true
       disclaimer = ""

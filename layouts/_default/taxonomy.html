@@ -1,47 +1,93 @@
 {{- define "title" -}}
-    {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+    {{- $terms := slice -}}
+    {{- with .Data.Terms -}}
+        {{- $terms = .ByCount -}}
+    {{- end -}}
+    {{- if gt (len $terms) 0 -}}
+        {{- .Params.Title | default (T .Data.Plural) | default .Data.Plural | dict "Some" | T "allSome" }} - {{ .Site.Title -}}
+    {{- else -}}
+        {{- .Title }} - {{ T .Data.Singular | default .Data.Singular }} - {{ .Site.Title -}}
+    {{- end -}}
 {{- end -}}
 
 {{- define "content" -}}
     {{- $taxonomies := .Data.Plural -}}
-    {{- $terms := .Data.Terms.ByCount -}}
+    {{- $terms := slice -}}
+    {{- with .Data.Terms -}}
+        {{- $terms = .ByCount -}}
+    {{- end -}}
     {{- $type := .Type -}}
 
     <div class="page archive">
         {{- /* Title */ -}}
         <h2 class="single-title animate__animated animate__pulse animate__faster">
-            {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
+            {{- if gt (len $terms) 0 -}}
+                {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
+            {{- else if eq .Data.Singular "tag" -}}
+                <i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+            {{- else if eq .Data.Singular "category" -}}
+                <i class="far fa-folder-open" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+            {{- else -}}
+                {{- .Title -}}
+            {{- end -}}
         </h2>
 
-        {{- /* Default Categories Page */ -}}
-        <div class="categories-card">
-            {{- range $terms -}}
-                {{- $term := .Term -}}
-                {{- $pages := .Pages -}}
-                {{- with $.Site.GetPage "taxonomy" (printf "%v/%v" $type $term) -}}
-                <div class="card-item">
-                    <div class="card-item-wrapper">
-                        <h3 class="card-item-title">
-                            <a href="{{ .RelPermalink }}">
-                                <i class="far fa-folder" aria-hidden="true"></i>&nbsp;{{ .Page.Title }}
-                            </a>
-                        </h3>
-                        {{- range first 5 $pages -}}
-                            <article class="archive-item">
-                                <a href="{{ .RelPermalink }}" class="archive-item-link">
-                                    {{- .Title | emojify -}}
+        {{- if gt (len $terms) 0 -}}
+            {{- /* Default Categories Page */ -}}
+            <div class="categories-card">
+                {{- range $terms -}}
+                    {{- $term := .Term -}}
+                    {{- $pages := .Pages -}}
+                    {{- with $.Site.GetPage "taxonomy" (printf "%v/%v" $type $term) -}}
+                    <div class="card-item">
+                        <div class="card-item-wrapper">
+                            <h3 class="card-item-title">
+                                <a href="{{ .RelPermalink }}">
+                                    <i class="far fa-folder" aria-hidden="true"></i>&nbsp;{{ .Page.Title }}
                                 </a>
-                            </article>
-                        {{- end -}}
-                        {{- if gt (len $pages) 5 -}}
-                            <span class="more-post">
-                                <a href="{{ .RelPermalink }}" class="more-single-link">{{ T "more" }} >></a>
-                            </span>
-                        {{- end -}}
+                            </h3>
+                            {{- range first 5 $pages -}}
+                                <article class="archive-item">
+                                    <a href="{{ .RelPermalink }}" class="archive-item-link">
+                                        {{- .Title | emojify -}}
+                                    </a>
+                                </article>
+                            {{- end -}}
+                            {{- if gt (len $pages) 5 -}}
+                                <span class="more-post">
+                                    <a href="{{ .RelPermalink }}" class="more-single-link">{{ T "more" }} >></a>
+                                </span>
+                            {{- end -}}
+                        </div>
                     </div>
-                </div>
+                    {{- end -}}
+                {{- end -}}
+            </div>
+        {{- else if .Pages -}}
+            {{- $pages := .Pages.GroupByDate "2006" -}}
+            {{- with .Site.Params.list.paginate | default .Site.Params.paginate -}}
+                {{- $pages = $.Paginate $pages . -}}
+            {{- else -}}
+                {{- $pages = .Paginate $pages -}}
+            {{- end -}}
+            {{- range $pages.PageGroups -}}
+                <h3 class="group-title">{{ .Key }}</h3>
+                {{- range .Pages -}}
+                    <article class="archive-item">
+                        <a href="{{ .RelPermalink }}" class="archive-item-link">
+                            {{- .Title | emojify -}}
+                        </a>
+                        <span class="archive-item-date">
+                            {{- $.Site.Params.list.dateFormat | default "01-02" | .Date.Format -}}
+                        </span>
+                    </article>
                 {{- end -}}
             {{- end -}}
-        </div>
+            {{- partial "paginator.html" . -}}
+        {{- else -}}
+            <div class="content">
+                <p>{{ if eq .Site.Language.Lang "zh-cn" }}这里暂时没有内容。{{ else }}Nothing has been filed here yet.{{ end }}</p>
+            </div>
+        {{- end -}}
     </div>
 {{- end -}}

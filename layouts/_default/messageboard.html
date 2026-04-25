@@ -1,0 +1,63 @@
+{{- define "title" }}{{ .Title }} - {{ .Site.Title }}{{ end -}}
+
+{{- define "content" -}}
+    {{- $params := .Scratch.Get "params" -}}
+    {{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
+    <div class="page single special guestbook-page">
+        <div class="guestbook-intro">
+            <p class="guestbook-intro__eyebrow">Livre d'or</p>
+            <h1 class="single-title animate__animated animate__pulse animate__faster">
+                {{- .Title -}}
+            </h1>
+            {{- with $params.subtitle -}}
+                <h2 class="single-subtitle">{{ . }}</h2>
+            {{- end -}}
+        </div>
+
+        <div class="content" id="content">
+            {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+        </div>
+
+        <section class="guestbook-links" aria-label="{{ if $isZh }}友链和入口{{ else }}Links and friends{{ end }}">
+            <a class="guestbook-link" href="https://github.com/Tardfyou" target="_blank" rel="noopener">
+                <i class="fab fa-github" aria-hidden="true"></i>
+                <span>
+                    <strong>GitHub</strong>
+                    <small>{{ if $isZh }}代码、项目和一些公开痕迹{{ else }}Code, projects, and public traces{{ end }}</small>
+                </span>
+            </a>
+            <a class="guestbook-link" href="{{ ("/about/#future-pdf" | relLangURL) }}">
+                <i class="far fa-file-pdf" aria-hidden="true"></i>
+                <span>
+                    <strong>{{ if $isZh }}未来 PDF 架{{ else }}Future PDF Shelf{{ end }}</strong>
+                    <small>{{ if $isZh }}先空着，之后会放文件{{ else }}Empty for now, files later{{ end }}</small>
+                </span>
+            </a>
+            <span class="guestbook-link guestbook-link--empty">
+                <i class="far fa-heart" aria-hidden="true"></i>
+                <span>
+                    <strong>{{ if $isZh }}友链位开放中{{ else }}Friend Link Slot{{ end }}</strong>
+                    <small>{{ if $isZh }}以后放朋友的小站{{ else }}Reserved for a friend's site{{ end }}</small>
+                </span>
+            </span>
+        </section>
+
+        {{- partial "comment.html" . -}}
+        <script>
+          (() => {
+            const page = document.currentScript.closest(".guestbook-page");
+            if (!page) return;
+
+            const comments = page.querySelector("#comments");
+            if (!comments) return;
+            comments.classList.add("is-loading");
+
+            const markReady = () => {
+              if (comments.querySelector("iframe")) comments.classList.add("is-ready");
+            };
+            markReady();
+            new MutationObserver(markReady).observe(comments, { childList: true, subtree: true });
+          })();
+        </script>
+    </div>
+{{- end -}}

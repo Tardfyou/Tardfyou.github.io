@@ -1,0 +1,39 @@
+{{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
+{{- $posts := where .Site.RegularPages "Type" "posts" -}}
+{{- $latest := first 1 $posts -}}
+{{- $music := index hugo.Data "music" -}}
+{{- $firstTrack := dict -}}
+{{- with $music.tracks -}}
+    {{- $firstTrack = index . 0 -}}
+{{- end -}}
+
+<section class="home-salon" aria-label="Salon highlights">
+    <a class="home-salon__feature" href="{{ ("/posts/" | relLangURL) }}">
+        <span class="home-salon__kicker">{{ if $isZh }}Letters{{ else }}Letters{{ end }}</span>
+        {{- with $latest -}}
+            {{- range . -}}
+                <strong>{{ .Title | emojify }}</strong>
+                <small>{{ .Date.Format "2006.01.02" }}</small>
+            {{- end -}}
+        {{- else -}}
+            <strong>{{ if $isZh }}文章目录{{ else }}Collected notes{{ end }}</strong>
+            <small>{{ if $isZh }}慢慢写，慢慢读{{ else }}Slow writing, slower reading{{ end }}</small>
+        {{- end -}}
+    </a>
+
+    <a class="home-salon__music" href="{{ ("/music/" | relLangURL) }}">
+        {{- with $firstTrack.cover -}}
+            <img src="{{ . | relURL }}" alt="" loading="lazy">
+        {{- end -}}
+        <span>
+            <em>{{ if $isZh }}Now Playing{{ else }}Now Playing{{ end }}</em>
+            <strong>{{ with $firstTrack.title }}{{ . }}{{ else }}Music{{ end }}</strong>
+        </span>
+    </a>
+
+    <a class="home-salon__note" href="{{ ("/messageboard/" | relLangURL) }}">
+        <span class="home-salon__kicker">{{ if $isZh }}Guest Book{{ else }}Guest Book{{ end }}</span>
+        <strong>{{ if $isZh }}留下一句话{{ else }}Leave a trace{{ end }}</strong>
+        <small>{{ if $isZh }}在这里相遇{{ else }}A small place to meet{{ end }}</small>
+    </a>
+</section>
