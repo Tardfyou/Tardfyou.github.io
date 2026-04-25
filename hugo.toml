@@ -115,6 +115,7 @@ copyright = "Tardfyou"
 [params]
   defaultTheme = "dark"
   dateFormat = "2006-01-02"
+  fingerprint = "sha256"
   title = "Vincent"
   description = "Vincent's Blog"
   images = ["/img/cat.jpg"]
