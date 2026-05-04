@@ -12,37 +12,72 @@
 
         <div class="music-shelf__tracks">
             {{- range .tracks -}}
-                <article class="music-track">
-                    <a class="music-track__cover" href="{{ .link }}" target="_blank" rel="noopener">
-                        <img src="{{ .cover | relURL }}" alt="{{ .album }} album cover" loading="lazy">
-                    </a>
-                    <div class="music-track__body">
-                        <span class="music-track__status">Now Playing</span>
-                        <div class="music-track__meta">
-                            <h3>{{ .title }}</h3>
-                            <p>{{ .artist }} &middot; {{ .album }}</p>
+                {{- if or (not (isset . "active")) .active -}}
+                    <article class="music-track{{ with .lyric }} has-lyrics{{ end }}" data-track-id="{{ .audio }}">
+                        <div class="music-track__ambient" aria-hidden="true">
+                            <img src="{{ .cover | relURL }}" alt="">
                         </div>
-                        {{- $memo := .memo -}}
-                        {{- if not $isZh -}}
-                            {{- $memo = .memo_en | default .memo -}}
-                        {{- end -}}
-                        {{- with $memo -}}
-                            <p class="music-track__memo">{{ . }}</p>
-                        {{- end -}}
-                        <audio class="music-track__audio" controls preload="none">
-                            {{- with .audio -}}
-                                <source src="{{ . | relURL }}" type="audio/mpeg">
-                            {{- end -}}
-                            {{- with .preview -}}
-                                <source src="{{ . }}" type="audio/mp4">
-                            {{- end -}}
-                        </audio>
-                        <a class="music-track__link" href="{{ .link }}" target="_blank" rel="noopener">
-                            <i class="fas fa-external-link-alt" aria-hidden="true"></i>
-                            Apple Music
+                        <button class="music-track__sort-handle" type="button" aria-label="Reorder track">
+                            <i class="fas fa-grip-lines" aria-hidden="true"></i>
+                        </button>
+                        <a class="music-track__cover" href="{{ .link }}" target="_blank" rel="noopener">
+                            <img src="{{ .cover | relURL }}" alt="{{ .album }} album cover" loading="lazy">
                         </a>
-                    </div>
-                </article>
+                        <div class="music-track__body">
+                            <span class="music-track__status">Now Playing</span>
+                            <div class="music-track__meta">
+                                <h3>{{ .title }}</h3>
+                                <p>{{ .artist }} &middot; {{ .album }}</p>
+                            </div>
+                            {{- $memo := .memo -}}
+                            {{- if not $isZh -}}
+                                {{- $memo = .memo_en | default .memo -}}
+                            {{- end -}}
+                            {{- with $memo -}}
+                                <p class="music-track__memo">{{ . }}</p>
+                            {{- end -}}
+                            <audio class="music-track__audio" controls preload="none">
+                                {{- with .audio -}}
+                                    <source src="{{ . | relURL }}" type="audio/mpeg">
+                                {{- end -}}
+                                {{- with .preview -}}
+                                    <source src="{{ . }}" type="audio/mp4">
+                                {{- end -}}
+                            </audio>
+                            <div class="music-track__actions">
+                                <a class="music-track__link" href="{{ .link }}" target="_blank" rel="noopener">
+                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                    Apple Music
+                                </a>
+                                {{- with .lyric -}}
+                                    <button class="music-track__lyrics-toggle" type="button" aria-expanded="false">
+                                        <i class="fas fa-align-left" aria-hidden="true"></i>
+                                        Lyrics
+                                    </button>
+                                {{- end -}}
+                            </div>
+                        </div>
+                        {{- with .lyric -}}
+                            <div class="music-track__lyrics" data-lyric-src="{{ . | relURL }}" aria-live="polite">
+                                <div class="music-track__lyrics-head">
+                                    <span>Live Lyrics</span>
+                                    <small>LRC</small>
+                                </div>
+                                <div class="music-track__lyrics-orbit" aria-hidden="true">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                                <div class="music-track__lyrics-window">
+                                    <p class="music-track__lyrics-state">Loading lyrics...</p>
+                                </div>
+                                <div class="music-track__lyrics-meter" aria-hidden="true">
+                                    <span></span>
+                                </div>
+                            </div>
+                        {{- end -}}
+                    </article>
+                {{- end -}}
             {{- end -}}
         </div>
 
@@ -54,9 +89,437 @@
       (() => {
         const shelf = document.currentScript.previousElementSibling;
         if (!shelf) return;
+        const tracksContainer = shelf.querySelector(".music-shelf__tracks");
         const audios = shelf.querySelectorAll(".music-track__audio");
+        const sortStorageKey = `music-track-order:${location.pathname}`;
+
+        const getTracks = () => [...shelf.querySelectorAll(".music-track")];
+
+        const saveTrackOrder = () => {
+          if (!tracksContainer) return;
+          const order = getTracks().map((track) => track.dataset.trackId).filter(Boolean);
+          try {
+            localStorage.setItem(sortStorageKey, JSON.stringify(order));
+          } catch (_) {}
+        };
+
+        const applyStoredTrackOrder = () => {
+          if (!tracksContainer) return;
+          let order = [];
+          try {
+            order = JSON.parse(localStorage.getItem(sortStorageKey) || "[]");
+          } catch (_) {}
+          if (!Array.isArray(order) || !order.length) return;
+
+          const tracks = getTracks();
+          const byId = new Map(tracks.map((track) => [track.dataset.trackId, track]));
+          const ordered = order.map((id) => byId.get(id)).filter(Boolean);
+          const remaining = tracks.filter((track) => !order.includes(track.dataset.trackId));
+          [...ordered, ...remaining].forEach((track) => tracksContainer.appendChild(track));
+        };
+
+        const findTrackDropTarget = (dragging, placeholder, dragStartIndex, clientX, clientY) => {
+          const candidates = [...tracksContainer.children].filter((item) => {
+            return item.classList.contains("music-track") && item !== dragging;
+          });
+          if (!candidates.length) return null;
+          const containerWidth = tracksContainer.getBoundingClientRect().width;
+
+          const currentInsertTarget = () => {
+            let sibling = placeholder?.nextElementSibling;
+            while (sibling === dragging) {
+              sibling = sibling.nextElementSibling;
+            }
+            return sibling || null;
+          };
+
+          const toInsertTarget = (index) => candidates[index] || null;
+          const getAxisInfo = (rect) => {
+            const targetTakesFullRow = rect.width > containerWidth * 0.72;
+            return targetTakesFullRow
+              ? { pointer: clientY, start: rect.top, center: rect.top + rect.height / 2, size: rect.height }
+              : { pointer: clientX, start: rect.left, center: rect.left + rect.width / 2, size: rect.width };
+          };
+
+          const hit = document.elementFromPoint(clientX, clientY);
+          if (hit?.closest(".music-track-placeholder")) {
+            return currentInsertTarget();
+          }
+
+          const hitTrack = hit?.closest(".music-track");
+          const inside = candidates.includes(hitTrack)
+            ? hitTrack
+            : candidates.find((track) => {
+            const rect = track.getBoundingClientRect();
+            return clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
+          });
+
+          if (inside) {
+            const rect = inside.getBoundingClientRect();
+            const targetIndex = candidates.indexOf(inside);
+            const axis = getAxisInfo(rect);
+            const ratio = Math.max(0, Math.min(1, (axis.pointer - axis.start) / axis.size));
+            let insertIndex = dragStartIndex <= targetIndex ? targetIndex + 1 : targetIndex;
+
+            if (ratio < 0.18) {
+              insertIndex = targetIndex;
+            } else if (ratio > 0.82) {
+              insertIndex = targetIndex + 1;
+            }
+
+            return toInsertTarget(insertIndex);
+          }
+
+          return currentInsertTarget();
+        };
+
+        const animateTrackReorder = (mutate) => {
+          if (!tracksContainer) return;
+          const tracks = getTracks();
+          const firstRects = new Map(tracks.map((track) => [track, track.getBoundingClientRect()]));
+
+          mutate();
+
+          getTracks().forEach((track) => {
+            const first = firstRects.get(track);
+            if (!first || track.classList.contains("is-dragging")) return;
+            const last = track.getBoundingClientRect();
+            const deltaX = first.left - last.left;
+            const deltaY = first.top - last.top;
+            if (Math.abs(deltaX) < 1 && Math.abs(deltaY) < 1) return;
+
+            track._sortAnimation?.cancel();
+            const finalScale = shelf.classList.contains("is-sorting") ? 0.965 : 1;
+            const animation = track.animate(
+              [
+                { transform: `translate3d(${deltaX}px, ${deltaY}px, 0) scale(${finalScale})` },
+                { transform: `translate3d(0, 0, 0) scale(${finalScale})` },
+              ],
+              {
+                duration: 480,
+                easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+              },
+            );
+            track._sortAnimation = animation;
+            animation.finished.finally(() => {
+              if (track._sortAnimation === animation) {
+                track._sortAnimation = null;
+              }
+            }).catch(() => {});
+          });
+        };
+
+        const initTrackSorting = () => {
+          if (!tracksContainer) return;
+          applyStoredTrackOrder();
+
+          let dragging = null;
+          let activeHandle = null;
+          let didMove = false;
+          let placeholder = null;
+          let pointerOffset = null;
+          let pendingMoveEvent = null;
+          let moveRafId = null;
+          let dragStartIndex = -1;
+          let lastPointerPoint = null;
+
+          const getPlaceholderNext = () => {
+            let sibling = placeholder?.nextElementSibling;
+            while (sibling === dragging) {
+              sibling = sibling.nextElementSibling;
+            }
+            return sibling || null;
+          };
+
+          const placePlaceholder = (before, shouldAnimate = true) => {
+            if (!placeholder || before === dragging || before === placeholder || before === getPlaceholderNext()) return;
+            const mutate = () => {
+              if (before) {
+                tracksContainer.insertBefore(placeholder, before);
+              } else {
+                tracksContainer.appendChild(placeholder);
+              }
+            };
+
+            if (shouldAnimate) {
+              animateTrackReorder(mutate);
+            } else {
+              mutate();
+            }
+          };
+
+          const startDrag = (track, handle, event) => {
+            const rect = track.getBoundingClientRect();
+            dragStartIndex = getTracks().indexOf(track);
+            placeholder = document.createElement("div");
+            placeholder.className = "music-track-placeholder";
+            placeholder.style.height = `${rect.height}px`;
+            if (track.classList.contains("lyrics-open")) {
+              placeholder.classList.add("lyrics-open");
+            }
+            tracksContainer.insertBefore(placeholder, track);
+
+            dragging = track;
+            activeHandle = handle;
+            didMove = false;
+            lastPointerPoint = {
+              x: event.clientX,
+              y: event.clientY,
+            };
+            pointerOffset = {
+              x: event.clientX - rect.left,
+              y: event.clientY - rect.top,
+            };
+            dragging.style.width = `${rect.width}px`;
+            dragging.style.height = `${rect.height}px`;
+            dragging.style.left = `${rect.left}px`;
+            dragging.style.top = `${rect.top}px`;
+            dragging.classList.add("is-dragging");
+            handle?.classList.add("is-grabbing");
+            handle?.setAttribute("aria-pressed", "true");
+            shelf.classList.add("is-sorting");
+            handle?.setPointerCapture?.(event.pointerId);
+          };
+
+          const moveFloatingTrack = (event) => {
+            if (!dragging || !pointerOffset) return;
+            dragging.style.left = `${event.clientX - pointerOffset.x}px`;
+            dragging.style.top = `${event.clientY - pointerOffset.y}px`;
+          };
+
+          const moveDragging = (event) => {
+            if (!dragging) return;
+            lastPointerPoint = {
+              x: event.clientX,
+              y: event.clientY,
+            };
+            pendingMoveEvent = event;
+            if (moveRafId) return;
+            moveRafId = window.requestAnimationFrame(() => {
+              moveRafId = null;
+              const currentEvent = pendingMoveEvent;
+              pendingMoveEvent = null;
+              if (!dragging || !currentEvent) return;
+              currentEvent.preventDefault();
+              didMove = true;
+              moveFloatingTrack(currentEvent);
+              const before = findTrackDropTarget(dragging, placeholder, dragStartIndex, currentEvent.clientX, currentEvent.clientY);
+              placePlaceholder(before);
+            });
+          };
+
+          const finishDrag = (event) => {
+            if (dragging && event && Number.isFinite(event.clientX) && Number.isFinite(event.clientY)) {
+              lastPointerPoint = {
+                x: event.clientX,
+                y: event.clientY,
+              };
+            }
+            if (moveRafId) {
+              window.cancelAnimationFrame(moveRafId);
+              moveRafId = null;
+            }
+            pendingMoveEvent = null;
+            if (!dragging) return;
+            if (placeholder) {
+              if (lastPointerPoint) {
+                const before = findTrackDropTarget(dragging, placeholder, dragStartIndex, lastPointerPoint.x, lastPointerPoint.y);
+                placePlaceholder(before, false);
+              }
+              tracksContainer.insertBefore(dragging, placeholder);
+              placeholder.remove();
+            }
+            dragging.classList.remove("is-dragging");
+            dragging.style.removeProperty("width");
+            dragging.style.removeProperty("height");
+            dragging.style.removeProperty("left");
+            dragging.style.removeProperty("top");
+            activeHandle?.classList.remove("is-grabbing");
+            activeHandle?.removeAttribute("aria-pressed");
+            shelf.classList.remove("is-sorting");
+            saveTrackOrder();
+            dragging = null;
+            activeHandle = null;
+            didMove = false;
+            placeholder = null;
+            pointerOffset = null;
+            dragStartIndex = -1;
+            lastPointerPoint = null;
+          };
+
+          tracksContainer.querySelectorAll(".music-track__sort-handle").forEach((handle) => {
+            handle.addEventListener("pointerdown", (event) => {
+              if (event.button !== 0 && event.pointerType !== "touch") return;
+              const track = handle.closest(".music-track");
+              if (!track) return;
+
+              event.preventDefault();
+              startDrag(track, handle, event);
+            });
+
+            handle.addEventListener("pointermove", (event) => {
+              if (!dragging || activeHandle !== handle) return;
+              moveDragging(event);
+            });
+
+            handle.addEventListener("pointerup", finishDrag);
+            handle.addEventListener("pointercancel", finishDrag);
+            handle.addEventListener("click", (event) => {
+              if (didMove) event.preventDefault();
+            });
+          });
+
+          document.addEventListener("pointermove", moveDragging);
+          document.addEventListener("pointerup", finishDrag);
+          document.addEventListener("pointercancel", finishDrag);
+        };
+
+        const parseTimestamp = (minutes, seconds, fraction = "0") => {
+          const milliseconds = Number(String(fraction).padEnd(3, "0").slice(0, 3));
+          return Number(minutes) * 60 + Number(seconds) + milliseconds / 1000;
+        };
+
+        const textFromRichLyric = (parts) => {
+          if (!Array.isArray(parts)) return "";
+          return parts.map((part) => part?.tx || "").join("").trim();
+        };
+
+        const parseLyrics = (raw) => {
+          const entries = [];
+          raw.replace(/^\uFEFF/, "").split(/\r?\n/).forEach((line, order) => {
+            const trimmed = line.trim();
+            if (!trimmed) return;
+
+            if (trimmed.startsWith("{")) {
+              try {
+                const item = JSON.parse(trimmed);
+                const text = textFromRichLyric(item.c);
+                if (Number.isFinite(item.t) && text) {
+                  entries.push({ time: item.t / 1000, text, order });
+                }
+              } catch (_) {}
+              return;
+            }
+
+            const timestamps = [...trimmed.matchAll(/\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\]/g)];
+            if (!timestamps.length) return;
+
+            const text = trimmed.replace(/\[(\d{1,2}):(\d{2})(?:[.:](\d{1,3}))?\]/g, "").trim();
+            if (!text) return;
+
+            timestamps.forEach((match) => {
+              entries.push({
+                time: parseTimestamp(match[1], match[2], match[3]),
+                text,
+                order,
+              });
+            });
+          });
+          return entries.sort((a, b) => a.time - b.time || a.order - b.order);
+        };
+
+        const renderLyrics = async (track) => {
+          const panel = track.querySelector(".music-track__lyrics");
+          const window = panel?.querySelector(".music-track__lyrics-window");
+          const src = panel?.dataset.lyricSrc;
+          if (!panel || !window || !src) return Promise.resolve();
+          if (panel.dataset.ready === "true") return Promise.resolve(track._lyricLines);
+          if (track._lyricsPromise) return track._lyricsPromise;
+
+          track._lyricsPromise = (async () => {
+            panel.dataset.loading = "true";
+
+            try {
+              const response = await fetch(new URL(src, document.baseURI));
+              if (!response.ok) throw new Error(`HTTP ${response.status}`);
+              const lines = parseLyrics(await response.text());
+              if (!lines.length) throw new Error("Empty lyrics");
+
+              window.innerHTML = "";
+              lines.forEach((line, index) => {
+                const button = document.createElement("button");
+                button.className = "music-track__lyric-line";
+                button.type = "button";
+                button.dataset.time = String(line.time);
+                button.dataset.index = String(index);
+                button.textContent = line.text;
+                button.classList.toggle("is-credit", line.time < 3);
+                button.addEventListener("click", () => {
+                  const audio = track.querySelector(".music-track__audio");
+                  if (!audio) return;
+                  audio.currentTime = line.time;
+                  audio.play().catch(() => {});
+                });
+                window.appendChild(button);
+              });
+
+              panel.dataset.ready = "true";
+              track._lyricLines = lines;
+              track._lyricNodes = [...window.querySelectorAll(".music-track__lyric-line")];
+              return lines;
+            } catch (_) {
+              panel.dataset.ready = "error";
+              window.innerHTML = '<p class="music-track__lyrics-state">Lyrics unavailable</p>';
+              return [];
+            } finally {
+              delete panel.dataset.loading;
+              track._lyricsPromise = null;
+            }
+          })();
+
+          return track._lyricsPromise;
+        };
+
+        const setActiveLyric = (track, audio) => {
+          const lines = track._lyricLines;
+          const nodes = track._lyricNodes;
+          if (!lines?.length || !nodes?.length) return;
+
+          const current = audio.currentTime + 0.08;
+          let activeIndex = -1;
+          for (let index = lines.length - 1; index >= 0; index -= 1) {
+            if (current >= lines[index].time) {
+              activeIndex = index;
+              break;
+            }
+          }
+
+          if (Number.isFinite(audio.duration) && audio.duration > 0) {
+            track.style.setProperty("--track-progress", `${Math.min(audio.currentTime / audio.duration, 1) * 100}%`);
+          }
+
+          if (activeIndex === track._activeLyricIndex) return;
+          track._activeLyricIndex = activeIndex;
+
+          nodes.forEach((node, index) => {
+            const distance = Math.abs(index - activeIndex);
+            node.classList.toggle("is-active", distance === 0);
+            node.classList.toggle("is-near", distance === 1);
+            node.classList.toggle("is-far", distance === 2);
+          });
+
+          const activeNode = nodes[activeIndex];
+          const window = activeNode?.closest(".music-track__lyrics-window");
+          if (!activeNode || !window) return;
+
+          window.scrollTo({
+            top: activeNode.offsetTop - window.clientHeight / 2 + activeNode.clientHeight / 2,
+            behavior: window.matches(":hover") ? "auto" : "smooth",
+          });
+        };
+
         audios.forEach((audio) => {
           const track = audio.closest(".music-track");
+          if (!track) return;
+          renderLyrics(track);
+
+          const toggle = track.querySelector(".music-track__lyrics-toggle");
+          toggle?.addEventListener("click", () => {
+            const expanded = track.classList.toggle("lyrics-open");
+            toggle.setAttribute("aria-expanded", String(expanded));
+            renderLyrics(track).then(() => setActiveLyric(track, audio));
+          });
+
           audio.addEventListener("play", () => {
             audios.forEach((other) => {
               if (other !== audio) other.pause();
@@ -64,15 +527,20 @@
             shelf.querySelectorAll(".music-track.is-playing").forEach((item) => {
               item.classList.remove("is-playing");
             });
-            track?.classList.add("is-playing");
+            track.classList.add("is-playing");
+            renderLyrics(track).then(() => setActiveLyric(track, audio));
           });
+          audio.addEventListener("timeupdate", () => setActiveLyric(track, audio));
+          audio.addEventListener("seeked", () => setActiveLyric(track, audio));
           audio.addEventListener("pause", () => {
-            track?.classList.remove("is-playing");
+            track.classList.remove("is-playing");
           });
           audio.addEventListener("ended", () => {
-            track?.classList.remove("is-playing");
+            track.classList.remove("is-playing");
           });
         });
+
+        initTrackSorting();
       })();
     </script>
 {{- end -}}

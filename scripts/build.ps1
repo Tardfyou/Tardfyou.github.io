@@ -9,7 +9,8 @@ $repoRoot = Split-Path -Parent $PSScriptRoot
 Set-Location $repoRoot
 
 $wingetLinks = Join-Path $env:LOCALAPPDATA "Microsoft\WinGet\Links"
-$env:Path = "$wingetLinks;C:\Program Files\nodejs;$env:Path"
+$localHugo = Join-Path $repoRoot ".tools\hugo"
+$env:Path = "$localHugo;$wingetLinks;C:\Program Files\nodejs;$env:Path"
 
 $hugo = Get-Command hugo -ErrorAction SilentlyContinue
 if (-not $hugo) {
