@@ -1856,8 +1856,8 @@ body[data-petals=full] .petal-screen span {
 
 .music-track.has-lyrics.lyrics-open {
   grid-column: 1 / -1;
-  grid-template-columns: 7.35rem minmax(15rem, 0.72fr) minmax(20rem, 1.28fr);
-  gap: 1rem 1.18rem;
+  grid-template-columns: 7.35rem minmax(24rem, 0.92fr) minmax(24rem, 1.08fr);
+  gap: 1rem 1.35rem;
   min-height: 20.5rem;
   padding: 1rem;
   background:
@@ -1974,8 +1974,10 @@ body[data-petals=full] .petal-screen span {
 
 .music-track__body {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 0.52rem;
   min-width: 0;
+  max-width: 100%;
   align-self: start;
 }
 
@@ -2007,6 +2009,11 @@ body[data-petals=full] .petal-screen span {
   margin: 0;
 }
 
+.music-track__meta {
+  min-width: 0;
+  max-width: 100%;
+}
+
 .music-track__meta h3 {
   overflow: hidden;
   color: #1f1913;
@@ -2031,10 +2038,13 @@ body[data-petals=full] .petal-screen span {
 }
 
 .music-track__memo {
+  min-width: 0;
+  max-width: 100%;
   margin: -0.12rem 0 0;
   color: #6f625b;
   font-size: 0.78rem;
   line-height: 1.62;
+  overflow-wrap: break-word;
 }
 
 .music-track.lyrics-open .music-track__memo {
@@ -2044,6 +2054,8 @@ body[data-petals=full] .petal-screen span {
 
 .music-track__audio {
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   height: 2rem;
   color-scheme: light;
 }
@@ -2054,6 +2066,7 @@ body[data-petals=full] .petal-screen span {
   gap: 0.52rem 0.72rem;
   align-items: center;
   min-width: 0;
+  max-width: 100%;
 }
 
 .music-track__link {
@@ -2705,16 +2718,25 @@ body[data-petals=full] .petal-screen span {
   }
 
   .music-track.has-lyrics.lyrics-open {
-    grid-template-columns: 6.6rem minmax(0, 0.86fr) minmax(17rem, 1.14fr);
-    min-height: 19.4rem;
+    grid-template-columns: 6.6rem minmax(0, 1fr);
+    gap: 0.9rem 1rem;
+    min-height: 0;
   }
 
   .music-track.lyrics-open .music-track__cover {
     width: 6.6rem;
   }
 
+  .music-track.has-lyrics.lyrics-open .music-track__lyrics {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    border-top: 1px solid rgba(45, 150, 189, 0.1);
+  }
+
   .music-track.has-lyrics.lyrics-open .music-track__lyrics-window {
-    height: 15.8rem;
+    height: 14.2rem;
+    padding-top: 4.25rem;
+    padding-bottom: 4.35rem;
   }
 
   .music-track.has-lyrics.lyrics-open .music-track__lyric-line {
