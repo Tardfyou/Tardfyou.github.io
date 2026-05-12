@@ -1,7 +1,7 @@
 ---
 title: "OpenSteamTool 技术原理解析：Lua 配置如何参与 Steam 假入库"
 date: 2026-05-12T20:20:00+08:00
-lastmod: 2026-05-12T21:09:11+08:00
+lastmod: 2026-05-12T21:27:23+08:00
 draft: false
 author: "Tardfyou"
 description: "基于 OpenSteamTool 源码、1086940.lua 配置和 Steamworks 公开文档，系统分析 Steam 假入库的客户端侧实现路径。"
@@ -188,6 +188,12 @@ setManifestid(DEPOT_ID, "MANIFEST_GID_AS_DECIMAL_STRING")
 站点生成 Lua 时的机械部分反而很简单：主 App 写成 `addappid(main_appid)`；带 key 的 depot 写成 `addappid(depotid, 占位参数, key)`；manifest 关系写成 `setManifestid(depotid, manifest_gid)`；最后按 AppID 打包成一个 `.lua` 文件。也就是说，网页的“下载 Lua”按钮背后未必有复杂逆向逻辑，复杂性主要转移到了数据来源、字段一致性校验和敏感材料的合规边界上。
 
 因此这类站点在技术分析中只能说明生态如何分发清单，不能被当作权威来源。尤其是当 Lua 文件包含真实 depot key 时，它已经越过了普通 metadata 的边界；研究者应当把它看成权限敏感样本，而不是“公开爬取即可得到”的普通配置。
+
+还可以再进一步理解这个风险：普通付费用户虽然通常拿不齐某个游戏的“全量宇宙”，但他可能拿到足够复现自己授权内容切片的数据。所谓内容切片，指的是该用户当时实际可访问的本体、已拥有 DLC、平台 depot、语言包、当前分支和对应 manifest。客户端为了把这些内容下载到本地并完成解密，必然会接触到与这组内容相匹配的下载元数据和解密材料。
+
+如果这组材料被整理成 OpenSteamTool 可消费的 Lua，另一个没有相同授权的客户端就可能被推进到相似的本地路径：库里显示目标 App，安装流程选中相同 depot 和 manifest，下载到与付费用户本地版本一致或接近一致的内容，并在本地完成 depot 解密。换句话说，泄露的不只是“游戏 ID 列表”，而是足以复刻某个已授权用户内容版本的客户端侧材料。
+
+这也是这类 Lua 清单真正敏感的地方。它未必覆盖所有 DLC、所有语言、所有平台、所有历史版本或所有运行时校验；但只要覆盖了某个付费用户实际下载过的一组 depot / manifest / key，就可能足以让其他人盗版入库并体验同一内容切片。后续是否能启动、联网、过反作弊、通过 Denuvo 或游戏自建后端，则取决于该游戏是否继续做服务端和运行时授权校验。
 
 ## OpenSteamTool 的进程注入和模块替换
 

@@ -1,7 +1,7 @@
 ---
 title: "OpenSteamTool Internals: How Lua Metadata Drives Steam Fake Library Entries"
 date: 2026-05-12T20:20:00+08:00
-lastmod: 2026-05-12T21:09:11+08:00
+lastmod: 2026-05-12T21:27:23+08:00
 draft: false
 author: "Tardfyou"
 description: "A source-level analysis of OpenSteamTool, its Lua metadata, and the Steam client hooks involved in fake library entries."
@@ -152,6 +152,12 @@ The difficult part is sensitive material. Depot keys, manifest request codes, Ap
 The final Lua generation step is comparatively mechanical: write the main app as `addappid(main_appid)`, write keyed depots as `addappid(depotid, placeholder, key)`, write manifest bindings as `setManifestid(depotid, manifest_gid)`, and package the result as a `.lua` file for that AppID. In other words, the "download Lua" button does not necessarily hide complex reverse engineering. The hard problems are data provenance, consistency validation, and the compliance boundary around sensitive fields.
 
 For technical analysis, these sites show how Lua lists circulate in the ecosystem. They should not be treated as authoritative sources. Once a Lua file contains real depot keys, it has crossed from ordinary metadata into permission-sensitive material.
+
+The risk can be stated more precisely. An ordinary paying user usually cannot obtain the whole universe of a game, but that user may obtain enough data to reproduce the specific content slice they are authorized to access. A content slice means the base app, owned DLC, platform depots, language depots, current branch, and manifest snapshots that the client actually downloads. To install and decrypt that slice locally, the client necessarily touches matching download metadata and decryption material.
+
+If those materials are serialized into a Lua file that OpenSteamTool can consume, another client without the same entitlement may be pushed into a similar local path: the app appears in the library, install logic selects the same depots and manifests, the downloaded files match or closely match the paying user's local version, and depot decryption succeeds locally. In other words, the sensitive part is not just a list of game IDs; it is a set of client-side materials sufficient to reproduce one authorized user's content version.
+
+That is the real sensitivity of these Lua lists. They may not cover every DLC, language, platform, historical manifest, or runtime authorization check. But if they cover the depot / manifest / key set for content a paying user actually downloaded, they may be sufficient for someone else to pirate that same content slice through a fake local library path. Whether the game then launches, works online, passes anti-cheat, passes Denuvo, or satisfies the game's own backend depends on later server-side and runtime checks.
 
 ## Loading and Hook Installation
 
