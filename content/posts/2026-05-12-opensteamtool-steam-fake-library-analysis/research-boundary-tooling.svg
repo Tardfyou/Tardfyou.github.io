@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Research tooling boundary for Steam client analysis</title>
+  <desc id="desc">A conceptual diagram separating acceptable high-level research tasks from prohibited extraction and redistribution of authorization material.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8cc7d8"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #e8edf3; }
+      .bg { fill: #121821; }
+      .study { fill: #20352f; stroke: #83bd7a; stroke-width: 2.2; rx: 8; }
+      .middle { fill: #1f2a36; stroke: #52697b; stroke-width: 2; rx: 8; }
+      .no { fill: #3a2826; stroke: #d08c65; stroke-width: 2.2; rx: 8; }
+      .title { font-size: 31px; font-weight: 650; }
+      .label { font-size: 23px; font-weight: 650; }
+      .small { font-size: 18px; fill: #b8c5cf; }
+      .muted { fill: #9ba9b6; font-size: 20px; }
+      .line { stroke: #8cc7d8; stroke-width: 2.8; fill: none; marker-end: url(#arrow); }
+      .stop { stroke: #d08c65; stroke-width: 3; fill: none; }
+    </style>
+  </defs>
+  <rect width="1280" height="720" class="bg"/>
+  <text x="56" y="58" class="title">Capability boundary: explain flows, do not extract reusable authorization material</text>
+  <text x="56" y="91" class="muted">The same tooling family can support legitimate research or misuse. The boundary is the output.</text>
+
+  <rect x="62" y="142" width="260" height="148" class="study"/>
+  <text x="90" y="184" class="label">Local metadata parsing</text>
+  <text x="90" y="222" class="small">appinfo / install manifests</text>
+  <text x="90" y="250" class="small">depot dependency maps</text>
+  <text x="90" y="278" class="small">platform / language settings</text>
+
+  <rect x="62" y="360" width="260" height="148" class="study"/>
+  <text x="90" y="402" class="label">Client flow observation</text>
+  <text x="90" y="440" class="small">install / update sequence</text>
+  <text x="90" y="468" class="small">logs and cache behavior</text>
+  <text x="90" y="496" class="small">request timing and states</text>
+
+  <rect x="400" y="142" width="260" height="148" class="study"/>
+  <text x="428" y="184" class="label">In-process analysis</text>
+  <text x="428" y="222" class="small">IPC / protobuf structures</text>
+  <text x="428" y="250" class="small">client memory layouts</text>
+  <text x="428" y="278" class="small">hook point reasoning</text>
+
+  <rect x="400" y="360" width="260" height="148" class="study"/>
+  <text x="428" y="402" class="label">Consistency checks</text>
+  <text x="428" y="440" class="small">depot vs manifest</text>
+  <text x="428" y="468" class="small">branch / language matching</text>
+  <text x="428" y="496" class="small">authorized test samples</text>
+
+  <rect x="738" y="224" width="226" height="174" class="middle"/>
+  <text x="766" y="266" class="label">Acceptable output</text>
+  <text x="766" y="304" class="small">architecture diagrams</text>
+  <text x="766" y="332" class="small">field semantics</text>
+  <text x="766" y="360" class="small">defensive lessons</text>
+  <text x="766" y="388" class="small">placeholder examples</text>
+
+  <rect x="1038" y="182" width="190" height="258" class="no"/>
+  <text x="1066" y="224" class="label">Do not output</text>
+  <text x="1066" y="262" class="small">real depot keys</text>
+  <text x="1066" y="290" class="small">tickets / tokens</text>
+  <text x="1066" y="318" class="small">request-code lists</text>
+  <text x="1066" y="346" class="small">reusable Lua</text>
+  <text x="1066" y="374" class="small">extraction steps</text>
+  <text x="1066" y="402" class="small">piracy workflow</text>
+
+  <path d="M322 216 C354 216, 371 216, 400 216" class="line"/>
+  <path d="M322 434 C354 434, 371 434, 400 434" class="line"/>
+  <path d="M660 216 C699 234, 718 257, 738 294" class="line"/>
+  <path d="M660 434 C700 414, 719 383, 738 350" class="line"/>
+  <path d="M964 312 C995 312, 1014 312, 1038 312" class="stop"/>
+  <path d="M1038 278 L1228 420" class="stop"/>
+  <path d="M1228 278 L1038 420" class="stop"/>
+
+  <text x="56" y="654" class="muted">A research article can explain why the client boundary is weak without turning the explanation into a material extraction guide.</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Likely provenance pipeline for third-party OpenSteamTool Lua lists</title>
+  <desc id="desc">A conceptual diagram showing public metadata, sensitive submissions, validation, and template rendering into Lua files.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8cc7d8"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #e8edf3; }
+      .bg { fill: #111820; }
+      .box { fill: #1f2a36; stroke: #52697b; stroke-width: 2; rx: 8; }
+      .safe { fill: #20352f; stroke: #83bd7a; stroke-width: 2.2; rx: 8; }
+      .risk { fill: #3a2826; stroke: #d08c65; stroke-width: 2.2; rx: 8; }
+      .out { fill: #243846; stroke: #7fc7d9; stroke-width: 2.2; rx: 8; }
+      .title { font-size: 31px; font-weight: 650; }
+      .label { font-size: 23px; font-weight: 650; }
+      .small { font-size: 18px; fill: #b8c5cf; }
+      .muted { fill: #9ba9b6; font-size: 20px; }
+      .line { stroke: #8cc7d8; stroke-width: 2.8; fill: none; marker-end: url(#arrow); }
+      .riskline { stroke: #d08c65; stroke-width: 2.8; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1280" height="720" class="bg"/>
+  <text x="56" y="58" class="title">Third-party Lua sites are usually data aggregators, not key generators</text>
+  <text x="56" y="91" class="muted">Public metadata is easy to index; depot keys and tickets require authorized sources or unsafe sharing.</text>
+
+  <rect x="58" y="130" width="276" height="164" class="safe"/>
+  <text x="84" y="172" class="label">Public metadata</text>
+  <text x="84" y="210" class="small">store pages / APIs</text>
+  <text x="84" y="238" class="small">appinfo-style indexes</text>
+  <text x="84" y="266" class="small">AppID, names, covers</text>
+
+  <rect x="58" y="352" width="276" height="190" class="risk"/>
+  <text x="84" y="394" class="label">Sensitive inputs</text>
+  <text x="84" y="432" class="small">user uploads</text>
+  <text x="84" y="460" class="small">maintainer curation</text>
+  <text x="84" y="488" class="small">authorized exports</text>
+  <text x="84" y="516" class="small">mirrors / leaks / gray sources</text>
+
+  <rect x="442" y="166" width="236" height="130" class="box"/>
+  <text x="470" y="208" class="label">Index database</text>
+  <text x="470" y="246" class="small">AppID -> metadata</text>
+  <text x="470" y="274" class="small">depot / manifest hints</text>
+
+  <rect x="442" y="376" width="236" height="130" class="risk"/>
+  <text x="470" y="418" class="label">Risky field pool</text>
+  <text x="470" y="456" class="small">depot keys</text>
+  <text x="470" y="484" class="small">request codes / tickets</text>
+
+  <rect x="774" y="258" width="228" height="154" class="box"/>
+  <text x="802" y="300" class="label">Validation</text>
+  <text x="802" y="338" class="small">deduplicate</text>
+  <text x="802" y="366" class="small">check field shape</text>
+  <text x="802" y="394" class="small">match depot / manifest</text>
+
+  <rect x="1064" y="258" width="164" height="154" class="out"/>
+  <text x="1092" y="300" class="label">Lua file</text>
+  <text x="1092" y="338" class="small">addappid(...)</text>
+  <text x="1092" y="366" class="small">setManifestid(...)</text>
+  <text x="1092" y="394" class="small">per-App download</text>
+
+  <path d="M334 212 C380 216, 404 223, 442 232" class="line"/>
+  <path d="M334 448 C381 446, 405 444, 442 441" class="riskline"/>
+  <path d="M678 232 C720 254, 744 282, 774 314" class="line"/>
+  <path d="M678 441 C724 416, 746 383, 774 352" class="riskline"/>
+  <path d="M1002 335 C1025 335, 1044 335, 1064 335" class="line"/>
+
+  <text x="56" y="654" class="muted">The template step is simple. The hard and sensitive part is where the key / ticket / token material came from.</text>
+</svg>

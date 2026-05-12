@@ -1,7 +1,7 @@
 ---
 title: "OpenSteamTool 技术原理解析：Lua 配置如何参与 Steam 假入库"
 date: 2026-05-12T20:20:00+08:00
-lastmod: 2026-05-12T21:27:23+08:00
+lastmod: 2026-05-12T21:32:58+08:00
 draft: false
 author: "Tardfyou"
 description: "基于 OpenSteamTool 源码、1086940.lua 配置和 Steamworks 公开文档，系统分析 Steam 假入库的客户端侧实现路径。"
@@ -17,6 +17,9 @@ categories:
   - "notes"
 images:
   - "opensteamtool-flow.svg"
+  - "steam-content-slice.svg"
+  - "lua-provenance-pipeline.svg"
+  - "research-boundary-tooling.svg"
   - "lua-index-site.png"
   - "steam-installable-result.png"
 lightgallery: true
@@ -111,6 +114,8 @@ Steamworks 认证文档把用户身份和应用所有权验证分成多种路径
 
 这说明该 Lua 样本主要覆盖的是“库可见 + 内容下载 + depot 解密”链路，而不是完整覆盖所有 DRM、游戏后端、多人联机和加密票据路径。
 
+![Steam 授权内容切片模型](steam-content-slice.svg)
+
 ## `1086940.lua` 的结构化画像
 
 这份 Lua 文件是纯声明式配置，只有顶层函数调用。
@@ -182,6 +187,8 @@ setManifestid(DEPOT_ID, "MANIFEST_GID_AS_DECIMAL_STRING")
 ```
 
 其中每一层的可信度不同。公开 metadata 层可以自动化程度较高：站点可以用商店页、公开 API、SteamDB 类索引或 appinfo 缓存建立 AppID、名称、封面、部分 DepotID、部分 manifest 关系。截图中的列表、搜索框、AppID 标签和下载按钮，都更像这类索引系统的表现。
+
+![第三方 Lua 清单来源与生成管线](lua-provenance-pipeline.svg)
 
 真正困难的是敏感字段。`depot key`、`manifest request code`、`AppTicket`、`ETicket`、`access token` 这类材料不应被视为公开数据。站点如果能批量提供“可用 Lua”，核心来源大概率不是计算，而是外部汇入：用户上传现成 Lua、维护者手工整理、从其他同类仓库同步、从已授权客户端或 Steamworks 权限环境导出，或者来自非官方共享与泄露。源码和 Steam 内容模型都不支持“只凭 AppID / DepotID / manifest GID 算出 depot key”。
 
@@ -503,6 +510,24 @@ end
 ```
 
 这段模板的“可用性”只来自字段之间的语义匹配，而不来自占位符本身。上面的 key 占位符故意不是可被当前源码接受的 64 字符 hex；占位 manifest 也不对应任何真实内容。它们只是说明 OpenSteamTool 期望的 Lua 形状。真正可工作的研究样本必须满足：ID 关系正确、manifest 属于对应 depot、depot key 来自授权路径、request code / ticket / token 在需要时由合法环境提供。否则故障点会分别表现为：库可见但不可安装、可安装但 manifest 获取失败、可下载但解密失败、可启动但 Steam API 或游戏后端验证失败。
+
+## 能力边界与可能涉及的技术栈
+
+从纯技术角度看，如果研究者本机有 Steam 客户端和若干已购买游戏，确实可以研究“客户端为了安装和运行这些已授权内容，接触了哪些元数据和中间材料”。但这类研究应停留在字段流转、信任边界和防护设计层面，不应实际导出、传播或复用 depot key、ticket、token 等解密和授权材料，也不应构造供未授权账号假入库使用的 Lua。
+
+高层上，可能涉及的技术栈包括：
+
+| 研究方向 | 可能观察对象 | 能回答的问题 | 边界 |
+| --- | --- | --- | --- |
+| 本地 metadata 解析 | appinfo、library metadata、安装 manifest、depot dependency、语言 / 平台配置 | AppID、DepotID、manifest GID、分支和语言包如何关联 | 只分析结构，不传播敏感字段 |
+| 客户端下载链路观察 | 安装 / 更新流程、manifest 请求、content server 交互、日志和缓存 | 客户端在何时需要 manifest、request code、depot key | 不抓取或复用可解密真实内容的材料 |
+| 进程内逆向与 hook | `steam.exe`、`steamclient64.dll`、IPC、protobuf、内存结构 | OpenSteamTool 类工具为什么能改写客户端视图 | 不提供可落地提取 key / ticket 的步骤 |
+| 缓存与注册表审计 | Steam 本地配置、注册表、ticket 缓存、运行时状态 | 哪些状态会被客户端缓存，哪些可能被游戏读取 | 不导出身份或所有权票据 |
+| 一致性校验 | depot 与 key、manifest 与分支、语言包与平台 depot 的对应关系 | 为什么清单字段不匹配会导致下载或解密失败 | 只做授权样本和占位样本的验证 |
+
+换句话说，具备这些技术能力，理论上可以解释一份 Lua 为什么工作、为什么失败，以及它对应的是哪一个已授权内容切片；但不应把研究推进到“从真实已购游戏提取可复用材料并交给他人使用”的程度。后者已经从客户端信任边界研究变成了绕过授权和盗版分发风险。
+
+![Steam 客户端分析的能力边界与研究产出](research-boundary-tooling.svg)
 
 ## 为什么这种设计有效
 

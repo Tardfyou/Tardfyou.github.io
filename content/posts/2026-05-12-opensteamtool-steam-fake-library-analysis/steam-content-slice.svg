@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Steam authorized content slice model</title>
+  <desc id="desc">A conceptual diagram explaining how a purchased app grants access to a limited slice of depots, manifests, language packs, and decryption material.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8cc7d8"/>
+    </marker>
+    <style>
+      text { font-family: "Segoe UI", Arial, sans-serif; fill: #e8edf3; }
+      .bg { fill: #121821; }
+      .panel { fill: #1d2733; stroke: #4f6575; stroke-width: 2; rx: 8; }
+      .ok { fill: #20352f; stroke: #83bd7a; stroke-width: 2.2; rx: 8; }
+      .warn { fill: #372b28; stroke: #d08c65; stroke-width: 2.2; rx: 8; }
+      .muted { fill: #9ba9b6; font-size: 20px; }
+      .title { font-size: 31px; font-weight: 650; }
+      .label { font-size: 23px; font-weight: 650; }
+      .small { font-size: 18px; fill: #b8c5cf; }
+      .line { stroke: #8cc7d8; stroke-width: 2.8; fill: none; marker-end: url(#arrow); }
+      .dash { stroke: #7f8d99; stroke-width: 2.2; fill: none; stroke-dasharray: 8 8; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1280" height="720" class="bg"/>
+  <text x="56" y="58" class="title">Purchased game does not expose the whole universe</text>
+  <text x="56" y="91" class="muted">It usually exposes one authorized content slice: owned app + owned DLC + platform + language + branch.</text>
+
+  <rect x="56" y="132" width="230" height="124" class="ok"/>
+  <text x="82" y="176" class="label">Paid account</text>
+  <text x="82" y="211" class="small">server-side entitlement</text>
+  <text x="82" y="238" class="small">for selected app / DLC</text>
+
+  <rect x="382" y="88" width="260" height="92" class="panel"/>
+  <text x="410" y="128" class="label">AppID</text>
+  <text x="410" y="158" class="small">visible product identity</text>
+
+  <rect x="382" y="214" width="260" height="112" class="panel"/>
+  <text x="410" y="254" class="label">Depot set</text>
+  <text x="410" y="284" class="small">platform, language, DLC</text>
+  <text x="410" y="311" class="small">shared components</text>
+
+  <rect x="382" y="360" width="260" height="112" class="panel"/>
+  <text x="410" y="400" class="label">Manifest GIDs</text>
+  <text x="410" y="430" class="small">branch-specific snapshots</text>
+  <text x="410" y="457" class="small">download chunk map</text>
+
+  <rect x="382" y="506" width="260" height="112" class="warn"/>
+  <text x="410" y="546" class="label">Depot keys</text>
+  <text x="410" y="576" class="small">sensitive decryption material</text>
+  <text x="410" y="603" class="small">not public metadata</text>
+
+  <rect x="760" y="178" width="250" height="260" class="ok"/>
+  <text x="790" y="222" class="label">Authorized content slice</text>
+  <text x="790" y="260" class="small">base app version</text>
+  <text x="790" y="290" class="small">owned DLC only</text>
+  <text x="790" y="320" class="small">current branch</text>
+  <text x="790" y="350" class="small">selected platform</text>
+  <text x="790" y="380" class="small">selected language pack</text>
+  <text x="790" y="410" class="small">matching key / manifest set</text>
+
+  <rect x="1060" y="118" width="164" height="392" class="warn"/>
+  <text x="1086" y="160" class="label">Not included</text>
+  <text x="1086" y="199" class="small">unowned DLC</text>
+  <text x="1086" y="229" class="small">private beta</text>
+  <text x="1086" y="259" class="small">dev depots</text>
+  <text x="1086" y="289" class="small">other regions</text>
+  <text x="1086" y="319" class="small">other platforms</text>
+  <text x="1086" y="349" class="small">other languages</text>
+  <text x="1086" y="379" class="small">runtime backend</text>
+  <text x="1086" y="409" class="small">anti-cheat state</text>
+  <text x="1086" y="439" class="small">Denuvo checks</text>
+
+  <path d="M286 194 C328 154, 346 137, 382 134" class="line"/>
+  <path d="M286 198 C331 227, 346 255, 382 270" class="line"/>
+  <path d="M286 202 C335 316, 346 390, 382 416" class="line"/>
+  <path d="M286 206 C337 430, 348 534, 382 562" class="line"/>
+  <path d="M642 134 C692 180, 724 219, 760 250" class="line"/>
+  <path d="M642 270 C690 276, 719 289, 760 306" class="line"/>
+  <path d="M642 416 C694 402, 724 386, 760 364" class="line"/>
+  <path d="M642 562 C700 516, 728 458, 760 410" class="line"/>
+  <path d="M1010 308 C1030 308, 1042 308, 1060 308" class="dash"/>
+
+  <text x="56" y="666" class="muted">Leaking one slice can still be enough to reproduce that user's local download/decryption path, even when it is not a complete game universe.</text>
+</svg>

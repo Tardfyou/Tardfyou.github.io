@@ -1,7 +1,7 @@
 ---
 title: "OpenSteamTool Internals: How Lua Metadata Drives Steam Fake Library Entries"
 date: 2026-05-12T20:20:00+08:00
-lastmod: 2026-05-12T21:27:23+08:00
+lastmod: 2026-05-12T21:32:58+08:00
 draft: false
 author: "Tardfyou"
 description: "A source-level analysis of OpenSteamTool, its Lua metadata, and the Steam client hooks involved in fake library entries."
@@ -17,6 +17,9 @@ categories:
   - "notes"
 images:
   - "opensteamtool-flow.svg"
+  - "steam-content-slice.svg"
+  - "lua-provenance-pipeline.svg"
+  - "research-boundary-tooling.svg"
   - "lua-index-site.png"
   - "steam-installable-result.png"
 lightgallery: true
@@ -88,6 +91,8 @@ A **depot decryption key** lets the client decrypt encrypted depot content. It i
 
 Tickets and tokens are a different layer. `AppTicket`, `ETicket`, PICS access tokens, and user-stat SteamIDs relate to runtime authorization, protected metadata, or Steam API behavior. The analyzed `1086940.lua` does not contain those fields.
 
+![Steam authorized content slice model](steam-content-slice.svg)
+
 ## What `1086940.lua` Stores
 
 The file is a declarative table, not a control program. It has no custom Lua functions, loops, or branches.
@@ -146,6 +151,8 @@ public metadata index
 ```
 
 The layers have very different trust properties. The public metadata layer can be highly automated: store pages, public APIs, SteamDB-style indexes, or appinfo caches can provide AppIDs, names, covers, some DepotIDs, and some manifest relationships. The search box, AppID labels, cover grid, and download buttons in the screenshot all look like that kind of index.
+
+![Likely provenance pipeline for third-party OpenSteamTool Lua lists](lua-provenance-pipeline.svg)
 
 The difficult part is sensitive material. Depot keys, manifest request codes, AppTickets, ETickets, and access tokens should not be treated as public data. If a site can provide many working Lua files, the core source is unlikely to be computation. More likely inputs include user-uploaded Lua files, maintainer-curated lists, mirrored community repositories, exports from authorized clients or Steamworks-permissioned environments, or unofficial sharing and leaks. Neither the OpenSteamTool source nor the Steam content model supports deriving a depot key from AppID, DepotID, and manifest GID alone.
 
@@ -326,6 +333,24 @@ end
 ```
 
 The key placeholders above are intentionally not 64-character hex strings accepted by the current source; the manifest placeholders also do not correspond to real content. They describe shape, not reusable data. A working research sample requires correct ID relationships, manifest-to-depot matching, authorized depot keys, and lawful request-code, ticket, or token handling where those paths are needed. Otherwise the failure will show up as a visible-but-not-installable app, failed manifest retrieval, failed decryption, or runtime rejection by Steam API or the game's own backend.
+
+## Capability Boundaries and Likely Tooling
+
+From a purely technical angle, a researcher who has a local Steam client and legitimately purchased games can study which metadata and intermediate materials the client touches in order to install and run those authorized contents. That research should stay at the level of data flow, trust boundaries, and defensive design. It should not export, redistribute, or reuse depot keys, tickets, tokens, or other authorization and decryption materials, and it should not produce Lua files intended for unauthorized fake-library use.
+
+At a high level, the relevant tooling areas are:
+
+| Research area | Possible observation target | Question answered | Boundary |
+| --- | --- | --- | --- |
+| Local metadata parsing | appinfo, library metadata, install manifests, depot dependency data, language / platform settings | How AppIDs, DepotIDs, manifest GIDs, branches, and language packs relate | Analyze structure, do not redistribute sensitive fields |
+| Download-flow observation | install / update flow, manifest requests, content-server interaction, logs and caches | When the client needs manifests, request codes, and depot keys | Do not capture or reuse material that decrypts real content |
+| In-process reversing and hooks | `steam.exe`, `steamclient64.dll`, IPC, protobuf, memory structures | Why OpenSteamTool-style tools can rewrite the client view | Do not provide practical key / ticket extraction steps |
+| Cache and registry auditing | Steam local config, registry state, ticket caches, runtime state | Which states are cached locally and which may be consumed by games | Do not export identity or ownership tickets |
+| Consistency validation | depot-to-key, manifest-to-branch, language-pack-to-platform relationships | Why mismatched list fields break download or decryption | Validate only authorized or placeholder samples |
+
+In other words, these capabilities can explain why a Lua file works, why it fails, and which authorized content slice it appears to describe. They should not be used to extract reusable materials from a real purchased game and hand them to other users. That would move from client trust-boundary research into authorization bypass and piracy distribution risk.
+
+![Research tooling boundary for Steam client analysis](research-boundary-tooling.svg)
 
 ## Limits and Failure Modes
 
