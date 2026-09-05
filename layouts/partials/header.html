@@ -28,7 +28,10 @@
         <div class="menu">
             <div class="menu-inner">
                 {{- range .Site.Menus.main -}}
-                    {{- $url := .URL | relLangURL -}}
+                    {{- $url := .URL -}}
+                    {{- if not (urls.Parse $url).Host -}}
+                        {{- $url = $url | relLangURL -}}
+                    {{- end -}}
                     {{- with .Page -}}
                         {{- $url = .RelPermalink -}}
                     {{- end -}}
@@ -131,7 +134,10 @@
                 </div>
             {{- end -}}
             {{- range .Site.Menus.main -}}
-                {{- $url := .URL | relLangURL -}}
+                {{- $url := .URL -}}
+                    {{- if not (urls.Parse $url).Host -}}
+                        {{- $url = $url | relLangURL -}}
+                    {{- end -}}
                 {{- with .Page -}}
                     {{- $url = .RelPermalink -}}
                 {{- end -}}
