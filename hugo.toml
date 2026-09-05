@@ -65,7 +65,7 @@ copyright = "Tardfyou"
       url = "/about/"
 
     [[languages.en.menu.main]]
-      weight = 5.5
+      weight = 7
       identifier = "academic"
       name = "Academic"
       url = "https://tardfyou.github.io/academic/"
@@ -113,7 +113,7 @@ copyright = "Tardfyou"
       url = "/about/"
 
     [[languages.zh-cn.menu.main]]
-      weight = 5.5
+      weight = 7
       identifier = "academic"
       name = "学术主页"
       url = "https://tardfyou.github.io/academic/"
