@@ -261,6 +261,9 @@ body[data-motion="off"].academic-site .portrait::after { display: none; }
   transition: translate 280ms var(--motion-spring), transform 420ms var(--motion-spring), box-shadow 300ms, border-color 240ms;
 }
 .academic-site .profile-links a { transition: translate 280ms var(--motion-spring), transform 420ms var(--motion-spring), color 220ms; }
+@media (pointer: coarse) {
+  .academic-site .paper-actions a { min-height: 44px; }
+}
 .academic-site .interests > span {
   overflow: hidden; background: rgba(131,161,198,.035); border-color: rgba(126,151,183,.17);
   box-shadow: inset 0 1px 1px rgba(255,255,255,.8), 0 1px 3px rgba(35,61,94,.025);
