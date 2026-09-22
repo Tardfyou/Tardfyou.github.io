@@ -72,7 +72,8 @@
         {{- /* Body wrapper */ -}}
         <div class="wrapper">
             {{- partial "header.html" . -}}
-            <main class="main" id="main-content" data-pagefind-body>
+            {{/* Index content pages; posts opt in around their body in the post layout. */}}
+            <main class="main" id="main-content"{{ if and .IsPage (ne .Type "posts") }} data-pagefind-body{{ end }}>
                 <div class="container">
                     {{- block "content" . }}{{ end -}}
                 </div>
