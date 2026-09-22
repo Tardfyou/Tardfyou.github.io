@@ -5,7 +5,7 @@
     {{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
     <div class="page single special about-page">
         <div class="about-hero">
-            <p class="about-hero__eyebrow">Maison Vincent</p>
+            <p class="about-hero__eyebrow">Maison {{ .Site.Title }}</p>
             <h1 class="single-title animate__animated animate__pulse animate__faster">
                 {{- .Title -}}
             </h1>
@@ -19,7 +19,7 @@
         </div>
 
         <nav class="about-links" aria-label="About links">
-            <a href="https://github.com/Tardfyou" target="_blank" rel="noopener">
+            <a href="{{ .Site.Params.author.link }}" target="_blank" rel="noopener">
                 <span>GitHub</span>
                 <small>{{ if $isZh }}代码与项目主页{{ else }}Code and project home{{ end }}</small>
             </a>
@@ -27,7 +27,7 @@
                 <span>{{ if $isZh }}未来 PDF{{ else }}Future PDFs{{ end }}</span>
                 <small>{{ if $isZh }}先留一个空入口{{ else }}An empty shelf for now{{ end }}</small>
             </a>
-            <a href="{{ ("/messageboard/" | relLangURL) }}">
+            <a href="{{ ("messageboard/" | relLangURL) }}">
                 <span>{{ if $isZh }}留言板{{ else }}Guest Book{{ end }}</span>
                 <small>{{ if $isZh }}路过留一句话{{ else }}Leave a sentence{{ end }}</small>
             </a>

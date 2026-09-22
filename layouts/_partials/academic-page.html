@@ -1,0 +1,74 @@
+{{ $p := hugo.Data.academic }}
+<!doctype html>
+<html lang="{{ .Site.LanguageCode }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>@view-transition { navigation: auto; }</style>
+  <link rel="preload" href="{{ "studio/fonts/cormorant-medium.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "studio/fonts/playfair-medium.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "academic-assets/fonts/crimson-pro-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <meta name="description" content="{{ $p.name }} · {{ $p.role }} · {{ $p.institution }}">
+  <meta name="theme-color" content="#ffffff">
+  <title>{{ $p.name }} · Academic</title>
+  <link rel="canonical" href="{{ .Permalink }}">
+  <link rel="icon" href="{{ "academic-assets/favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="stylesheet" href="{{ "academic-assets/academic.css" | relURL }}?v=liquid-layout-14">
+  <link rel="stylesheet" href="{{ "studio/motion.css" | relURL }}?v=liquid-layout-14">
+  <link rel="stylesheet" href="{{ "studio/academic.css" | relURL }}?v=liquid-layout-14">
+<link rel="stylesheet" href="{{ "studio/typography.css" | relURL }}?v=liquid-layout-14">
+  <link rel="stylesheet" href="{{ "studio/lens.css" | relURL }}?v=liquid-layout-14">
+</head>
+<body id="top" class="academic-site" data-motion="{{ .Site.Params.studio.motion | default "soft" }}">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="reading-progress" aria-hidden="true"></div>
+  <header class="academic-topbar">
+    <a class="studio-wordmark" href="#top">{{ $p.name }}<span> / Academic</span></a>
+    <div class="site-switch" aria-label="Website">
+      {{ if ne .Site.Params.studio.mode "academic" }}<a href="{{ .Site.Home.RelPermalink }}">Blog {{ partial "studio-icon.html" "chevron-right" }}</a>{{ end }}
+      <a class="selected" href="#about" aria-current="page">Academic</a>
+    </div>
+  </header>
+  <div class="site-shell">
+    <aside class="profile" aria-label="Personal profile">
+      <div class="profile-identity">
+        <a class="portrait" href="#about" aria-label="About {{ $p.name }}"><img src="{{ $p.portrait | relURL }}" width="156" height="156" alt="Portrait of {{ $p.name }}"></a>
+        <div class="profile-name"><h1 id="name"><span class="title-text">{{ $p.name }}</span></h1>{{ with $p.secondaryName }}<p class="english-name">{{ . }}</p>{{ end }}<p class="position">{{ $p.role }}</p></div>
+      </div>
+      <div class="institution"><p class="affiliation">{{ $p.department }}</p><p class="university">{{ $p.institution }}</p></div>
+      <div class="contact-links"><a class="email" href="mailto:{{ $p.email }}">{{ $p.email }}</a><div class="profile-links">{{ with $p.github }}<a href="{{ . }}">GitHub {{ partial "studio-icon.html" "external" }}</a>{{ end }}{{ if ne .Site.Params.studio.mode "academic" }}<a href="{{ .Site.Home.RelPermalink }}">Blog {{ partial "studio-icon.html" "chevron-right" }}</a>{{ end }}</div></div>
+      <nav aria-label="Main navigation" data-sliding-nav>
+        {{ if $p.about }}<a href="#about">{{ partial "studio-icon.html" "about" }}<span class="nav-label">About</span><span aria-hidden="true">01</span></a>{{ end }}
+        {{ if $p.research }}<a href="#research">{{ partial "studio-icon.html" "research" }}<span class="nav-label">Research</span><span aria-hidden="true">02</span></a>{{ end }}
+        {{ if $p.experience }}<a href="#experience">{{ partial "studio-icon.html" "experience" }}<span class="nav-label">Experience</span><span aria-hidden="true">03</span></a>{{ end }}
+        {{ if $p.education }}<a href="#education">{{ partial "studio-icon.html" "education" }}<span class="nav-label">Education</span><span aria-hidden="true">04</span></a>{{ end }}
+        {{ if $p.honors }}<a href="#honors">{{ partial "studio-icon.html" "honors" }}<span class="nav-label">Honors</span><span aria-hidden="true">05</span></a>{{ end }}
+      </nav>
+      {{ with $p.tagline }}<p class="profile-caption">{{ . }}</p>{{ end }}
+    </aside>
+    <main id="main" data-pagefind-body>
+      {{ with $p.about }}<section class="about content-section" id="about" aria-labelledby="about-title">
+        <div class="section-heading"><span class="section-number">01 / INTRODUCTION</span><h2 id="about-title">About Me</h2></div>
+        {{ range . }}<p>{{ . | markdownify }}</p>{{ end }}
+        {{ with $p.interests }}<div class="interests" aria-label="Research interests">{{ range . }}<span>{{ . }}</span>{{ end }}</div>{{ end }}
+      </section>{{ end }}
+      {{ with $p.research }}<section class="content-section" id="research" aria-labelledby="research-title">
+        <div class="section-heading" data-reveal><span class="section-number">02 / SELECTED WORK</span><h2 id="research-title">Selected Research</h2></div>
+        <div class="section-body">{{ range . }}<article class="research-item"{{ with .id }} id="{{ . }}"{{ end }}>
+          <div class="item-meta paper-meta"><div class="paper-badges">{{ with .venue }}<span class="paper-badge badge-venue">{{ . }}</span>{{ end }}{{ with .rank }}<span class="paper-badge badge-rank">{{ . }}</span>{{ end }}{{ with .status }}<span class="paper-badge badge-status">{{ . }}</span>{{ end }}{{ if not .venue }}<span>{{ .kind }}</span>{{ end }}</div><span>{{ .date }}</span></div>
+          <h3>{{ .title }}</h3>{{ with .authors }}<p class="authors">{{ . }}</p>{{ end }}<p>{{ .description }}</p>{{ with .note }}<p class="small-note">{{ . }}</p>{{ end }}
+          {{ with .links }}<div class="paper-actions">{{ range . }}<a href="{{ .url }}">{{ .label }} {{ if strings.HasPrefix .url "mailto:" }}{{ partial "studio-icon.html" "mail" }}{{ else }}{{ partial "studio-icon.html" "external" }}{{ end }}</a>{{ end }}</div>{{ end }}
+          {{ with .abstract }}<details class="abstract"><summary><span class="abstract-label">Read abstract</span><span class="abstract-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v12M4 10h12"/></svg></span></summary><p>{{ . }}</p></details>{{ end }}
+        </article>{{ end }}</div>
+      </section>{{ end }}
+      {{ with $p.experience }}<section class="content-section" id="experience" aria-labelledby="experience-title"><div class="section-heading"><span class="section-number">03 / IN PRACTICE</span><h2 id="experience-title">Experience</h2></div><div class="section-body experience-list">{{ range . }}<article class="experience"><div class="experience-top"><h3>{{ .title }}</h3><span class="date">{{ .date }}</span></div><p class="role">{{ .role }}</p><p>{{ .description }}</p></article>{{ end }}</div></section>{{ end }}
+      {{ with $p.education }}<section class="content-section" id="education" aria-labelledby="education-title"><div class="section-heading"><span class="section-number">04 / THE FOUNDATION</span><h2 id="education-title">Education</h2></div><div class="section-body">{{ range . }}<article class="education"><p class="item-meta">{{ .institution }}</p><h3>{{ .title }}</h3><p>{{ .description }}</p>{{ with .note }}<p class="small-note">{{ . }}</p>{{ end }}</article>{{ end }}</div></section>{{ end }}
+      {{ with $p.honors }}<section class="content-section" id="honors" aria-labelledby="honors-title"><div class="section-heading"><span class="section-number">05 / MILESTONES</span><h2 id="honors-title">Selected Honors</h2></div><div class="section-body"><ul class="honors">{{ range . }}<li><span>{{ .title }}{{ with .note }}<small>{{ . }}</small>{{ end }}</span><time>{{ .date }}</time></li>{{ end }}</ul></div></section>{{ end }}
+    </main>
+    <footer><p>© {{ now.Year }} {{ $p.name }}</p><div>{{ with $p.source }}<a href="{{ . }}">Source {{ partial "studio-icon.html" "external" }}</a>{{ end }}<a href="#top">Back to top {{ partial "studio-icon.html" "chevron-up" }}</a></div></footer>
+  </div>
+  <script src="{{ "academic-assets/navigation.js" | relURL }}?v=liquid-layout-14" defer></script>
+  <script src="{{ "studio/motion.js" | relURL }}?v=liquid-layout-14" defer></script>
+  <script src="{{ "studio/lens.js" | relURL }}?v=liquid-layout-14" defer></script>
+</body>
+</html>

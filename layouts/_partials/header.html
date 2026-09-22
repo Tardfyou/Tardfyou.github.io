@@ -27,17 +27,18 @@
         </div>
         <div class="menu">
             <div class="menu-inner">
-                {{- range .Site.Menus.main -}}
+                {{- range .Site.Menus.main -}}{{ if or (ne .Identifier "academic") (ne $.Site.Params.studio.mode "blog") }}
                     {{- $url := .URL -}}
                     {{- if not (urls.Parse $url).Host -}}
-                        {{- $url = $url | relLangURL -}}
+                        {{- $url = strings.TrimPrefix "/" $url | relLangURL -}}
                     {{- end -}}
                     {{- with .Page -}}
                         {{- $url = .RelPermalink -}}
                     {{- end -}}
-                    <a class="menu-item{{ if $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) }} active{{ end }}" href="{{ $url }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                    {{- $active := $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) -}}
+                    <a class="menu-item{{ if $active }} active{{ end }}" href="{{ $url }}"{{ if $active }} aria-current="{{ if eq $.RelPermalink $url }}page{{ else }}location{{ end }}"{{ end }}{{ with .Title }} title="{{ . }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
                         {{- .Pre | safeHTML }} {{ .Name }} {{ .Post | safeHTML -}}
-                    </a>
+                    </a>{{ end }}
                 {{- end -}}
                 {{- if .Site.Menus.main -}}
                     <span class="menu-item delimiter"></span>
@@ -133,17 +134,18 @@
                     </a>
                 </div>
             {{- end -}}
-            {{- range .Site.Menus.main -}}
+            {{- range .Site.Menus.main -}}{{ if or (ne .Identifier "academic") (ne $.Site.Params.studio.mode "blog") }}
                 {{- $url := .URL -}}
                     {{- if not (urls.Parse $url).Host -}}
-                        {{- $url = $url | relLangURL -}}
+                        {{- $url = strings.TrimPrefix "/" $url | relLangURL -}}
                     {{- end -}}
                 {{- with .Page -}}
                     {{- $url = .RelPermalink -}}
                 {{- end -}}
-                <a class="menu-item" href="{{ $url }}" title="{{ .Title }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
+                {{- $active := $.IsMenuCurrent `main` . | or ($.HasMenuCurrent `main` .) | or (eq $.RelPermalink $url) -}}
+                <a class="menu-item{{ if $active }} active{{ end }}" href="{{ $url }}" title="{{ .Title }}"{{ if $active }} aria-current="{{ if eq $.RelPermalink $url }}page{{ else }}location{{ end }}"{{ end }}{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
                     {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
-                </a>
+                </a>{{ end }}
             {{- end -}}
             <a href="javascript:void(0);" class="menu-item theme-switch" title="{{ T "switchTheme" }}">
                 <i class="fas fa-adjust" aria-hidden="true"></i>
@@ -170,9 +172,9 @@
 
 {{- if .Site.Params.search.enable -}}
     <div class="search-dropdown desktop">
-        <div id="search-dropdown-desktop"></div>
+        <div id="search-dropdown-desktop" data-lens="window"></div>
     </div>
     <div class="search-dropdown mobile">
-        <div id="search-dropdown-mobile"></div>
+        <div id="search-dropdown-mobile" data-lens="window"></div>
     </div>
 {{- end -}}

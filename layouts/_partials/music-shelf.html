@@ -15,13 +15,13 @@
                 {{- if or (not (isset . "active")) .active -}}
                     <article class="music-track{{ with .lyric }} has-lyrics{{ end }}" data-track-id="{{ .audio }}">
                         <div class="music-track__ambient" aria-hidden="true">
-                            <img src="{{ .cover | relURL }}" alt="">
+                            <img src="{{ partial "studio-url.html" .cover }}" alt="">
                         </div>
                         <button class="music-track__sort-handle" type="button" aria-label="Reorder track">
                             <i class="fas fa-grip-lines" aria-hidden="true"></i>
                         </button>
                         <a class="music-track__cover" href="{{ .link }}" target="_blank" rel="noopener">
-                            <img src="{{ .cover | relURL }}" alt="{{ .album }} album cover" loading="lazy">
+                            <img src="{{ partial "studio-url.html" .cover }}" alt="{{ .album }} album cover" loading="lazy">
                         </a>
                         <div class="music-track__body">
                             <span class="music-track__status">Now Playing</span>
@@ -38,7 +38,7 @@
                             {{- end -}}
                             <audio class="music-track__audio" controls preload="none">
                                 {{- with .audio -}}
-                                    <source src="{{ . | relURL }}" type="audio/mpeg">
+                                    <source src="{{ partial "studio-url.html" . }}" type="audio/mpeg">
                                 {{- end -}}
                                 {{- with .preview -}}
                                     <source src="{{ . }}" type="audio/mp4">
@@ -46,7 +46,7 @@
                             </audio>
                             <div class="music-track__actions">
                                 <a class="music-track__link" href="{{ .link }}" target="_blank" rel="noopener">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                                    {{ partial "studio-icon.html" "external" }}
                                     Apple Music
                                 </a>
                                 {{- with .lyric -}}
@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         {{- with .lyric -}}
-                            <div class="music-track__lyrics" data-lyric-src="{{ . | relURL }}" aria-live="polite">
+                            <div class="music-track__lyrics" data-lyric-src="{{ partial "studio-url.html" . }}" aria-live="polite">
                                 <div class="music-track__lyrics-head">
                                     <span>Live Lyrics</span>
                                     <small>LRC</small>

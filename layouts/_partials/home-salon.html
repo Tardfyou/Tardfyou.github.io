@@ -1,0 +1,10 @@
+{{ $isZh := eq .Site.Language.Lang "zh-cn" }}
+{{ $posts := where .Site.RegularPages "Type" "posts" }}
+{{ $active := slice }}
+{{ range hugo.Data.music.tracks }}{{ if ne .active false }}{{ $active = $active | append . }}{{ end }}{{ end }}
+<section class="home-salon" aria-label="Highlights">
+  <a data-lens="tile" class="home-salon__feature" href="{{ "posts/" | relLangURL }}"><span class="home-salon__kicker">{{ if $isZh }}文字与记录{{ else }}Letters{{ end }}</span>{{ range first 1 $posts }}<strong>{{ .Title }}</strong><small>{{ .Date.Format "2006.01.02" }}</small>{{ else }}<strong>Collected notes</strong><small>A place to think out loud.</small>{{ end }}</a>
+  {{ if $active }}{{ with index $active 0 }}<a data-lens="tile" class="home-salon__music" href="{{ "music/" | relLangURL }}">{{ with .cover }}<img src="{{ partial "studio-url.html" . }}" alt="" loading="lazy">{{ end }}<span><em>{{ if $isZh }}最近在听{{ else }}On repeat{{ end }}</em><strong>{{ .title }}</strong><small>{{ .artist }}</small></span></a>{{ end }}
+  {{ else }}<a data-lens="tile" class="home-salon__note" href="{{ if eq .Site.Params.studio.mode "blog" }}{{ "about/" | relLangURL }}{{ else }}{{ "academic/" | relURL }}{{ end }}"><span class="home-salon__kicker">{{ if eq .Site.Params.studio.mode "blog" }}The author{{ else }}Research{{ end }}</span><strong>{{ if eq .Site.Params.studio.mode "blog" }}A little about me{{ else }}Ideas into practice{{ end }}</strong><small>{{ if eq .Site.Params.studio.mode "blog" }}Beyond the writing{{ else }}Work, experience & publications{{ end }}</small></a>{{ end }}
+  {{ if .Site.Params.studio.guestbook }}<a data-lens="tile" class="home-salon__note" href="{{ "messageboard/" | relLangURL }}"><span class="home-salon__kicker">Guest book</span><strong>{{ if $isZh }}留下一句话{{ else }}Leave a trace{{ end }}</strong><small>{{ if $isZh }}在这里相遇{{ else }}A small place to meet{{ end }}</small></a>{{ else }}<a data-lens="tile" class="home-salon__note" href="mailto:{{ .Site.Params.author.email }}"><span class="home-salon__kicker">Say hello</span><strong>Let's stay in touch</strong><small>Good conversations start small.</small></a>{{ end }}
+</section>

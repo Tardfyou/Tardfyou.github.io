@@ -1,0 +1,13 @@
+{
+  "name": "quiet-studio-blog-academic",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A reusable Hugo blog and academic site with quiet iOS-inspired motion.",
+  "scripts": {
+    "dev": "node scripts/site.mjs dev",
+    "build": "node scripts/site.mjs build",
+    "preview": "node scripts/preview.mjs"
+  },
+  "engines": {"node": ">=22"},
+  "devDependencies": {"pagefind": "1.5.2"}
+}

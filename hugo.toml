@@ -68,7 +68,7 @@ copyright = "Tardfyou"
       weight = 7
       identifier = "academic"
       name = "Academic"
-      url = "https://tardfyou.github.io/academic/"
+      url = "/academic/"
 
     [[languages.en.menu.main]]
       weight = 6
@@ -116,7 +116,7 @@ copyright = "Tardfyou"
       weight = 7
       identifier = "academic"
       name = "学术主页"
-      url = "https://tardfyou.github.io/academic/"
+      url = "/academic/"
 
     [[languages.zh-cn.menu.main]]
       weight = 6
@@ -125,7 +125,7 @@ copyright = "Tardfyou"
       url = "/messageboard/"
 
 [params]
-  defaultTheme = "dark"
+  defaultTheme = "light"
   dateFormat = "2006-01-02"
   fingerprint = "sha256"
   title = "Vincent"
@@ -238,3 +238,8 @@ copyright = "Tardfyou"
         label = "comment"
         lightTheme = "github-light"
         darkTheme = "github-dark"
+
+[params.studio]
+  mode = "hybrid"
+  motion = "soft"
+  guestbook = true

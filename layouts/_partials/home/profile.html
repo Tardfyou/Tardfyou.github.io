@@ -8,20 +8,20 @@
         <div class="home-avatar">
             {{- $menus := $.Site.Menus.main | default slice -}}
             {{- with index $menus 0 -}}
-                {{- $url := .URL | relLangURL -}}
+                {{- $url := strings.TrimPrefix "/" .URL | relLangURL -}}
                 {{- with .Page -}}
                     {{- $url = .RelPermalink -}}
                 {{- end -}}
                 <a href="{{ $url }}"{{ if (urls.Parse $url).Host }} rel="noopener noreffer" target="_blank"{{ end }}>
-                    <img src="{{ $avatar | relURL }}" alt="{{ $profile.title | default $.Site.Title }}">
+                    <img src="{{ partial "studio-url.html" $avatar }}" alt="{{ $profile.title | default $.Site.Title }}">
                 </a>
             {{- else -}}
-                <img src="{{ $avatar | relURL }}" alt="{{ $profile.title | default $.Site.Title }}">
+                <img src="{{ partial "studio-url.html" $avatar }}" alt="{{ $profile.title | default $.Site.Title }}">
             {{- end -}}
         </div>
     {{- end -}}
 
-    {{- with $profile.title -}}
+    {{- with ($profile.title | default .Site.Title) -}}
         <h1 class="home-title">
             {{- . | safeHTML -}}
         </h1>
@@ -98,4 +98,5 @@
             {{- . | safeHTML -}}
         </h3>
     {{- end -}}
+{{ if ne .Site.Params.studio.mode "blog" }}<div><nav class="studio-switch" aria-label="Website"><a href="{{ .Site.Home.RelPermalink }}" aria-current="page">Blog</a><a href="{{ "academic/" | relURL }}">Academic {{ partial "studio-icon.html" "chevron-right" }}</a></nav></div>{{ end }}
 </div>

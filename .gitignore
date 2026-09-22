@@ -9,3 +9,5 @@ static/music/stefanie-sun/audio/
 .tools/
 Thumbs.db
 .DS_Store
+node_modules
+static/_pagefind/

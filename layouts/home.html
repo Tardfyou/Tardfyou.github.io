@@ -30,7 +30,8 @@
             {{- else -}}
                 {{- $pages = .Paginate $pages -}}
             {{- end -}}
-            {{- range $pages.Pages -}}
+            <div class="studio-section-heading"><h2>{{ if eq .Site.Language.Lang "zh-cn" }}最近写作{{ else }}Recent writing{{ end }}</h2><a href="{{ "posts/" | relLangURL }}">{{ if eq .Site.Language.Lang "zh-cn" }}所有文章{{ else }}All posts{{ end }} {{ partial "studio-icon.html" "chevron-right" }}</a></div>
+{{- range $pages.Pages -}}
                 {{- .Render "summary" -}}
             {{- end -}}
             {{- partial "paginator.html" . -}}

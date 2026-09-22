@@ -1,87 +1,33 @@
-# Tardfyou.github.io
+# Vincent · Blog & Academic
 
-A small digital salon for essays, notes, experiments, and quiet obsessions.
+A Hugo blog and academic profile with a pure-white reading canvas, transparent optical glass, and restrained liquid motion.
 
-This repository contains the Hugo source for the site, currently composed with `Hugo + LoveIt`, then tailored in-repo rather than treated as an untouched theme install.
+- [Blog](https://tardfyou.github.io/)
+- [Academic profile](https://tardfyou.github.io/academic/)
 
-## The Maison
+## Run locally
 
-Two structural changes have already been completed:
+Install Hugo Extended 0.160.1 and Node.js 22 or newer, then run:
 
-1. The old Hexo-style static export has been cleared out of the repository root.
-2. Existing posts have been moved into Hugo's content structure, so publishing and maintenance now happen from one coherent source.
-
-## Floor Plan
-
-```text
-.
-|-- .github/              GitHub Pages workflow
-|-- assets/               Project-level style overrides
-|-- content/              Posts and pages
-|-- docs/                 Maintenance and migration notes
-|-- layouts/              Project-level template overrides
-|-- scripts/              Migration and rebuild utilities
-|-- static/               Static assets
-|-- themes/LoveIt/        Vendored theme source
-|-- hugo.toml
-`-- README.md
+```sh
+npm ci
+npm run dev
+npm run build
+npm run preview
 ```
 
-## The Atelier
+The GitHub Pages workflow builds Hugo and a Pagefind search index automatically.
 
-Local preview:
+## Customize
 
-```powershell
-.\scripts\dev.cmd
-```
+- `hugo.toml`: navigation, site identity, comments and `params.studio` settings.
+- `data/academic.json`: profile, research, experience, education and honors.
+- `data/music.toml`: music shelf configuration; existing media stays under `static/music/`.
+- `content/`: bilingual posts and pages.
+- `static/studio/`: shared typography, motion and optical-glass implementation.
 
-Preview including drafts:
+`params.studio.mode` supports `hybrid`, `blog` and `academic`. Set `params.studio.motion` to `off` to disable motion. Reduced-motion, reduced-transparency and contrast preferences are supported. Full backdrop refraction and interactive liquid rims are enhanced in Chromium; other browsers retain the clear CSS material.
 
-```powershell
-.\scripts\dev.cmd -Drafts
-```
+Glass windows, existing tiles, chips and floating controls can opt in with `data-lens="window"`, `tile`, `chip` or `control`. Decorative SVG layers stay out of document flow and do not change link hit targets. Displacement maps are cached until the layout changes; interactive animation stops when it settles.
 
-Production build:
-
-```powershell
-.\scripts\build.cmd
-```
-
-Build, commit, and push:
-
-```powershell
-.\scripts\publish.cmd -Message "Update blog"
-```
-
-## Service
-
-Deployment is handled through GitHub Actions. The workflow lives at `.github/workflows/hugo.yml`.
-
-For GitHub Pages, use:
-
-- `Build and deployment`
-- `Source: GitHub Actions`
-
-The old branch-root publishing approach should stay retired.
-
-## House Documents
-
-- Environment setup: `docs/ENVIRONMENT_SETUP.md`
-- Maintenance and upgrades: `docs/MAINTENANCE_AND_UPGRADE.md`
-- Content migration and rebuild notes: `docs/CONTENT_MIGRATION.md`
-
-## If The Theme Is Touched
-
-During a LoveIt upgrade, preserve the project-owned layers first:
-
-- `hugo.toml`
-- `assets/css/_override.scss`
-- `assets/css/_custom.scss`
-- `layouts/`
-- `content/`
-- `scripts/`
-- `.github/workflows/hugo.yml`
-
-## One Final Note
-
-`themes/LoveIt/` is vendored into the repository. It is not managed as a git submodule.
+For reuse, replace the personal articles, profile, photos and music with your own content. Preserve the LoveIt theme license and the OFL files distributed with the fonts. Personal writing remains under the license shown on the site.

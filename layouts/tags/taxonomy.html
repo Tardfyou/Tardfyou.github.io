@@ -29,7 +29,7 @@
         {{- if gt (len $terms) 0 -}}
             <div class="tag-cloud-tags">
                 {{- range $.Site.Taxonomies.tags.ByCount -}}
-                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+                    <a data-lens="chip" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
                 {{- end -}}
             </div>
         {{- else if .Pages -}}

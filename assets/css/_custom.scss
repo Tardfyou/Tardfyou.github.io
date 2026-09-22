@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Mea+Culpa&display=swap');
 
 .home .home-profile .home-subtitle,
 .home[data-home=posts] .home-profile .home-subtitle {
@@ -496,7 +495,7 @@ header {
 .home .home-profile .home-subtitle,
 .home .home-profile .links,
 .home .home-profile .home-disclaimer {
-  opacity: 0;
+  opacity: 1;
   animation: ios-soft-rise var(--ios-motion-slow) var(--ios-motion-ease) both;
 }
 
@@ -543,7 +542,7 @@ header {
 .home[data-home=posts] .summary,
 .categories-card .card-item,
 .archive-item {
-  opacity: 0;
+  opacity: 1;
   animation: ios-soft-rise var(--ios-motion-medium) var(--ios-motion-ease) both;
 }
 
@@ -885,7 +884,7 @@ header {
 .guestbook-page > .content,
 .guestbook-links,
 .guestbook-page #comments {
-  opacity: 0;
+  opacity: 1;
   animation: ios-soft-focus var(--ios-motion-slow) var(--ios-motion-ease) both;
 }
 
@@ -1719,7 +1718,7 @@ body[data-petals=full] .petal-screen span {
 
   .archive .single-title,
   .archive .group-title {
-    opacity: 0;
+    opacity: 1;
     animation: ios-soft-focus var(--ios-motion-slow) var(--ios-motion-ease) both;
   }
 }

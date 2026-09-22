@@ -19,14 +19,14 @@
         </div>
 
         <section class="guestbook-links" aria-label="{{ if $isZh }}友链和入口{{ else }}Links and friends{{ end }}">
-            <a class="guestbook-link" href="https://github.com/Tardfyou" target="_blank" rel="noopener">
+            <a class="guestbook-link" href="{{ .Site.Params.author.link }}" target="_blank" rel="noopener">
                 <i class="fab fa-github" aria-hidden="true"></i>
                 <span>
                     <strong>GitHub</strong>
                     <small>{{ if $isZh }}代码、项目和一些公开痕迹{{ else }}Code, projects, and public traces{{ end }}</small>
                 </span>
             </a>
-            <a class="guestbook-link" href="{{ ("/about/#future-pdf" | relLangURL) }}">
+            <a class="guestbook-link" href="{{ ("about/#future-pdf" | relLangURL) }}">
                 <i class="far fa-file-pdf" aria-hidden="true"></i>
                 <span>
                     <strong>{{ if $isZh }}未来 PDF 架{{ else }}Future PDF Shelf{{ end }}</strong>

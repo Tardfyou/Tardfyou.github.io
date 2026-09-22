@@ -1,3 +1,4 @@
+{{ if and .IsHome (eq .Site.Params.studio.mode "academic") }}{{ partial "academic-page.html" . }}{{ else }}
 {{- partial "init.html" . -}}
 
 <!DOCTYPE html>
@@ -5,15 +6,26 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>@view-transition { navigation: auto; }</style>
+  <link rel="preload" href="{{ "studio/fonts/cormorant-medium.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "studio/fonts/playfair-medium.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="{{ "academic-assets/fonts/crimson-pro-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
         <meta name="robots" content="noodp" />
         <title>{{ block "title" . }}{{ .Site.Title }}{{ end }}</title>
 
         {{- partial "head/meta.html" . -}}
         {{- partial "head/link.html" . -}}
         {{- partial "head/seo.html" . -}}
-    </head>
+
+        {{/* Keep navigation overrides render-blocking, after the theme CSS. */}}
+        <link rel="stylesheet" href="{{ "studio/motion.css" | relURL }}?v=liquid-layout-14">
+        <link rel="stylesheet" href="{{ "studio/blog.css" | relURL }}?v=liquid-layout-14">
+        <link rel="stylesheet" href="{{ "studio/typography.css" | relURL }}?v=liquid-layout-14">
+  <link rel="stylesheet" href="{{ "studio/lens.css" | relURL }}?v=liquid-layout-14">
+
+</head>
     {{- $isZh := eq .Site.Language.Lang "zh-cn" -}}
-    <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}" data-petals="light">
+    <body data-header-desktop="{{ .Site.Params.header.desktopMode }}" data-header-mobile="{{ .Site.Params.header.mobileMode }}" data-petals="light" data-motion="{{ .Site.Params.studio.motion | default "soft" }}">
         {{- /* Check theme isDark before body rendering */ -}}
         {{- $theme := .Site.Params.defaulttheme -}}
         <script>
@@ -29,7 +41,7 @@
           query.addEventListener('change', applyTheme);
         </script>
 
-        <div id="mask"></div>
+        <a class="studio-skip" href="#main-content">Skip to content</a><div class="reading-progress" aria-hidden="true"></div><div id="mask"></div>
         <div class="petal-screen" aria-hidden="true">
             <span></span>
             <span></span>
@@ -60,7 +72,7 @@
         {{- /* Body wrapper */ -}}
         <div class="wrapper">
             {{- partial "header.html" . -}}
-            <main class="main">
+            <main class="main" id="main-content" data-pagefind-body>
                 <div class="container">
                     {{- block "content" . }}{{ end -}}
                 </div>
@@ -70,19 +82,19 @@
 
         <div id="fixed-buttons">
             {{- /* top button */ -}}
-            <a href="#" id="back-to-top" class="fixed-button" title="{{ T `backToTop` }}">
-                <i class="fas fa-arrow-up" aria-hidden="true"></i>
+            <a href="#" id="back-to-top" class="fixed-button" data-lens="control" title="{{ T `backToTop` }}">
+                {{ partial "studio-icon.html" "chevron-up" }}
             </a>
         </div>
 
         <div id="fixed-buttons-hidden">
             {{- /* comment button */ -}}
-            <a href="#" id="view-comments" class="fixed-button" title="{{ T `viewComments` }}">
+            <a href="#" id="view-comments" class="fixed-button" data-lens="control" title="{{ T `viewComments` }}">
                 <i class="fas fa-comment" aria-hidden="true"></i>
             </a>
         </div>
 
-        <button class="petal-toggle" type="button" aria-label="{{ if $isZh }}切换花瓣强度{{ else }}Toggle petal intensity{{ end }}">
+        <button class="petal-toggle" data-lens="control" type="button" aria-label="{{ if $isZh }}切换花瓣强度{{ else }}Toggle petal intensity{{ end }}">
             <i class="far fa-snowflake" aria-hidden="true"></i>
             <span data-label-quiet="{{ if $isZh }}静{{ else }}Still{{ end }}" data-label-light="{{ if $isZh }}轻落{{ else }}Light{{ end }}" data-label-full="{{ if $isZh }}满屏{{ else }}Full{{ end }}">
                 {{ if $isZh }}轻落{{ else }}Light{{ end }}
@@ -113,7 +125,12 @@
           })();
         </script>
 
-        {{- /* Load JavaScript scripts and CSS */ -}}
+        {{- /* Load page plugins and JavaScript */ -}}
         {{- partial "assets.html" . -}}
-    </body>
+
+    <script src="{{ "studio/motion.js" | relURL }}?v=liquid-layout-14" defer></script>
+  <script src="{{ "studio/lens.js" | relURL }}?v=liquid-layout-14" defer></script>
+</body>
 </html>
+
+{{ end }}

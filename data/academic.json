@@ -1,0 +1,128 @@
+{
+  "name": "Vincent",
+  "secondaryName": "ChengzhiYi",
+  "role": "Master's Student",
+  "department": "School of Cyber Science and Engineering",
+  "institution": "Huazhong University of Science and Technology",
+  "email": "yimou@hust.edu.cn",
+  "github": "https://github.com/Tardfyou",
+  "portrait": "academic-assets/portrait.jpg",
+  "source": "https://github.com/Tardfyou/academic",
+  "about": [
+    "I am a master's student in the School of Cyber Science and Engineering at **Huazhong University of Science and Technology**, where I am part of **Security Pride**.",
+    "My research focuses on **large language model systems security** and **static program analysis**. My projects also explore AI-assisted vulnerability analysis."
+  ],
+  "interests": [
+    "LLM Systems Security",
+    "Static Program Analysis"
+  ],
+  "research": [
+    {
+      "title": "SemWeaver: Refining LLM-Generated Static Vulnerability Checkers with Analyzer-Internal Evidence",
+      "venue": "ICSE 2027",
+      "rank": "CCF-A",
+      "status": "Submitted · Under review",
+      "date": "2026",
+      "kind": "",
+      "authors": "Chengzhi Yi, Shenao Wang, Yanjie Zhao, Xiao Cheng, Haoyu Wang",
+      "description": "A plug-in refinement layer that selects evidence from static-analysis engines to help LLM-generated vulnerability checkers distinguish vulnerable code from fixed code.",
+      "note": "Huazhong University of Science and Technology · Macquarie University",
+      "abstract": "LLM-based patch-driven synthesis can automatically generate static vulnerability checkers from security fixes, but the resulting checkers often capture only the syntactic shape of the patch while missing the semantic conditions (path guards, state invariants, data-flow relations, and API contracts) needed to distinguish vulnerable code from fixed code. Existing refinement loops rely on behavioral feedback alone, which reveals symptoms but not causes, reducing refinement to prompt-level retry. We observe that static-analysis engines already compute the missing predicates as intermediate results during checker execution, yet these results are never exposed to the refinement process. Directly feeding all intermediate results to the LLM is impractical due to their volume and noise. SemWeaver is a plug-in refinement layer that bridges this gap through adaptive evidence selection: a patch-mechanism classifier identifies the bug category and collects only the relevant analyzer-native facts, which are then normalized with patch context and validation feedback into a typed semantic evidence bundle. A target-preserving gate ensures that each refinement preserves the vulnerable-side trigger while eliminating fixed-side warnings. We evaluate SemWeaver on real-world Linux kernel vulnerability patches. On 12 refinable KNighter derived CSA checkers, SemWeaver raises the patch-discriminating success rate from 0% to 91.7%. On 20 cross-backend detectors (CSA and CodeQL) from an independent generator, it achieves a 50% relative improvement. Ablation and model-robustness studies confirm the contribution of analyzer-native evidence beyond validation-only retry.",
+      "links": [
+        {
+          "label": "Artifact",
+          "url": "https://anonymous.4open.science/r/SemWeaver-FD1E"
+        },
+        {
+          "label": "Contact author",
+          "url": "mailto:yimou@hust.edu.cn?subject=SemWeaver%20paper%20inquiry"
+        }
+      ],
+      "id": "semweaver"
+    },
+    {
+      "title": "Intelligent security operations with large language models",
+      "venue": "",
+      "rank": "",
+      "status": "",
+      "date": "2024 — 2025",
+      "kind": "Research project",
+      "authors": "",
+      "description": "Security-focused language models and orchestration for threat investigation, remediation, and coordinated protection across security devices. I contributed to backend development, API testing, dataset construction, and model training.",
+      "note": "Advisor: Lansheng Han · National undergraduate innovation project",
+      "abstract": "",
+      "links": []
+    }
+  ],
+  "experience": [
+    {
+      "title": "StepFun 阶跃星辰",
+      "date": "Jul 6 — Sep 10, 2026",
+      "role": "AI Security Engineering Intern · Shanghai",
+      "description": "Secure development lifecycle tooling, static application security testing, and automated security scanning integrated into development workflows."
+    },
+    {
+      "title": "ByteDance 字节跳动",
+      "date": "Jun — Sep 2025",
+      "role": "R&D Intern · Douyin LIVE · Hangzhou",
+      "description": "Backend development for QA platforms, automation services, and agent development. Independently completed four technical initiatives."
+    },
+    {
+      "title": "State Grid 国家电网",
+      "date": "Jul — Aug 2024",
+      "role": "Information Security Intern · Wuhan",
+      "description": "Contributed to language-model data resources, knowledge graph construction, and platform API development and testing."
+    }
+  ],
+  "education": [
+    {
+      "institution": "HUAZHONG UNIVERSITY OF SCIENCE AND TECHNOLOGY",
+      "title": "Master's Student · Cyberspace Security",
+      "description": "School of Cyber Science and Engineering",
+      "note": "Planned transition to doctoral studies in 2027."
+    },
+    {
+      "institution": "HUAZHONG UNIVERSITY OF SCIENCE AND TECHNOLOGY",
+      "title": "Cyberspace Security",
+      "description": "Undergraduate studies · 2022 — 2026",
+      "note": "School of Cyber Science and Engineering"
+    }
+  ],
+  "honors": [
+    {
+      "title": "First-Class Master's Scholarship",
+      "note": "",
+      "date": "2026"
+    },
+    {
+      "title": "HUST Undergraduate Natural Science Innovation Fund",
+      "note": "Research funding recipient",
+      "date": "2025"
+    },
+    {
+      "title": "National Undergraduate Innovation Project",
+      "note": "Core member · Excellent completion",
+      "date": "2025"
+    },
+    {
+      "title": "Kingsoft Cloud Security Elite Program",
+      "note": "Ranked first upon completion",
+      "date": "2024"
+    },
+    {
+      "title": "HUST Cybersecurity Competition",
+      "note": "Second prize",
+      "date": "2024"
+    },
+    {
+      "title": "Lanqiao Cup · Provincial Competition",
+      "note": "Third prize",
+      "date": "2024"
+    },
+    {
+      "title": "Academic Excellence Scholarship",
+      "note": "",
+      "date": "2023"
+    }
+  ]
+}
