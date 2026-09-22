@@ -312,3 +312,6 @@ body[data-motion="off"].academic-site .experience:hover .date { transform: none;
   }
   body[data-motion="off"].academic-site .profile nav a { min-height: 54px; }
 }
+
+/* Direct paper links keep their heading clear of the floating navigation. */
+.academic-site .research-item[id] { scroll-margin-top: 100px; }

@@ -24,6 +24,38 @@
     surfaces.set(element, { id, map, displacement, geometry: '' });
   });
 
+  // Snell-law bezel profile adapted from DevSam7t3/liquid-glass (MIT).
+  // See THIRD_PARTY_NOTICES.md and licenses/devsam-liquid-glass-MIT.txt.
+  // Normalized units share one lookup table across all lens sizes.
+  const refractionProfile = (() => {
+    const samples = 128, eta = 1 / 1.5, thickness = .6;
+    const surface = x => Math.sqrt(Math.max(0, 1 - (1 - x) ** 2));
+    const profile = new Float32Array(samples + 1);
+    let maximum = 0;
+    for (let i = 0; i < samples; i++) {
+      const x = i / samples, height = surface(x);
+      const slope = (surface(Math.min(1, x + .0001)) - height) / .0001;
+      const normalLength = Math.hypot(slope, 1);
+      const nx = -slope / normalLength, ny = -1 / normalLength;
+      const k = 1 - eta * eta * (1 - ny * ny);
+      const ray = eta * ny + Math.sqrt(Math.max(0, k));
+      const rx = -ray * nx, ry = eta - ray * ny;
+      profile[i] = Math.max(0, rx * (height + thickness) / ry);
+      maximum = Math.max(maximum, profile[i]);
+    }
+    for (let i = 0; i < samples; i++) profile[i] /= maximum || 1;
+    return profile;
+  })();
+  const bezelBend = (t, edgeWidth) => {
+    const position = t * (refractionProfile.length - 1);
+    const index = Math.min(Math.floor(position), refractionProfile.length - 2);
+    const mix = position - index;
+    const refraction = refractionProfile[index] * (1 - mix) + refractionProfile[index + 1] * mix;
+    // A subpixel shoulder joins the unfiltered exterior without a hard seam.
+    const edge = Math.min(1, t / edgeWidth);
+    return refraction * edge * edge * (3 - 2 * edge);
+  };
+
   const update = element => {
     const state = surfaces.get(element);
     const width = element.offsetWidth, height = element.offsetHeight;
@@ -35,6 +67,7 @@
     state.width = width; state.height = height; state.radius = radius;
     const compact = element.matches('[data-lens=chip], [data-lens=control], .paper-badge, .paper-actions a, .interests > span, .abstract-icon, .studio-switch');
     const depth = Math.min(compact ? 8 : 18, height * .28);
+    const edgeWidth = Math.min(.18, .75 / depth);
     const strength = compact ? 3.2 : element.dataset.lens === 'window' ? 8 : 10;
     // Cache a small normal map at layout changes, never at scroll/pointer rate.
     const resolution = Math.min(1, Math.sqrt(100000 / (width * height)));
@@ -57,7 +90,7 @@
         nx *= Math.sign(px); ny *= Math.sign(py);
         // The center is clear; curvature is concentrated in the rounded bevel.
         const t = Math.max(0, Math.min(1, inside / depth));
-        const bend = inside > 0 && inside < depth ? Math.sin(Math.PI * t) ** .8 : 0;
+        const bend = inside > 0 && inside < depth ? bezelBend(t, edgeWidth) : 0;
         const i = (y * canvas.width + x) * 4;
         pixels.data[i] = Math.round(128 - nx * bend * 120);
         pixels.data[i + 1] = Math.round(128 - ny * bend * 120);
@@ -65,6 +98,10 @@
       }
     }
     context.putImageData(pixels, 0, 0);
+    // Percentages resolve against the 0-sized SVG host in Chromium. Use the
+    // target's CSS pixels so the map bends the rim instead of shifting the pane.
+    state.map.setAttribute('width', width);
+    state.map.setAttribute('height', height);
     state.map.setAttribute('href', canvas.toDataURL());
     state.strength = strength * 2;
     state.displacement.setAttribute('scale', state.strength);
