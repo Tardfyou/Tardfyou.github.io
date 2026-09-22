@@ -104,6 +104,12 @@
     summary.addEventListener('click', event => {
       event.preventDefault();
       const startHeight = details.getBoundingClientRect().height;
+      // Sample before cancelling so a reversal continues from the visible text.
+      const contentStyle = details.open && paragraph ? getComputedStyle(paragraph) : null;
+      const contentStart = {
+        opacity: contentStyle?.opacity ?? '0',
+        transform: contentStyle?.transform ?? 'translateY(7px)'
+      };
       desiredOpen = !desiredOpen;
       details.dataset.expanded = String(desiredOpen);
       summary.setAttribute('aria-expanded', String(desiredOpen));
@@ -123,10 +129,10 @@
       details.style.overflow = 'hidden';
       details.style.height = `${startHeight}px`;
       contentAnimation?.cancel();
-      if (desiredOpen && paragraph) contentAnimation = paragraph.animate([
-        { opacity: 0, transform: 'translateY(7px)' },
-        { opacity: 1, transform: 'translateY(0)' }
-      ], { duration: 340, delay: 45, fill: 'backwards', easing: 'cubic-bezier(.16,1,.3,1)' });
+      if (paragraph) contentAnimation = paragraph.animate([
+        contentStart,
+        { opacity: desiredOpen ? 1 : 0, transform: desiredOpen ? 'translateY(0)' : 'translateY(-3px)' }
+      ], { duration: desiredOpen ? 340 : 220, fill: 'both', easing: 'cubic-bezier(.16,1,.3,1)' });
       const heights = desiredOpen
         ? [{ height: `${startHeight}px` }, { height: `${endHeight + 3}px`, offset: .8 }, { height: `${endHeight}px` }]
         : [{ height: `${startHeight}px` }, { height: `${endHeight}px` }];
