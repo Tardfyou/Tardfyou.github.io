@@ -838,6 +838,8 @@ header {
 }
 
 .archive-item-date {
+  flex-shrink: 0;
+  white-space: nowrap;
   color: #877d75;
   font-size: 0.82rem;
   letter-spacing: 0.02em;
