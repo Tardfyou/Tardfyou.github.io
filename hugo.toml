@@ -176,7 +176,7 @@ copyright = "Tardfyou"
     contentLength = 4000
     placeholder = ""
     maxResultLength = 10
-    snippetLength = 30
+    snippetLength = 160
     highlightTag = "em"
     absoluteURL = false
 

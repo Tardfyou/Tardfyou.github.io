@@ -105,7 +105,7 @@ class Theme {
 
     initSearch() {
         const searchConfig = this.config.search;
-        const isMobile = Util.isMobile();
+        const isMobile = document.getElementById('header-mobile').getClientRects().length > 0;
         if (!searchConfig || isMobile && this._searchMobileOnce || !isMobile && this._searchDesktopOnce) return;
 
         const maxResultLength = searchConfig.maxResultLength ? searchConfig.maxResultLength : 10;
@@ -169,6 +169,9 @@ class Theme {
         }, false);
 
         const initAutosearch = () => {
+            const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+            })[character]);
             const autosearch = autocomplete(`#search-input-${suffix}`, {
                 hint: false,
                 autoselect: true,
@@ -350,15 +353,18 @@ class Theme {
                                 const loaded = await Promise.all(
                                     searchResult.results.slice(0, maxResultLength).map(r => r.data())
                                 );
+                                const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                                const titlePattern = query ? new RegExp(`(${escapedQuery})`, 'gi') : null;
                                 loaded.forEach(item => {
                                     const uri = item.url;
                                     if (results[uri]) return;
-                                    let title = item.meta?.title || '';
-                                    let context = item.excerpt || item.content || '';
-                                    context = context.slice(0, snippetLength);
-                                    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                                    title = title.replace(new RegExp(`(${escapedQuery})`, 'gi'), `<${highlightTag}>$1</${highlightTag}>`);
-                                    context = context.replace(new RegExp(`(${escapedQuery})`, 'gi'), `<${highlightTag}>$1</${highlightTag}>`);
+                                    const rawTitle = item.meta?.title || '';
+                                    const titleParts = titlePattern ? rawTitle.split(titlePattern) : [rawTitle];
+                                    const title = titleParts.map((part, index) => index % 2
+                                        ? `<${highlightTag}>${escapeHTML(part)}</${highlightTag}>`
+                                        : escapeHTML(part)).join('');
+                                    // Pagefind returns a complete excerpt around the match, with balanced marks.
+                                    const context = item.excerpt || escapeHTML((item.content || '').slice(0, snippetLength));
                                     results[uri] = { uri, title, date: '', context };
                                 });
                                 finish(Object.values(results));
@@ -372,7 +378,7 @@ class Theme {
                 },
                 templates: {
                     suggestion: ({ title, date, context }) => `<div><span class="suggestion-title">${title}</span><span class="suggestion-date">${date}</span></div><div class="suggestion-context">${context}</div>`,
-                    empty: ({ query }) => `<div class="search-empty">${searchConfig.noResultsFound}: <span class="search-query">"${query}"</span></div>`,
+                    empty: ({ query }) => `<div class="search-empty">${searchConfig.noResultsFound}: <span class="search-query">"${escapeHTML(query)}"</span></div>`,
                     footer: ({}) => {
                         const searchTypes = {
                             algolia: { searchType: 'algolia', icon: '<i class="fab fa-algolia" aria-hidden="true"></i>', href: 'https://www.algolia.com/' },
@@ -386,6 +392,14 @@ class Theme {
             });
             autosearch.on('autocomplete:selected', (_event, suggestion, _dataset, _context) => {
                 window.location.assign(suggestion.uri);
+            });
+            autosearch.on('autocomplete:cursorchanged', () => {
+                const selected = document.querySelector(`#search-dropdown-${suffix} .suggestion.cursor`);
+                const list = selected?.closest('.suggestions');
+                if (!list) return;
+                const row = selected.getBoundingClientRect(), viewport = list.getBoundingClientRect();
+                if (row.top < viewport.top) list.scrollTop += row.top - viewport.top;
+                else if (row.bottom > viewport.bottom) list.scrollTop += row.bottom - viewport.bottom;
             });
             if (isMobile) this._searchMobile = autosearch;
             else this._searchDesktop = autosearch;

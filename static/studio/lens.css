@@ -111,7 +111,10 @@ body [data-lens="window"]:has(.dropdown-menu[style*="display: block"]) {
   border-radius: 16px; padding: 13px 15px; margin: 2px 0;
   transition: background-color 150ms, box-shadow 180ms;
 }
-:is(#search-dropdown-desktop,#search-dropdown-mobile) .suggestion-title { max-width: 100%; font-weight: 500; }
+:is(#search-dropdown-desktop,#search-dropdown-mobile) .suggestion-title {
+  display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2;
+  max-width: 100%; white-space: normal; overflow: hidden; line-height: 1.45; font-weight: 500;
+}
 :is(#search-dropdown-desktop,#search-dropdown-mobile) .suggestion-context { color: #5a6b7e; font-size: .92rem; line-height: 1.45; margin-top: 4px; }
 :is(#search-dropdown-desktop,#search-dropdown-mobile) .suggestion.cursor {
   background: rgba(156,181,214,.15);
