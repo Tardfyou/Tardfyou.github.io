@@ -132,10 +132,22 @@ body #header-desktop .menu .search input, body #header-mobile .search input {
 body #header-desktop .menu .search input:focus, body #header-mobile .search input:focus {
   border-color: #7095c05c; box-shadow: inset 0 1px 2px #28425e09, 0 0 0 3px #789fcc12;
 }
-body #toc-static[data-lens] { --lens-center: .74; border-radius: 20px; overflow: hidden; }
+body #toc-static[data-lens] { --lens-center: .74; box-sizing: border-box; border-radius: 20px; overflow: hidden; }
 body #toc-static[data-lens] :is(.toc-title,.toc-content) { background: transparent; }
 body #toc-static[data-lens] .toc-title { min-height: 46px; align-items: center; padding: 3px 16px; }
 body #toc-static[data-lens] .toc-content { border-top: 1px solid #8da6c01c; }
+body #toc-static summary { list-style: none; cursor: pointer; }
+body #toc-static summary::-webkit-details-marker { display: none; }
+body #toc-static summary:focus-visible { outline-offset: -5px; border-radius: inherit; }
+body #toc-static[open] > .toc-content { max-height: none; overflow: visible; transition: none; }
+.toc-toggle-icon {
+  display: inline-grid; place-items: center; flex: 0 0 auto; width: 28px; height: 28px;
+  border-radius: 50%; background: #93abc610;
+  transition: transform 360ms var(--motion-spring), background-color 200ms;
+}
+.toc-toggle-icon .link-icon { width: 16px; height: 16px; opacity: .8; }
+#toc-static[open]:not([data-expanded="false"]) .toc-toggle-icon { transform: rotate(90deg); }
+#toc-static summary:hover .toc-toggle-icon { background: #93abc624; }
 
 /* Fine pointer feedback stays small enough to keep labels and hit targets stable. */
 body [data-lens]:is(a,button) { transition: transform 420ms var(--motion-spring), box-shadow 280ms, border-color 220ms; }
@@ -159,6 +171,8 @@ body[theme=dark] [data-lens="window"] { --lens-material: linear-gradient(180deg,
 [theme=dark] :is(#search-dropdown-desktop,#search-dropdown-mobile) :is(em,mark) { background: #a8c8f036; }
 body[theme=dark] #header-desktop .menu .search input, body[theme=dark] #header-mobile .search input { background: #18223059; border-color: #89a2c033; box-shadow: inset 0 1px 2px #0002, 0 1px 0 #ffffff12; }
 @media (max-width: 1080px) {
+  #toc-auto { display: none; }
+  #toc-static { display: block; }
   #header-mobile.open .header-wrapper { display: none; margin-top: 0; }
   #header-mobile.open .menu { padding: 0; }
   #header-mobile .header-container .menu .search-wrapper { display: flex; align-items: center; gap: 10px; padding: 10px 14px; min-height: 60px; }

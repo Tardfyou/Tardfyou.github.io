@@ -76,15 +76,15 @@
 
         {{- /* Static TOC */ -}}
         {{- if ne $toc.enable false -}}
-            <div class="details toc" id="toc-static" data-lens="tile" data-kept="{{ if $toc.keepStatic }}true{{ end }}">
-                <div class="details-summary toc-title">
+            <details class="details toc" id="toc-static" data-lens="tile" data-kept="{{ if $toc.keepStatic }}true{{ end }}">
+                <summary class="details-summary toc-title">
                     <span>{{ T "contents" }}</span>
-                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
-                </div>
+                    <span class="toc-toggle-icon" aria-hidden="true">{{ partial "studio-icon.html" "chevron-right" }}</span>
+                </summary>
                 <div class="details-content toc-content" id="toc-content-static">
                     {{- dict "Content" .TableOfContents "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
                 </div>
-            </div>
+            </details>
         {{- end -}}
 
         {{- /* Content */ -}}

@@ -113,7 +113,15 @@
     let timer = 0;
     const changed = new Set();
     const observer = new ResizeObserver(entries => {
-      entries.forEach(entry => changed.add(entry.target));
+      entries.forEach(entry => {
+        changed.add(entry.target);
+        const width = entry.target.offsetWidth, height = entry.target.offsetHeight;
+        // Keep the cached map covering an opening panel; regenerate after it settles.
+        if (width && height) {
+          const { map } = surfaces.get(entry.target);
+          map.setAttribute('width', width); map.setAttribute('height', height);
+        }
+      });
       clearTimeout(timer);
       timer = setTimeout(() => { changed.forEach(update); changed.clear(); }, 100);
     });

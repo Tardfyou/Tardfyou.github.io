@@ -13,7 +13,7 @@ class Util {
     }
 
     static isTocStatic() {
-        return window.matchMedia('only screen and (max-width: 960px)').matches;
+        return window.matchMedia('only screen and (max-width: 1080px)').matches;
     }
 
     static animateCSS(element, animation, reserved, callback) {
@@ -427,6 +427,7 @@ class Theme {
 
     initDetails() {
         Util.forEach(document.getElementsByClassName('details'), $details => {
+            if ($details.matches('details#toc-static')) return;
             const $summary = $details.getElementsByClassName('details-summary')[0];
             $summary.addEventListener('click', () => {
                 $details.classList.toggle('open');
