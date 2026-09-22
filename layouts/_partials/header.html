@@ -110,9 +110,12 @@
                     {{- end -}}
                 </a>
             </div>
-            <div class="menu-toggle" id="menu-toggle-mobile">
-                <span></span><span></span><span></span>
-            </div>
+            <button class="menu-toggle" id="menu-toggle-mobile" type="button" aria-controls="menu-mobile" aria-expanded="false"
+                aria-label="{{ if eq .Site.Language.Lang "zh-cn" }}展开导航{{ else }}Open navigation{{ end }}"
+                data-open-label="{{ if eq .Site.Language.Lang "zh-cn" }}展开导航{{ else }}Open navigation{{ end }}"
+                data-close-label="{{ if eq .Site.Language.Lang "zh-cn" }}收起导航{{ else }}Close navigation{{ end }}">
+                <span aria-hidden="true"></span><span aria-hidden="true"></span><span aria-hidden="true"></span>
+            </button>
         </div>
         <div class="menu" id="menu-mobile">
             {{- if .Site.Params.search.enable -}}

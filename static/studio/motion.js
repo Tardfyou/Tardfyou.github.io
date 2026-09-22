@@ -308,27 +308,76 @@
     }
   });
 
-  // Preserve the theme's menu behavior; animate its presentation and add Escape.
+  // The native button owns input semantics; the theme still owns menu/search state.
   const menu = document.querySelector('#menu-toggle-mobile');
   const menuPanel = document.querySelector('#menu-mobile');
-  if (menu && menuPanel) {
-    menu.setAttribute('role', 'button'); menu.tabIndex = 0;
-    menu.setAttribute('aria-label', 'Toggle navigation');
-    menu.setAttribute('aria-controls', 'menu-mobile');
-    let wasOpen = false;
-    const sync = () => {
-      const open = menu.classList.contains('active');
-      menu.setAttribute('aria-expanded', String(open));
-      if (open && !wasOpen) {
-        animate(menuPanel, [{ opacity: 0, transform: 'translateY(-7px) scale(.975)' }, { opacity: 1, transform: 'none' }], { duration: 360, easing: 'cubic-bezier(.16,1,.3,1)' });
-        menuPanel.querySelectorAll('a.menu-item').forEach((item, index) => animate(item, [{ opacity: 0, transform: 'translateY(-5px)' }, { opacity: 1, transform: 'none' }], { duration: 300, delay: Math.min(index, 5) * 24, easing: 'ease-out' }));
-      }
-      wasOpen = open;
+  const mobileHeader = document.querySelector('#header-mobile');
+  const menuContainer = mobileHeader?.querySelector('.header-container');
+  if (menu && menuPanel && menuContainer) {
+    const mobile = matchMedia('(max-width: 1080px)');
+    let wasOpen = menu.classList.contains('active'), wasSearch = mobileHeader.classList.contains('open');
+    let animation = null, snapNext = false;
+    const settle = () => {
+      if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
+      menuPanel.style.display = '';
+      menuContainer.style.height = '';
+      menuPanel.inert = !menu.classList.contains('active') && !mobileHeader.classList.contains('open');
     };
-    new MutationObserver(sync).observe(menu, { attributes: true, attributeFilter: ['class'] }); sync();
-    menu.addEventListener('keydown', event => { if (['Enter', ' '].includes(event.key)) { event.preventDefault(); menu.click(); } });
+    resetters.add(settle);
+    const sync = () => {
+      const open = menu.classList.contains('active'), searching = mobileHeader.classList.contains('open');
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? (menu.dataset.closeLabel || 'Close navigation') : (menu.dataset.openLabel || 'Open navigation'));
+      const changed = open !== wasOpen;
+      const immediate = searching || wasSearch || !mobile.matches || !motionAllowed() || snapNext;
+      snapNext = false;
+      wasOpen = open; wasSearch = searching;
+      if (!changed && !immediate) return;
+      if (immediate) { settle(); return; }
+      const reversing = !!animation;
+      const currentHeight = reversing ? menuContainer.getBoundingClientRect().height : null;
+      if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
+      menuContainer.style.height = '';
+      menuPanel.style.display = open ? 'none' : 'block';
+      const startHeight = currentHeight ?? menuContainer.getBoundingClientRect().height;
+      menuPanel.style.display = open ? 'block' : 'none';
+      const endHeight = menuContainer.getBoundingClientRect().height;
+      menuPanel.style.display = 'block';
+      menuPanel.inert = !open;
+      if (open && !reversing) menuPanel.scrollTop = 0;
+      menuContainer.style.height = `${startHeight}px`;
+      animation = animate(menuContainer, [{ height: `${startHeight}px` }, { height: `${endHeight}px` }], {
+        duration: open ? 360 : 260, fill: 'forwards', easing: 'cubic-bezier(.16,1,.3,1)'
+      });
+      if (animation) animation.onfinish = settle;
+      else settle();
+    };
+    const observer = new MutationObserver(sync);
+    observer.observe(menu, { attributes: true, attributeFilter: ['class'] });
+    observer.observe(mobileHeader, { attributes: true, attributeFilter: ['class'] });
+    const close = (focusButton, immediately = false) => {
+      if (immediately) snapNext = true;
+      if (mobileHeader.classList.contains('open')) document.querySelector('#search-cancel-mobile')?.click();
+      else if (menu.classList.contains('active')) menu.click();
+      if (focusButton && mobile.matches) menu.focus();
+    };
     addEventListener('keydown', event => {
-      if (event.key === 'Escape' && menu.classList.contains('active')) { menu.click(); menu.focus(); }
+      if (event.key === 'Escape' && mobile.matches && (menu.classList.contains('active') || mobileHeader.classList.contains('open'))) {
+        event.preventDefault(); close(true);
+      }
     });
+    mobileHeader.addEventListener('focusout', event => {
+      if (mobile.matches && menu.classList.contains('active') && !mobileHeader.classList.contains('open')
+        && event.relatedTarget && !mobileHeader.contains(event.relatedTarget)) close(false, true);
+    });
+    mobile.addEventListener('change', () => {
+      if (!mobile.matches) close(false);
+      else if (document.querySelector('#header-desktop.open')) {
+        document.querySelector('#mask')?.click();
+        menu.focus();
+      }
+      settle();
+    });
+    sync(); settle();
   }
 })();

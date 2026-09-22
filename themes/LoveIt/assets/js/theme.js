@@ -120,10 +120,15 @@ class Theme {
         const $searchClear = document.getElementById(`search-clear-${suffix}`);
         if (isMobile) {
             this._searchMobileOnce = true;
-            $searchInput.addEventListener('focus', () => {
+            const openSearch = () => {
                 document.body.classList.add('blur');
                 $header.classList.add('open');
-            }, false);
+            };
+            // Tab may pass through the field to the navigation links without opening search.
+            $searchInput.addEventListener('click', openSearch, false);
+            $searchInput.addEventListener('input', () => { if ($searchInput.value) openSearch(); }, false);
+            $searchInput.addEventListener('keydown', event => { if (event.key === 'Enter') openSearch(); }, false);
+            $searchToggle.addEventListener('click', () => { openSearch(); $searchInput.focus(); }, false);
             document.getElementById('search-cancel-mobile').addEventListener('click', () => {
                 $header.classList.remove('open');
                 document.body.classList.remove('blur');
@@ -834,13 +839,13 @@ class Theme {
 
     onResize() {
         window.addEventListener('resize', () => {
+            this.initSearch();
             if (!this._resizeTimeout) {
                 this._resizeTimeout = window.setTimeout(() => {
                     this._resizeTimeout = null;
                     for (let event of this.resizeEventSet) event();
                     this.initToc();
                     this.initMermaid();
-                    this.initSearch();
                 }, 100);
             }
         }, false);
