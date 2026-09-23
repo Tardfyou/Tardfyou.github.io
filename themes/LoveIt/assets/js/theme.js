@@ -484,14 +484,50 @@ class Theme {
             const $copy = $codeBlock.querySelector('.code-header .copy');
             if ($copy) {
                 const $code = $codeBlock.querySelector('code');
-                $copy.setAttribute('data-clipboard-text', $code.innerText);
-                const clipboard = new ClipboardJS($copy);
-                const $codeLines = $code.querySelectorAll('span.cl');
-                clipboard.on('success', _e => {
-                    if ($codeLines) {
-                        Util.forEach($codeLines, $codeLine => Util.animateCSS($codeLine, 'animate__flash'))
+                const $status = $copy.querySelector('.copy-status');
+                const label = $copy.getAttribute('aria-label');
+                let resetTimer = 0, copying = false;
+                const reset = () => {
+                    clearTimeout(resetTimer);
+                    $copy.classList.remove('is-copied', 'is-copy-error');
+                    $copy.title = label;
+                    $status.textContent = '';
+                };
+                $copy.addEventListener('click', async () => {
+                    if (copying) return;
+                    copying = true;
+                    reset();
+                    $copy.setAttribute('aria-busy', 'true');
+                    let failed = false;
+                    try {
+                        const text = $code.innerText;
+                        if (navigator.clipboard?.writeText) {
+                            await navigator.clipboard.writeText(text);
+                        } else {
+                            // Keep non-secure previews usable without treating a denied write as success.
+                            const textarea = document.createElement('textarea');
+                            textarea.value = text;
+                            textarea.readOnly = true;
+                            textarea.style.cssText = 'position:fixed;left:-9999px;top:0;font-size:16px';
+                            document.body.append(textarea);
+                            try {
+                                textarea.select();
+                                if (!document.execCommand('copy')) throw new Error('Copy unavailable');
+                            } finally {
+                                textarea.remove();
+                                $copy.focus({preventScroll: true});
+                            }
+                        }
+                    } catch (_) {
+                        failed = true;
                     }
+                    copying = false;
+                    $copy.removeAttribute('aria-busy');
+                    $copy.classList.add(failed ? 'is-copy-error' : 'is-copied');
+                    $copy.title = $status.textContent = $copy.dataset[failed ? 'labelError' : 'labelCopied'];
+                    resetTimer = setTimeout(reset, failed ? 3000 : 1600);
                 });
+                window.addEventListener('pagehide', reset);
             }
         });
     }

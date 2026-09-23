@@ -1,0 +1,31 @@
+{{- $content := .Content -}}
+{{- $lang := .Lang -}}
+{{- $params := .Page.Scratch.Get "params" -}}
+{{- $maxShownLines := $params.code.maxShownLines | default 10 | int -}}
+{{- $copy := $params.code.copy | default true -}}
+{{- $isZh := eq .Page.Language.Lang "zh-cn" -}}
+{{- $lines := split $content "\n" | len -}}
+{{- $options := dict "lineNoStart" 1 "lineNos" true -}}
+{{- $options = .Options | partial "function/dict.html" | merge $options -}}
+{{- $lineNoStart := $options.lineNoStart | int -}}
+{{- $lineNos := $options.lineNos | partial "function/bool.html" -}}
+
+{{- $options = dict "noClasses" false "lineNos" false | merge $options -}}
+{{- $result := transform.Highlight $content $lang $options -}}
+<div class="code-block{{ if $lineNos }} code-line-numbers{{ end }}{{ if le $lines $maxShownLines }} open{{ end }}" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
+    <div class="code-header language-{{ $lang }}">
+        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
+        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
+        {{ if $copy }}<button type="button" class="copy" data-lens="chip" data-pagefind-ignore title="{{ T "copyToClipboard" }}" aria-label="{{ T "copyToClipboard" }}"
+            data-label-copied="{{ if $isZh }}已复制{{ else }}Copied{{ end }}"
+            data-label-error="{{ if $isZh }}复制失败，请选中代码复制{{ else }}Copy failed. Select the code to copy{{ end }}">
+            <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+                <g class="copy-glyph"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h3"/></g>
+                <path class="copy-check" d="m5 12 4 4L19 6"/>
+                <g class="copy-error"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v6m0 4h.01"/></g>
+            </svg>
+            <span class="copy-status" role="status" aria-live="polite" aria-atomic="true"></span>
+        </button>{{ end }}
+    </div>
+    {{- $result -}}
+</div>
