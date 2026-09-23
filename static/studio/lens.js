@@ -21,7 +21,10 @@
     const map = make('feImage', { x: 0, y: 0, width: '100%', height: '100%', preserveAspectRatio: 'none', result: 'lens-map' });
     const displacement = make('feDisplacementMap', { in: 'SourceGraphic', in2: 'lens-map', xChannelSelector: 'R', yChannelSelector: 'G' });
     filter.append(map, displacement); defs.append(filter);
-    surfaces.set(element, { id, map, displacement, geometry: '' });
+    const article = element.classList.contains('article-glass');
+    const bounds = article ? element.getBoundingClientRect() : null;
+    const nearViewport = !article || bounds.bottom >= -350 && bounds.top <= innerHeight + 350;
+    surfaces.set(element, { id, map, displacement, geometry: '', article, nearViewport });
   });
 
   // Snell-law bezel profile adapted from DevSam7t3/liquid-glass (MIT).
@@ -58,6 +61,7 @@
 
   const update = element => {
     const state = surfaces.get(element);
+    if (state.article && !state.nearViewport) return;
     const width = element.offsetWidth, height = element.offsetHeight;
     if (!width || !height) return;
     const radius = Math.min(parseFloat(getComputedStyle(element).borderTopLeftRadius) || 0, width / 2, height / 2);
@@ -109,6 +113,17 @@
     element.classList.add('lens-ready');
   };
   surfaces.forEach((_, element) => update(element));
+  if ('IntersectionObserver' in window) {
+    const visibility = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        surfaces.get(entry.target).nearViewport = entry.isIntersecting;
+        if (entry.isIntersecting) update(entry.target);
+      });
+    }, {rootMargin: '350px 0px'});
+    surfaces.forEach((state, element) => {if (state.article) visibility.observe(element)});
+  } else {
+    surfaces.forEach((state, element) => {if (state.article) {state.nearViewport = true; update(element)}});
+  }
   if ('ResizeObserver' in window) {
     let timer = 0;
     const changed = new Set();
@@ -118,7 +133,9 @@
         const width = entry.target.offsetWidth, height = entry.target.offsetHeight;
         // Keep the cached map covering an opening panel; regenerate after it settles.
         if (width && height) {
-          const { map } = surfaces.get(entry.target);
+          const state = surfaces.get(entry.target);
+          if (state.width !== width || state.height !== height) state.clearRim?.();
+          const { map } = state;
           map.setAttribute('width', width); map.setAttribute('height', height);
         }
       });
@@ -143,7 +160,7 @@
   addEventListener('pagehide', stopRims); addEventListener('resize', stopRims);
 
   surfaces.forEach((state, element) => {
-    if (!element.matches('.academic-topbar, #header-desktop .header-wrapper, .profile nav, .studio-switch, .paper-badge, .paper-actions a, [data-lens=chip], [data-lens=control], a[data-lens=tile]')) return;
+    if (!element.matches('.academic-topbar, #header-desktop .header-wrapper, .profile nav, .studio-switch, .paper-badge, .paper-actions a, [data-lens=chip], [data-lens=control], a[data-lens=tile], .article-glass')) return;
     const rim = make('svg', { class: 'liquid-rim', 'aria-hidden': 'true', focusable: 'false', preserveAspectRatio: 'none' });
     const gradient = make('radialGradient', { id: `${state.id}-light`, gradientUnits: 'userSpaceOnUse', r: 100 });
     [[0,'#fff',.98],[.32,'#edf5ff',.9],[.7,'#9eb6d2',.55],[1,'#bdcfe2',.28]].forEach(([offset,color,opacity]) => gradient.append(make('stop', { offset, 'stop-color': color, 'stop-opacity': opacity })));
@@ -210,6 +227,7 @@
       if (state.strength) state.displacement.setAttribute('scale', state.strength);
     };
     cancelRims.add(clear);
+    state.clearRim = clear;
     const tick = now => {
       if (!liquidAllowed() || !points.length) { clear(); return; }
       const dt = Math.min((now - (previousTime || now - 16)) / 1000, .025); previousTime = now;

@@ -1,5 +1,15 @@
 /* Native links and visible content first; motion is a progressive enhancement. */
 (() => {
+  // Keep article tables semantic and scrollable inside their existing glass surface.
+  document.querySelectorAll('.page.single #content > blockquote').forEach(quote => {
+    quote.classList.add('article-glass'); quote.dataset.lens = 'tile';
+  });
+  document.querySelectorAll('.page.single #content > table').forEach(table => {
+    const surface = document.createElement('div');
+    surface.className = 'article-glass article-table'; surface.dataset.lens = 'tile';
+    surface.setAttribute('data-reveal', '');
+    table.before(surface); surface.append(table);
+  });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const motionAllowed = () => !reduced.matches && document.body.dataset.motion !== 'off';

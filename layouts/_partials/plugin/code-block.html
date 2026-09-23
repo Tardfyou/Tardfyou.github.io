@@ -12,7 +12,7 @@
 
 {{- $options = dict "noClasses" false "lineNos" false | merge $options -}}
 {{- $result := transform.Highlight $content $lang $options -}}
-<div class="code-block{{ if $lineNos }} code-line-numbers{{ end }}" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
+<div class="code-block article-glass{{ if $lineNos }} code-line-numbers{{ end }}" data-lens="tile" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
     <details class="code-disclosure"{{ if le $lines $maxShownLines }} open{{ end }}>
         <summary class="code-header language-{{ $lang }}" data-pagefind-ignore aria-label="{{ if $isZh }}{{ $lang | default "文本" }}代码{{ else }}{{ $lang | default "Plain text" }} code{{ end }}">
             <span class="code-title"><span class="code-toggle-icon" aria-hidden="true">{{ partial "studio-icon.html" "chevron-right" }}</span></span>
