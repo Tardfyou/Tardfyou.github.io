@@ -555,7 +555,8 @@ class Theme {
             $toc.style.visibility = 'visible';
             const $tocLinkElements = $tocCore.querySelectorAll('a:first-child');
             const $tocLiElements = $tocCore.getElementsByTagName('li');
-            const $headerLinkElements = document.getElementsByClassName('headerLink');
+            // Match the TOC's own targets; article H1s and excluded heading levels do not share its indices.
+            const $headerLinkElements = Array.from($tocLinkElements, $link => document.getElementById(decodeURIComponent($link.hash.slice(1))));
             const headerIsFixed = document.body.getAttribute('data-header-desktop') !== 'normal';
             const headerHeight = document.getElementById('header-desktop').offsetHeight;
             const TOP_SPACING = 20 + (headerIsFixed ? headerHeight : 0);
