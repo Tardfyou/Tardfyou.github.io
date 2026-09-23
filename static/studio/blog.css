@@ -53,6 +53,15 @@ body, .home .home-title, .home .single-title { font-family: 'Studio Serif', Geor
 footer.footer { color: var(--studio-muted); padding-top: 24px; font-size: 12px; }
 article.page.single { width: min(760px, calc(100% - 48px)); }
 article.page.single > .single-title[id] { scroll-margin-top: 100px; }
+article.page.single > .post-meta { font: 12px/1.7 var(--type-ui); color: var(--studio-copy); }
+article.page.single > .post-meta .post-meta-line { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; padding: 4px 0; }
+article.page.single > .post-meta :is(.author,.post-category a,.post-meta-item) { display: inline-flex; align-items: center; gap: 6px; vertical-align: middle; }
+article.page.single > .post-meta .post-meta-item { white-space: nowrap; }
+article.page.single > .post-meta :is(.author,.post-category a) { color: var(--studio-copy); max-width: 100%; }
+article.page.single > .post-meta :is(.author,.post-category a):hover { color: var(--studio-ink); }
+article.page.single > .post-meta :is(.author,.post-category a) > span { min-width: 0; overflow-wrap: anywhere; }
+article.page.single > .post-meta .post-category a { margin-inline-start: 5px; }
+article.page.single > .post-meta svg { display: block; width: 14px; height: 14px; flex: 0 0 14px; stroke-width: 1.6; opacity: .72; }
 #menu-toggle-mobile:focus-visible { outline: 2px solid #648fbf; outline-offset: 6px; }
 @media (max-width: 1080px) {
   #header-mobile .header-container { margin: 8px 14px 0; background: var(--studio-glass); border: 1px solid var(--studio-line); border-radius: 15px; backdrop-filter: blur(8px) saturate(135%); -webkit-backdrop-filter: blur(8px) saturate(135%); overflow: hidden; }

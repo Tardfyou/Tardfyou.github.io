@@ -42,32 +42,33 @@
                 {{- $author := $params.author | default .Site.Params.Author.name | default (T "author") -}}
                 {{- $authorLink := $params.authorlink | default .Site.Params.Author.link | default .Site.Home.RelPermalink -}}
                 <span class="post-author">
-                    {{- $options := dict "Class" "author" "Destination" $authorLink "Title" "Author" "Rel" "author" "Icon" (dict "Class" "fas fa-user-circle") "Content" $author -}}
+                    {{- $authorContent := printf `%s<span>%s</span>` (partial "studio-icon.html" "about") $author -}}
+                    {{- $options := dict "Class" "author" "Destination" $authorLink "Title" "Author" "Rel" "author" "Content" $authorContent -}}
                     {{- partial "plugin/a.html" $options -}}
                 </span>
 
                 {{- $categories := slice -}}
                 {{- range .Params.categories -}}
                     {{- $category := partialCached "function/path.html" . . | printf "/categories/%v" | $.Site.GetPage -}}
-                    {{- $categories = $categories | append (printf `<a href="%v"><i class="far fa-folder" aria-hidden="true"></i>%v</a>` $category.RelPermalink $category.Title) -}}
+                    {{- $categories = $categories | append (printf `<a href="%v">%s<span>%v</span></a>` $category.RelPermalink (partial "studio-icon.html" "folder") $category.Title) -}}
                 {{- end -}}
                 {{- with delimit $categories "&nbsp;" -}}
-                    &nbsp;<span class="post-category">
+                    {{ " " }}<span class="post-category">
                         {{- dict "Categories" . | T "includedInCategories" | safeHTML -}}
                     </span>
                 {{- end -}}
             </div>
             <div class="post-meta-line">
                 {{- with .Site.Params.dateformat | default "2006-01-02" | .PublishDate.Format -}}
-                    <i class="far fa-calendar-alt" aria-hidden="true"></i>&nbsp;<time datetime="{{ . }}">{{ . }}</time>&nbsp;
+                    <span class="post-meta-item">{{ partial "studio-icon.html" "calendar" }}<time datetime="{{ . }}">{{ . }}</time></span>{{ " " }}
                 {{- end -}}
-                <i class="fas fa-pencil-alt" aria-hidden="true"></i>&nbsp;{{ T "wordCount" .WordCount }}&nbsp;
-                <i class="far fa-clock" aria-hidden="true"></i>&nbsp;{{ T "readingTime" .ReadingTime }}&nbsp;
+                <span class="post-meta-item">{{ partial "studio-icon.html" "edit" }}<span>{{ T "wordCount" .WordCount }}</span></span>{{ " " }}
+                <span class="post-meta-item">{{ partial "studio-icon.html" "clock" }}<span>{{ T "readingTime" .ReadingTime }}</span></span>{{ " " }}
                 {{- $comment := .Scratch.Get "comment" | default dict -}}
                 {{- if $comment.enable | and $comment.valine.enable | and $comment.valine.visitor -}}
-                    <span id="{{ .RelPermalink }}" class="leancloud_visitors" data-flag-title="{{ .Title }}">
-                        <i class="far fa-eye" aria-hidden="true"></i>&nbsp;<span class=leancloud-visitors-count></span>&nbsp;{{ T "views" }}
-                    </span>&nbsp;
+                    <span id="{{ .RelPermalink }}" class="leancloud_visitors post-meta-item" data-flag-title="{{ .Title }}">
+                        {{ partial "studio-icon.html" "eye" }}<span><span class=leancloud-visitors-count></span>&nbsp;{{ T "views" }}</span>
+                    </span>{{ " " }}
                 {{- end -}}
             </div>
         </div>
