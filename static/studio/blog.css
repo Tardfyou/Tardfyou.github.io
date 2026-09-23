@@ -52,6 +52,7 @@ body, .home .home-title, .home .single-title { font-family: 'Studio Serif', Geor
 .petal-toggle { background: var(--studio-glass); color: var(--studio-copy); border-color: var(--studio-line); border-radius: 12px; backdrop-filter: blur(12px); }
 footer.footer { color: var(--studio-muted); padding-top: 24px; font-size: 12px; }
 article.page.single { width: min(760px, calc(100% - 48px)); }
+article.page.single > .single-title[id] { scroll-margin-top: 100px; }
 #menu-toggle-mobile:focus-visible { outline: 2px solid #648fbf; outline-offset: 6px; }
 @media (max-width: 1080px) {
   #header-mobile .header-container { margin: 8px 14px 0; background: var(--studio-glass); border: 1px solid var(--studio-line); border-radius: 15px; backdrop-filter: blur(8px) saturate(135%); -webkit-backdrop-filter: blur(8px) saturate(135%); overflow: hidden; }

@@ -2,6 +2,15 @@
 
 {{- define "content" -}}
     {{- $params := .Scratch.Get "params" -}}
+    {{- $content := dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" -}}
+    {{- $titleAnchor := "" -}}
+    {{- /* Merge only an exact plain-text opening H1; preserve its permalink on the page title. */ -}}
+    {{- range findRESubmatch `^\s*<h1 id="([^"]+)">([^<]+)</h1>\s*` $content 1 -}}
+        {{- if eq (index . 2 | htmlUnescape | strings.TrimSpace) ($.Title | emojify | strings.TrimSpace) -}}
+            {{- $titleAnchor = index . 1 | htmlUnescape -}}
+            {{- $content = strings.TrimPrefix (index . 0) $content -}}
+        {{- end -}}
+    {{- end -}}
 
     {{- $toc := $params.toc -}}
     {{- if eq $toc true -}}
@@ -20,7 +29,7 @@
 
     <article class="page single">
         {{- /* Title */ -}}
-        <h1 class="single-title animate__animated animate__pulse animate__faster" data-pagefind-body>{{ .Title | emojify }}</h1>
+        <h1 class="single-title animate__animated animate__pulse animate__faster"{{ with $titleAnchor }} id="{{ . }}"{{ end }} data-pagefind-body>{{ .Title | emojify }}</h1>
 
         {{- /* Subtitle */ -}}
         {{- with $params.subtitle -}}
@@ -89,7 +98,7 @@
 
         {{- /* Content */ -}}
         <div class="content" id="content" data-pagefind-body>
-            {{- dict "Content" .Content "Ruby" $params.ruby "Fraction" $params.fraction "Fontawesome" $params.fontawesome | partial "function/content.html" | safeHTML -}}
+            {{- $content | safeHTML -}}
         </div>
 
         {{- /* Footer */ -}}

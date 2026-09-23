@@ -26,6 +26,8 @@ The GitHub Pages workflow builds Hugo and a Pagefind search index automatically.
 - `content/`: bilingual posts and pages.
 - `static/studio/`: shared typography, motion and optical-glass implementation.
 
+An exact plain-text opening H1 that repeats the page title is merged into that title at render time. Its anchor is preserved, and the Markdown source remains unchanged.
+
 `params.studio.mode` supports `hybrid`, `blog` and `academic`. Set `params.studio.motion` to `off` to disable motion. Reduced-motion, reduced-transparency and contrast preferences are supported. Liquid rim feedback is independent of backdrop refraction and has been verified in Chromium and WebKit desktop and touch emulation. Full SVG backdrop refraction remains enhanced in Chromium; other engines retain clear CSS glass without creating displacement filters or maps.
 
 Glass windows, existing tiles, chips and floating controls can opt in with `data-lens="window"`, `tile`, `chip` or `control`. Decorative SVG layers stay out of document flow and do not change link hit targets. Displacement maps are cached until the layout changes; interactive animation stops when it settles.

@@ -1,6 +1,7 @@
 {{- $content := .Content -}}
 {{- $lang := .Lang -}}
-{{- $params := .Page.Scratch.Get "params" -}}
+{{- /* Render hooks also run before the page layout initializes Scratch. */ -}}
+{{- $params := .Page.Params | merge .Page.Site.Params.page -}}
 {{- $maxShownLines := $params.code.maxShownLines | default 10 | int -}}
 {{- $copy := $params.code.copy | default true -}}
 {{- $isZh := eq .Page.Language.Lang "zh-cn" -}}
