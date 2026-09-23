@@ -47,14 +47,14 @@
                 {{- if .Site.Params.search.enable -}}
                     <span class="menu-item search" id="search-desktop">
                         <input type="text" placeholder="{{ .Site.Params.search.placeholder | default (T `searchPlaceholder`) }}" id="search-input-desktop">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="{{ T `search` }}">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="{{ T `clear` }}">
-                            <i class="fas fa-times-circle" aria-hidden="true"></i>
-                        </a>
+                        <button type="button" class="search-button search-toggle" id="search-toggle-desktop" title="{{ T `search` }}" aria-label="{{ T `search` }}">
+                            {{ partial "studio-icon.html" "search" }}
+                        </button>
+                        <button type="button" class="search-button search-clear" id="search-clear-desktop" title="{{ T `clear` }}" aria-label="{{ T `clear` }}">
+                            {{ partial "studio-icon.html" "clear" }}
+                        </button>
                         <span class="search-button search-loading" id="search-loading-desktop">
-                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                            {{ partial "studio-icon.html" "loading" }}
                         </span>
                     </span>
                 {{- end -}}
@@ -70,7 +70,7 @@
                     {{- end -}}
                     {{- with $targetURL -}}
                         <a class="menu-item language-switcher language-toggle desktop-language-switcher" href="{{ . }}" title="{{ $targetName }}">
-                            <i class="fa fa-globe" aria-hidden="true"></i>
+                            {{ partial "studio-icon.html" "globe" }}
                             <span class="language-current">{{ if eq $.Lang "zh-cn" }}CN{{ else }}EN{{ end }}</span>
                         </a>
                     {{- end -}}
@@ -120,19 +120,19 @@
                 <div class="search-wrapper">
                     <div class="search mobile" id="search-mobile">
                         <input type="text" placeholder="{{ .Site.Params.search.placeholder | default (T `searchPlaceholder`) }}" id="search-input-mobile">
-                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="{{ T `search` }}">
-                            <i class="fas fa-search" aria-hidden="true"></i>
-                        </a>
-                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="{{ T `clear` }}">
-                            <i class="fas fa-times-circle" aria-hidden="true"></i>
-                        </a>
+                        <button type="button" class="search-button search-toggle" id="search-toggle-mobile" title="{{ T `search` }}" aria-label="{{ T `search` }}">
+                            {{ partial "studio-icon.html" "search" }}
+                        </button>
+                        <button type="button" class="search-button search-clear" id="search-clear-mobile" title="{{ T `clear` }}" aria-label="{{ T `clear` }}">
+                            {{ partial "studio-icon.html" "clear" }}
+                        </button>
                         <span class="search-button search-loading" id="search-loading-mobile">
-                            <i class="fas fa-spinner fa-spin" aria-hidden="true"></i>
+                            {{ partial "studio-icon.html" "loading" }}
                         </span>
                     </div>
-                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                    <button type="button" class="search-cancel" id="search-cancel-mobile">
                         {{ T `cancel` }}
-                    </a>
+                    </button>
                 </div>
             {{- end -}}
             {{- range .Site.Menus.main -}}{{ if or (ne .Identifier "academic") (ne $.Site.Params.studio.mode "blog") }}
@@ -160,7 +160,7 @@
                 {{- end -}}
                 {{- with $targetURL -}}
                     <a class="menu-item language-switcher language-toggle mobile-language-switcher" href="{{ . }}" title="{{ $targetName }}">
-                        <i class="fa fa-globe" aria-hidden="true"></i>
+                        {{ partial "studio-icon.html" "globe" }}
                         <span class="language-current">{{ if eq $.Lang "zh-cn" }}CN{{ else }}EN{{ end }}</span>
                     </a>
                 {{- end -}}

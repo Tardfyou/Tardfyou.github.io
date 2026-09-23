@@ -123,6 +123,16 @@ body[data-motion][theme] { background: var(--studio-bg); color: var(--studio-ink
 #header-desktop .menu #search-toggle-desktop { display: grid; place-items: center; left: 0; right: auto; }
 #header-desktop .header-wrapper .menu .menu-item.search { margin: 0; }
 #header-desktop .menu .search input { background: #f5f7fa; border: 1px solid #e8edf3; transition: width 380ms var(--motion-spring); }
+:is(#header-desktop,#header-mobile) button:is(.search-button,.search-cancel) { appearance: none; -webkit-appearance: none; border: 0; padding: 0; background: transparent; color: var(--studio-copy); font: inherit; cursor: pointer; }
+:is(#header-desktop,#header-mobile) .search-button > .link-icon { position: absolute; left: 50%; top: 50%; translate: -50% -50%; width: 18px; height: 18px; opacity: .85; }
+:is(#header-desktop,#header-mobile) .language-switcher > .link-icon { width: 16px; height: 16px; opacity: .8; }
+:is(#header-desktop,#header-mobile) .search-loading > .link-icon { transform-origin: center; animation: studio-search-loading 900ms linear infinite; }
+@keyframes studio-search-loading { to { transform: rotate(1turn); } }
+#header-mobile .header-container .menu .search-button { width: 44px; height: 44px; line-height: 44px; top: 50%; margin-top: -22px; }
+#header-mobile .header-container .menu .search-toggle { left: 0; right: auto; }
+#header-mobile .header-container .menu :is(.search-clear,.search-loading) { left: auto; right: 0; }
+#header-mobile .header-container .menu .search input { padding-inline: 44px; }
+#header-mobile button.search-cancel { min-width: 44px; min-height: 44px; font-family: var(--type-ui); border-radius: 12px; }
 #header-desktop.open .menu-inner > a.menu-item:not(.theme-switch):not(.language-switcher) { display: none; }
 .is-scrolled #header-desktop .header-wrapper { transform: translateY(-3px); box-shadow: 0 4px 9px rgba(24,43,67,.04), 0 15px 38px rgba(24,43,67,.09), inset 0 1px 1px white; }
 .studio-switch { position: relative; padding: 5px; border-radius: 999px; background: rgba(246,248,251,.18); border-color: rgba(155,176,203,.18); backdrop-filter: blur(5px) saturate(115%); -webkit-backdrop-filter: blur(5px) saturate(115%); box-shadow: inset 0 1px 1px rgba(255,255,255,.72), 0 3px 10px rgba(24,43,67,.03); view-transition-name: site-mode; }

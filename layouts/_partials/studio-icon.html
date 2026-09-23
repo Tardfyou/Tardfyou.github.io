@@ -11,9 +11,13 @@
   "edit" `<path d="m15 4 5 5M4 20l5-1L20 8a2.1 2.1 0 0 0-5-5L4 14Z"/>`
   "clock" `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>`
   "eye" `<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>`
+  "search" `<circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/>`
+  "clear" `<circle cx="12" cy="12" r="8.5"/><path d="m9 9 6 6m0-6-6 6"/>`
+  "loading" `<path d="M20 12a8 8 0 1 1-8-8"/>`
+  "globe" `<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z"/>`
   "chevron-right" `<path d="m9 6 6 6-6 6"/>`
   "chevron-left" `<path d="m15 6-6 6 6 6"/>`
   "chevron-up" `<path d="m6 15 6-6 6 6"/>`
 -}}
-{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "chevron-right" "chevron-left" "chevron-up") . -}}
+{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "chevron-right" "chevron-left" "chevron-up") . -}}
 <svg class="{{ if $action }}link-icon link-icon--{{ . }}{{ else }}nav-icon{{ end }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ index $icons . | safeHTML }}</svg>
