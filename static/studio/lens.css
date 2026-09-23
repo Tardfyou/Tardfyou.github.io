@@ -106,6 +106,7 @@ body #content > .article-glass.lens-ready, body #toc-auto.article-glass.lens-rea
 }
 body #content > .article-glass > .code-disclosure { border-radius: inherit; }
 body #content > .article-glass :is(.code-header,.highlight,.highlight pre,.highlight code,.hl) { background: transparent; }
+body #content .code-block .highlight > pre:not(.chroma) > code { color: var(--studio-ink); }
 body #content > .article-glass .code-header { border-bottom: 1px solid #8da6c014; color: var(--studio-copy); }
 body #content > blockquote { padding: 14px 20px; }
 body #content > :is(table,.article-table) { margin: 1rem 0; }

@@ -12,6 +12,10 @@
 
 {{- $options = dict "noClasses" false "lineNos" false | merge $options -}}
 {{- $result := transform.Highlight $content $lang $options -}}
+{{- /* Unlabelled and unknown languages return a bare pre; keep one body for scrolling and disclosure motion. */ -}}
+{{- if not (strings.HasPrefix (string $result) "<div class=\"highlight\">") -}}
+    {{- $result = printf "<div class=\"highlight\">%s</div>" $result | safeHTML -}}
+{{- end -}}
 <div class="code-block article-glass{{ if $lineNos }} code-line-numbers{{ end }}" data-lens="tile" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
     <details class="code-disclosure"{{ if le $lines $maxShownLines }} open{{ end }}>
         <summary class="code-header language-{{ $lang }}" data-pagefind-ignore aria-label="{{ if $isZh }}{{ $lang | default "文本" }}代码{{ else }}{{ $lang | default "Plain text" }} code{{ end }}">
