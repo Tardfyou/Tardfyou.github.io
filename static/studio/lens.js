@@ -1,26 +1,32 @@
 /* A rounded lens distorts the backdrop only. Foreground text remains untouched. */
 (() => {
-  // WebKit accepts url() syntactically but does not render SVG backdrop filters.
-  // Its CSS fallback keeps the same clear material, without the displacement.
-  if (!/Chrome\//.test(navigator.userAgent) || !CSS.supports('backdrop-filter', 'url("#studio-lens")')) return;
+  // Keep SVG backdrop refraction on its verified rendering path. Other engines
+  // retain CSS glass and can still use the independent liquid-rim feedback.
+  const refractionEnabled = /Chrome\//.test(navigator.userAgent) && CSS.supports('backdrop-filter', 'url("#studio-lens")');
   const ns = 'http://www.w3.org/2000/svg';
   const make = (name, attributes) => {
     const node = document.createElementNS(ns, name);
     Object.entries(attributes).forEach(([key, value]) => node.setAttribute(key, value));
     return node;
   };
-  const svg = make('svg', { width: 0, height: 0, 'aria-hidden': 'true', focusable: 'false' });
-  svg.style.cssText = 'position:absolute;pointer-events:none;overflow:hidden';
-  const defs = make('defs', {}); svg.append(defs); document.body.append(svg);
+  let defs;
+  if (refractionEnabled) {
+    const svg = make('svg', { width: 0, height: 0, 'aria-hidden': 'true', focusable: 'false' });
+    svg.style.cssText = 'position:absolute;pointer-events:none;overflow:hidden';
+    defs = make('defs', {}); svg.append(defs); document.body.append(svg);
+  }
   const surfaces = new Map();
   const selector = '[data-lens], .academic-topbar, .profile nav, #header-desktop .header-wrapper, #header-mobile .header-container, .studio-switch, .academic-site .paper-badge, .academic-site .paper-actions a, .academic-site .interests > span, .academic-site .abstract-icon';
 
   document.querySelectorAll(selector).forEach((element, index) => {
     const id = `studio-lens-${index}`;
-    const filter = make('filter', { id, x: 0, y: 0, width: '100%', height: '100%', 'color-interpolation-filters': 'sRGB' });
-    const map = make('feImage', { x: 0, y: 0, width: '100%', height: '100%', preserveAspectRatio: 'none', result: 'lens-map' });
-    const displacement = make('feDisplacementMap', { in: 'SourceGraphic', in2: 'lens-map', xChannelSelector: 'R', yChannelSelector: 'G' });
-    filter.append(map, displacement); defs.append(filter);
+    let map, displacement;
+    if (refractionEnabled) {
+      const filter = make('filter', { id, x: 0, y: 0, width: '100%', height: '100%', 'color-interpolation-filters': 'sRGB' });
+      map = make('feImage', { x: 0, y: 0, width: '100%', height: '100%', preserveAspectRatio: 'none', result: 'lens-map' });
+      displacement = make('feDisplacementMap', { in: 'SourceGraphic', in2: 'lens-map', xChannelSelector: 'R', yChannelSelector: 'G' });
+      filter.append(map, displacement); defs.append(filter);
+    }
     const article = element.classList.contains('article-glass');
     const bounds = article ? element.getBoundingClientRect() : null;
     const nearViewport = !article || bounds.bottom >= -350 && bounds.top <= innerHeight + 350;
@@ -30,7 +36,7 @@
   // Snell-law bezel profile adapted from DevSam7t3/liquid-glass (MIT).
   // See THIRD_PARTY_NOTICES.md and licenses/devsam-liquid-glass-MIT.txt.
   // Normalized units share one lookup table across all lens sizes.
-  const refractionProfile = (() => {
+  const refractionProfile = refractionEnabled ? (() => {
     const samples = 128, eta = 1 / 1.5, thickness = .6;
     const surface = x => Math.sqrt(Math.max(0, 1 - (1 - x) ** 2));
     const profile = new Float32Array(samples + 1);
@@ -48,7 +54,7 @@
     }
     for (let i = 0; i < samples; i++) profile[i] /= maximum || 1;
     return profile;
-  })();
+  })() : null;
   const bezelBend = (t, edgeWidth) => {
     const position = t * (refractionProfile.length - 1);
     const index = Math.min(Math.floor(position), refractionProfile.length - 2);
@@ -69,6 +75,7 @@
     if (geometry === state.geometry) return;
     state.geometry = geometry;
     state.width = width; state.height = height; state.radius = radius;
+    if (!refractionEnabled) return;
     const compact = element.matches('[data-lens=chip], [data-lens=control], .paper-badge, .paper-actions a, .interests > span, .abstract-icon, .studio-switch');
     const depth = Math.min(compact ? 8 : 18, height * .28);
     const edgeWidth = Math.min(.18, .75 / depth);
@@ -136,7 +143,7 @@
           const state = surfaces.get(entry.target);
           if (state.width !== width || state.height !== height) state.clearRim?.();
           const { map } = state;
-          map.setAttribute('width', width); map.setAttribute('height', height);
+          map?.setAttribute('width', width); map?.setAttribute('height', height);
         }
       });
       clearTimeout(timer);
@@ -221,7 +228,7 @@
       gradient.setAttribute('cx', lightPoint.x); gradient.setAttribute('cy', lightPoint.y); gradient.setAttribute('r', spread * 2.5);
       rim.style.opacity = Math.min(.95, Math.abs(height) * .55 + Math.min(.25, Math.abs(speed) * .008));
       // The edge's optical depth responds to pressure without rebuilding its map.
-      state.displacement.setAttribute('scale', (state.strength * (1 + height * .025)).toFixed(3));
+      if (state.strength) state.displacement.setAttribute('scale', (state.strength * (1 + height * .025)).toFixed(3));
     };
     const clear = () => {
       cancelAnimationFrame(frame); frame = 0; previousTime = 0; height = 0; targetHeight = 0; speed = 0; pressed = false; lastPointer = null;

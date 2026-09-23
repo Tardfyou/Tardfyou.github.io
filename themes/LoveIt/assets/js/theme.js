@@ -180,11 +180,14 @@ class Theme {
             this.clickMaskEventSet.add(this._searchDesktopOnClickMask);
         }
         $searchInput.addEventListener('input', () => {
-            if ($searchInput.value === '') $searchClear.style.display = 'none';
-            else $searchClear.style.display = 'inline';
+            if ($searchInput.value === '') {
+                $searchClear.style.display = 'none';
+                $searchLoading.style.display = 'none';
+            } else $searchClear.style.display = 'inline';
         }, false);
 
         const initAutosearch = () => {
+            let searchRequest = 0;
             const escapeHTML = value => String(value).replace(/[&<>"']/g, character => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
             })[character]);
@@ -198,11 +201,13 @@ class Theme {
             }, {
                 name: 'search',
                 source: (query, callback) => {
+                    const request = ++searchRequest, inputValue = $searchInput.value;
                     $searchLoading.style.display = 'inline';
                     $searchClear.style.display = 'none';
                     const finish = (results) => {
+                        if (request !== searchRequest || $searchInput.value !== inputValue) return;
                         $searchLoading.style.display = 'none';
-                        $searchClear.style.display = 'inline';
+                        $searchClear.style.display = inputValue ? 'inline' : 'none';
                         callback(results);
                     };
                     if (searchConfig.type === 'lunr') {
@@ -406,6 +411,11 @@ class Theme {
                         return `<div class="search-footer">Search by <a href="${href}" rel="noopener noreffer" target="_blank">${icon} ${searchType}</a></div>`;},
                 },
             });
+            // Mirror the widget state explicitly; WebKit can leave the style-dependent :has() rule stale.
+            const $searchWindow = document.getElementById(`search-dropdown-${suffix}`);
+            const syncSearchWindow = () => $searchWindow.toggleAttribute('data-search-open', $searchWindow.querySelector('.dropdown-menu')?.style.display === 'block');
+            ['shown', 'closed', 'updated'].forEach(event => autosearch.on(`autocomplete:${event}`, syncSearchWindow));
+            syncSearchWindow();
             autosearch.on('autocomplete:selected', (_event, suggestion, _dataset, _context) => {
                 window.location.assign(suggestion.uri);
             });
