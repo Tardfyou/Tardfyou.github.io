@@ -223,7 +223,7 @@ body[data-motion="off"] .home .home-profile .home-avatar img:hover { transform: 
     margin: 1px 0; padding: 0 16px; font-family: var(--type-ui); font-size: 13px; line-height: 44px;
   }
   #header-mobile .header-container #menu-mobile > a:is(.theme-switch,.language-switcher) {
-    display: inline-flex; justify-content: center; min-width: 44px; margin: 8px 6px 0; padding: 0 13px;
+    display: inline-flex; justify-content: center; vertical-align: middle; min-width: 44px; margin: 8px 6px 0; padding: 0 13px;
   }
   body[theme=dark] #header-mobile .header-container #menu-mobile {
     background: linear-gradient(180deg,rgba(22,30,42,.2),rgba(22,30,42,.62) 12px,rgba(22,30,42,.62) calc(100% - 12px),rgba(22,30,42,.2));

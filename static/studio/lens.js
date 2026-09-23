@@ -160,7 +160,8 @@
   addEventListener('pagehide', stopRims); addEventListener('resize', stopRims);
 
   surfaces.forEach((state, element) => {
-    if (!element.matches('.academic-topbar, #header-desktop .header-wrapper, .profile nav, .studio-switch, .paper-badge, .paper-actions a, [data-lens=chip], [data-lens=control], a[data-lens=tile], .article-glass')) return;
+    if (!element.matches('.academic-topbar, #header-desktop .header-wrapper, #header-mobile .header-container, .profile nav, .studio-switch, .paper-badge, .paper-actions a, [data-lens=chip], [data-lens=control], a[data-lens=tile], .article-glass')) return;
+    const insetRim = element.matches('#header-mobile .header-container');
     const rim = make('svg', { class: 'liquid-rim', 'aria-hidden': 'true', focusable: 'false', preserveAspectRatio: 'none' });
     const gradient = make('radialGradient', { id: `${state.id}-light`, gradientUnits: 'userSpaceOnUse', r: 100 });
     [[0,'#fff',.98],[.32,'#edf5ff',.9],[.7,'#9eb6d2',.55],[1,'#bdcfe2',.28]].forEach(([offset,color,opacity]) => gradient.append(make('stop', { offset, 'stop-color': color, 'stop-opacity': opacity })));
@@ -204,12 +205,14 @@
     };
     const paint = () => {
       let lightPoint = points[0], lightDistance = Infinity;
+      // Mobile chrome keeps its menu clipping; its rim responds inward instead of being cut off.
+      const rimHeight = insetRim ? -height : height;
       const vertices = points.map(point => {
         const gap = Math.abs(point.distance - center) % perimeter;
         const distance = Math.min(gap, perimeter - gap);
         if (distance < lightDistance) { lightPoint = point; lightDistance = distance; }
         const wave = Math.exp(-distance * distance / (2 * spread * spread)) - .15 * Math.exp(-distance * distance / (5 * spread * spread));
-        return [point.x + point.nx * height * wave, point.y + point.ny * height * wave];
+        return [point.x + point.nx * rimHeight * wave, point.y + point.ny * rimHeight * wave];
       });
       const midpoint = (a, b) => `${((a[0] + b[0]) / 2).toFixed(2)} ${((a[1] + b[1]) / 2).toFixed(2)}`;
       let curve = `M ${midpoint(vertices.at(-1), vertices[0])}`;
