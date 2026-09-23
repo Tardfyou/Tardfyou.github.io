@@ -19,7 +19,7 @@
 
         {{/* Keep navigation overrides render-blocking, after the theme CSS. */}}
         <link rel="stylesheet" href="{{ "studio/motion.css" | relURL }}?v=mobile-menu-18">
-        <link rel="stylesheet" href="{{ "studio/blog.css" | relURL }}?v=navigation-icons-34">
+        <link rel="stylesheet" href="{{ "studio/blog.css" | relURL }}?v=reading-controls-35">
         <link rel="stylesheet" href="{{ "studio/typography.css" | relURL }}?v=mobile-menu-18">
   <link rel="stylesheet" href="{{ "studio/lens.css" | relURL }}?v=portable-rim-31">
 
@@ -41,6 +41,14 @@
           query.addEventListener('change', applyTheme);
         </script>
 
+        <script>
+          (() => {
+            try {
+              const saved = localStorage.getItem("petal-intensity") || localStorage.getItem("guestbook-petals");
+              if (["quiet", "light", "full"].includes(saved)) document.body.dataset.petals = saved;
+            } catch (_) {}
+          })();
+        </script>
         <a class="studio-skip" href="#main-content">Skip to content</a><div class="reading-progress" aria-hidden="true"></div><div id="mask"></div>
         <div class="petal-screen" aria-hidden="true">
             <span></span>
@@ -83,21 +91,23 @@
 
         <div id="fixed-buttons">
             {{- /* top button */ -}}
-            <a href="#" id="back-to-top" class="fixed-button" data-lens="control" title="{{ T `backToTop` }}">
+            <a href="#" id="back-to-top" class="fixed-button" data-lens="control" title="{{ T `backToTop` }}" aria-label="{{ T `backToTop` }}">
                 {{ partial "studio-icon.html" "chevron-up" }}
             </a>
         </div>
 
         <div id="fixed-buttons-hidden">
             {{- /* comment button */ -}}
-            <a href="#" id="view-comments" class="fixed-button" data-lens="control" title="{{ T `viewComments` }}">
-                <i class="fas fa-comment" aria-hidden="true"></i>
+            <a href="#" id="view-comments" class="fixed-button" data-lens="control" title="{{ T `viewComments` }}" aria-label="{{ T `viewComments` }}">
+                {{ partial "studio-icon.html" "comment" }}
             </a>
         </div>
 
-        <button class="petal-toggle" data-lens="control" type="button" aria-label="{{ if $isZh }}切换花瓣强度{{ else }}Toggle petal intensity{{ end }}">
-            <i class="far fa-snowflake" aria-hidden="true"></i>
-            <span data-label-quiet="{{ if $isZh }}静{{ else }}Still{{ end }}" data-label-light="{{ if $isZh }}轻落{{ else }}Light{{ end }}" data-label-full="{{ if $isZh }}满屏{{ else }}Full{{ end }}">
+        <button class="petal-toggle" data-lens="control" type="button" aria-label="{{ if $isZh }}切换花瓣强度{{ else }}Toggle petal intensity{{ end }}"
+            data-label-pattern="{{ if $isZh }}花瓣：{current}；切换为{next}{{ else }}Petals: {current}. Switch to {next}{{ end }}"
+            data-paused-pattern="{{ if $isZh }}花瓣已暂停；已保存{current}；切换偏好为{next}{{ else }}Petals paused. Saved: {current}. Change preference to {next}{{ end }}">
+            {{ partial "studio-icon.html" "petals" }}
+            <span class="petal-label" data-label-quiet="{{ if $isZh }}微落{{ else }}Quiet{{ end }}" data-label-light="{{ if $isZh }}轻落{{ else }}Light{{ end }}" data-label-full="{{ if $isZh }}满屏{{ else }}Full{{ end }}">
                 {{ if $isZh }}轻落{{ else }}Light{{ end }}
             </span>
         </button>
@@ -106,19 +116,33 @@
           (() => {
             const body = document.body;
             const toggle = document.querySelector(".petal-toggle");
-            const label = toggle?.querySelector("span");
+            const label = toggle?.querySelector(".petal-label");
             const modes = ["quiet", "light", "full"];
-            const saved = window.localStorage?.getItem("petal-intensity") || window.localStorage?.getItem("guestbook-petals");
-            let mode = modes.includes(saved) ? saved : body.dataset.petals || "light";
+            const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+            let mode = modes.includes(body.dataset.petals) ? body.dataset.petals : "light";
+
+            const updateControl = () => {
+              if (!toggle || !label) return;
+              const text = value => label.dataset[`label${value[0].toUpperCase()}${value.slice(1)}`] || value;
+              const paused = reduced.matches || body.dataset.motion === "off";
+              label.textContent = text(mode);
+              toggle.toggleAttribute("data-petals-paused", paused);
+              const pattern = paused ? toggle.dataset.pausedPattern : toggle.dataset.labelPattern;
+              const description = pattern.replace("{current}", text(mode)).replace("{next}", text(modes[(modes.indexOf(mode) + 1) % modes.length]));
+              toggle.title = description;
+              toggle.setAttribute("aria-label", description);
+            };
 
             const setMode = (next) => {
               mode = next;
               body.dataset.petals = mode;
-              if (label) label.textContent = label.dataset[`label${mode[0].toUpperCase()}${mode.slice(1)}`] || mode;
-              window.localStorage?.setItem("petal-intensity", mode);
+              updateControl();
+              try { localStorage.setItem("petal-intensity", mode); } catch (_) {}
             };
 
             setMode(mode);
+            reduced.addEventListener("change", updateControl);
+            new MutationObserver(updateControl).observe(body, { attributes: true, attributeFilter: ["data-motion"] });
             toggle?.addEventListener("click", () => {
               const next = modes[(modes.indexOf(mode) + 1) % modes.length];
               setMode(next);

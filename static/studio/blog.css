@@ -50,6 +50,13 @@ body, .home .home-title, .home .single-title { font-family: 'Studio Serif', Geor
 .home[data-home=posts] .summary .post-tags a { color: var(--studio-muted); }
 .petal-screen { opacity: .55; }
 .petal-toggle { background: var(--studio-glass); color: var(--studio-copy); border-color: var(--studio-line); border-radius: 12px; backdrop-filter: blur(12px); }
+body[data-petals] .petal-toggle[data-lens] { min-width: 88px; font: 11px/1.2 var(--type-ui); gap: 6px; }
+.petal-toggle > .link-icon, #view-comments > .link-icon { width: 18px; height: 18px; opacity: .85; }
+.petal-mark, .petal-paused-mark { transform-box: fill-box; transform-origin: center; transition: opacity 160ms ease, transform 280ms var(--motion-spring); }
+.petal-mark--three, .petal-paused-mark, body[data-petals=quiet] .petal-mark--two { opacity: 0; transform: scale(.8); }
+body[data-petals=full] .petal-mark--three { opacity: 1; transform: none; }
+.petal-toggle[data-petals-paused] .petal-mark--one, body:not([data-petals=quiet]) .petal-toggle[data-petals-paused] .petal-mark--two, body[data-petals=full] .petal-toggle[data-petals-paused] .petal-mark--three { opacity: .3; }
+.petal-toggle[data-petals-paused] .petal-paused-mark { opacity: 1; transform: none; }
 footer.footer { color: var(--studio-muted); padding-top: 24px; font-size: 12px; }
 article.page.single { width: min(760px, calc(100% - 48px)); }
 article.page.single > .single-title[id] { scroll-margin-top: 100px; }

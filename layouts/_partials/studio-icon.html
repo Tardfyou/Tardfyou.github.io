@@ -15,9 +15,11 @@
   "clear" `<circle cx="12" cy="12" r="8.5"/><path d="m9 9 6 6m0-6-6 6"/>`
   "loading" `<path d="M20 12a8 8 0 1 1-8-8"/>`
   "globe" `<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18Z"/>`
+  "comment" `<path d="M5 4h14a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H9l-6 3V6a2 2 0 0 1 2-2Z"/>`
+  "petals" `<g class="petal-mark petal-mark--one"><path d="M5 13c-2-5 2-8 6-7 1 4-2 8-6 7Z"/></g><g class="petal-mark petal-mark--two"><path d="M13 10c2-4 6-4 7-1 0 4-4 6-7 1Z"/></g><g class="petal-mark petal-mark--three"><path d="M10 17c1-3 5-4 7-1 0 4-4 6-7 1Z"/></g><path class="petal-paused-mark" d="m4 4 16 16"/>`
   "chevron-right" `<path d="m9 6 6 6-6 6"/>`
   "chevron-left" `<path d="m15 6-6 6 6 6"/>`
   "chevron-up" `<path d="m6 15 6-6 6 6"/>`
 -}}
-{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "chevron-right" "chevron-left" "chevron-up") . -}}
+{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "comment" "petals" "chevron-right" "chevron-left" "chevron-up") . -}}
 <svg class="{{ if $action }}link-icon link-icon--{{ . }}{{ else }}nav-icon{{ end }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ index $icons . | safeHTML }}</svg>
