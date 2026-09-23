@@ -94,10 +94,28 @@
   background: inherit;
 }
 
-.page.single .content .code-block .code-header .copy {
+.code-block { position: relative; }
+.code-block .code-disclosure { overflow: hidden; }
+.single .content .code-block .code-disclosure > .code-header {
+  min-height: 36px; padding-right: 40px; list-style: none;
+}
+.code-disclosure > summary::-webkit-details-marker { display: none; }
+.code-disclosure > summary:focus-visible { outline-offset: -4px; }
+.code-disclosure .code-title { display: flex; align-items: center; min-width: 0; }
+.code-disclosure .code-toggle-icon { display: inline-flex; transition: transform 280ms var(--ios-motion-ease); }
+.code-disclosure[data-expanded=true] .code-toggle-icon,
+.code-disclosure[open]:not([data-expanded]) .code-toggle-icon { transform: rotate(90deg); }
+.single .content .code-block .code-disclosure > .highlight { max-height: none; transition: none; }
+.single .content .code-block .code-disclosure > .highlight::-webkit-scrollbar { height: .5rem; }
+.single .content .code-disclosure[open] > .code-header { background: darken($code-background-color, 3%); }
+[theme=dark] .single .content .code-disclosure[open] > .code-header { background: darken($code-background-color-dark, 3%); }
+.code-disclosure[data-expanded=true] .ellipses,
+.code-disclosure[open]:not([data-expanded]) .ellipses { visibility: hidden; }
+.page.single .content .code-block > .copy {
   --lens-center: .22;
-  appearance: none; display: inline-grid; place-items: center; flex: 0 0 auto;
-  width: 32px; height: 32px; padding: 0; margin: 2px 4px;
+  position: absolute; top: 2px; right: 4px; z-index: 2;
+  appearance: none; display: inline-grid; place-items: center;
+  width: 32px; height: 32px; padding: 0; margin: 0;
   border-radius: 9px; font: inherit; color: var(--studio-copy); cursor: pointer;
 }
 .code-block .copy-icon { width: 18px; height: 18px; pointer-events: none; }
@@ -113,7 +131,8 @@
   overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
 }
 @media (pointer: coarse) {
-  .page.single .content .code-block .code-header .copy { width: 44px; height: 44px; }
+  .single .content .code-block .code-disclosure > .code-header { min-height: 48px; padding-right: 52px; }
+  .page.single .content .code-block > .copy { width: 44px; height: 44px; }
 }
 
 .page.single .content .code-block .highlight pre,

@@ -21,50 +21,49 @@
   addEventListener('pagehide', reset);
 
   // Native disclosure semantics, with height motion that can reverse mid-flight.
-  const toc = document.querySelector('details#toc-static');
-  if (toc) {
-    const summary = toc.querySelector('summary');
-    const content = toc.querySelector('.toc-content');
-    let desiredOpen = toc.open, animation = null;
+  document.querySelectorAll('details#toc-static, details.code-disclosure').forEach(disclosure => {
+    const summary = disclosure.querySelector('summary');
+    const content = disclosure.querySelector('.toc-content, .highlight');
+    let desiredOpen = disclosure.open, animation = null;
     const settle = () => {
       if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
-      toc.open = desiredOpen;
-      toc.dataset.expanded = String(desiredOpen);
+      disclosure.open = desiredOpen;
+      disclosure.dataset.expanded = String(desiredOpen);
       content.inert = false;
-      toc.style.height = '';
+      disclosure.style.height = '';
     };
     resetters.add(settle);
     addEventListener('resize', settle);
     document.fonts?.ready.then(settle);
     summary.addEventListener('click', event => {
       event.preventDefault();
-      const startHeight = toc.getBoundingClientRect().height;
+      const startHeight = disclosure.getBoundingClientRect().height;
       desiredOpen = !desiredOpen;
-      toc.dataset.expanded = String(desiredOpen);
+      disclosure.dataset.expanded = String(desiredOpen);
       if (animation) { animation.onfinish = null; animation.cancel(); animation = null; }
-      if (!motionAllowed() || !toc.animate) { settle(); return; }
-      toc.style.height = '';
-      toc.open = true;
-      const style = getComputedStyle(toc);
+      if (!motionAllowed() || !disclosure.animate) { settle(); return; }
+      disclosure.style.height = '';
+      disclosure.open = true;
+      const style = getComputedStyle(disclosure);
       const edges = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth)
         + parseFloat(style.paddingTop) + parseFloat(style.paddingBottom);
-      const endHeight = desiredOpen ? toc.getBoundingClientRect().height : summary.offsetHeight + edges;
+      const endHeight = desiredOpen ? disclosure.getBoundingClientRect().height : summary.offsetHeight + edges;
       content.inert = !desiredOpen;
-      toc.style.height = `${startHeight}px`;
+      disclosure.style.height = `${startHeight}px`;
       const frames = [{ height: `${startHeight}px` }];
       if (desiredOpen) frames.push({ height: `${endHeight + 2}px`, offset: .8 });
       frames.push({ height: `${endHeight}px` });
-      animation = animate(toc, frames, { duration: desiredOpen ? 420 : 280, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+      animation = animate(disclosure, frames, { duration: desiredOpen ? 420 : 280, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
       animation.onfinish = settle;
     });
-    toc.addEventListener('toggle', () => {
-      if (!animation) { desiredOpen = toc.open; toc.dataset.expanded = String(desiredOpen); }
+    disclosure.addEventListener('toggle', () => {
+      if (!animation) { desiredOpen = disclosure.open; disclosure.dataset.expanded = String(desiredOpen); }
     });
     content.addEventListener('click', event => {
       if (event.target.closest('a[href^="#"]')) settle();
     });
     settle();
-  }
+  });
 
   if ('IntersectionObserver' in window) {
     // Observe individual reading blocks, not their section containers. Using the
@@ -251,9 +250,9 @@
   });
 
   // Independent scale avoids fighting hover transforms and navigation geometry.
-  document.querySelectorAll('.profile nav a, .site-switch a, .studio-switch a, .profile-links a, .paper-actions a, .home-salon > a, .abstract summary, #toc-static summary, .theme-switch, .petal-toggle, #menu-toggle-mobile, a[data-lens=chip], a[data-lens=control]').forEach(control => {
+  document.querySelectorAll('.profile nav a, .site-switch a, .studio-switch a, .profile-links a, .paper-actions a, .home-salon > a, .abstract summary, #toc-static summary, .code-disclosure summary, .theme-switch, .petal-toggle, #menu-toggle-mobile, a[data-lens=chip], a[data-lens=control]').forEach(control => {
     let animation = null, pressed = false;
-    const feedback = control.matches('.abstract summary, #toc-static summary') ? control.querySelector('.abstract-icon, .toc-toggle-icon') || control : control;
+    const feedback = control.matches('.abstract summary, #toc-static summary, .code-disclosure summary') ? control.querySelector('.abstract-icon, .toc-toggle-icon, .code-toggle-icon') || control : control;
     const scale = () => getComputedStyle(feedback).scale === 'none' ? '1' : getComputedStyle(feedback).scale;
     const cancel = () => { animation?.cancel(); animation = null; pressed = false; };
     resetters.add(cancel);

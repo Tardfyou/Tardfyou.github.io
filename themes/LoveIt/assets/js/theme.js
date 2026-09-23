@@ -469,19 +469,7 @@ class Theme {
 
     initHighlight() {
         Util.forEach(document.querySelectorAll('.code-block'), $codeBlock => {
-            const $codeTitle = $codeBlock.querySelector('.code-header > .code-title');
-            if ($codeTitle) {
-                $codeTitle.addEventListener('click', () => {
-                    $codeBlock.classList.toggle('open');
-                }, false);
-            }
-            const $ellipses = $codeBlock.querySelector('.code-header .ellipses');
-            if ($ellipses) {
-                $ellipses.addEventListener('click', () => {
-                    $codeBlock.classList.toggle('open');
-                }, false);
-            }
-            const $copy = $codeBlock.querySelector('.code-header .copy');
+            const $copy = $codeBlock.querySelector(':scope > .copy');
             if ($copy) {
                 const $code = $codeBlock.querySelector('code');
                 const $status = $copy.querySelector('.copy-status');
@@ -500,7 +488,9 @@ class Theme {
                     $copy.setAttribute('aria-busy', 'true');
                     let failed = false;
                     try {
-                        const text = $code.innerText;
+                        // Chroma's line spans retain the code even while native details hides it.
+                        const lines = $code.querySelectorAll(':scope > .line');
+                        const text = lines.length ? Array.from(lines, line => line.textContent.replace(/\r?\n$/, '')).join('\n') : $code.textContent;
                         if (navigator.clipboard?.writeText) {
                             await navigator.clipboard.writeText(text);
                         } else {

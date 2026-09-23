@@ -12,11 +12,15 @@
 
 {{- $options = dict "noClasses" false "lineNos" false | merge $options -}}
 {{- $result := transform.Highlight $content $lang $options -}}
-<div class="code-block{{ if $lineNos }} code-line-numbers{{ end }}{{ if le $lines $maxShownLines }} open{{ end }}" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
-    <div class="code-header language-{{ $lang }}">
-        <span class="code-title"><i class="arrow fas fa-angle-right" aria-hidden="true"></i></span>
-        <span class="ellipses"><i class="fas fa-ellipsis-h" aria-hidden="true"></i></span>
-        {{ if $copy }}<button type="button" class="copy" data-lens="chip" data-pagefind-ignore title="{{ T "copyToClipboard" }}" aria-label="{{ T "copyToClipboard" }}"
+<div class="code-block{{ if $lineNos }} code-line-numbers{{ end }}" style="counter-reset: code-block {{ sub $lineNoStart 1 }}">
+    <details class="code-disclosure"{{ if le $lines $maxShownLines }} open{{ end }}>
+        <summary class="code-header language-{{ $lang }}" data-pagefind-ignore aria-label="{{ if $isZh }}{{ $lang | default "文本" }}代码{{ else }}{{ $lang | default "Plain text" }} code{{ end }}">
+            <span class="code-title"><span class="code-toggle-icon" aria-hidden="true">{{ partial "studio-icon.html" "chevron-right" }}</span></span>
+            <span class="ellipses" aria-hidden="true"><i class="fas fa-ellipsis-h"></i></span>
+        </summary>
+        {{- $result -}}
+    </details>
+    {{ if $copy }}<button type="button" class="copy" data-lens="chip" data-pagefind-ignore title="{{ T "copyToClipboard" }}" aria-label="{{ T "copyToClipboard" }}"
             data-label-copied="{{ if $isZh }}已复制{{ else }}Copied{{ end }}"
             data-label-error="{{ if $isZh }}复制失败，请选中代码复制{{ else }}Copy failed. Select the code to copy{{ end }}">
             <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -25,7 +29,5 @@
                 <g class="copy-error"><circle cx="12" cy="12" r="8.5"/><path d="M12 7v6m0 4h.01"/></g>
             </svg>
             <span class="copy-status" role="status" aria-live="polite" aria-atomic="true"></span>
-        </button>{{ end }}
-    </div>
-    {{- $result -}}
+    </button>{{ end }}
 </div>
