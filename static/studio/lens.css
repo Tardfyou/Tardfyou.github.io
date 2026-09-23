@@ -47,12 +47,31 @@ body [data-lens].lens-ready {
 }
 [theme=dark] :is(#header-desktop .header-wrapper,#header-mobile .header-container) a { text-shadow: 0 1px 3px #171c23; }
 [theme=dark] :is(#header-desktop .header-wrapper,#header-mobile .header-container,.studio-switch)::before { opacity: .28; }
+/* Separate navigation labels from moving text, feathering the reading layer before the optical rim. */
+#header-desktop .header-wrapper, #header-mobile .header-container { position: relative; }
+@supports (mask-composite: intersect) or (-webkit-mask-composite: source-in) {
+  :is(.academic-topbar,#header-desktop .header-wrapper,#header-mobile .header-container)::after,
+  .profile nav::after {
+    content: ''; position: absolute; inset: 2px; z-index: 0; border-radius: inherit; pointer-events: none;
+    background-color: rgba(255,255,255,.65);
+    -webkit-mask-image: linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 30px),transparent),linear-gradient(180deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);
+    mask-image: linear-gradient(90deg,transparent,#000 30px,#000 calc(100% - 30px),transparent),linear-gradient(180deg,transparent,#000 18px,#000 calc(100% - 18px),transparent);
+    -webkit-mask-composite: source-in; mask-composite: intersect;
+  }
+  [theme=dark] :is(#header-desktop .header-wrapper,#header-mobile .header-container)::after { background-color: rgba(23,28,35,.74); }
+  #header-mobile .header-container::after { bottom: auto; height: 52px; }
+  .profile nav::after { display: none; }
+  @media (max-width: 740px) { .profile nav::after { display: block; z-index: -1; } }
+}
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   :is(.academic-topbar,.profile nav,#header-desktop .header-wrapper,#header-mobile .header-container,.studio-switch),
   .academic-site :is(.paper-badge,.paper-actions a,.interests > span,.abstract-icon), body [data-lens] {
     background-image: none !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
   }
-  :is(.academic-topbar,.profile nav,#header-desktop .header-wrapper,#header-mobile .header-container,.studio-switch)::before { display: none; }
+  :is(.academic-topbar,.profile nav,#header-desktop .header-wrapper,#header-mobile .header-container,.studio-switch)::before,
+  :is(.academic-topbar,.profile nav,#header-desktop .header-wrapper,#header-mobile .header-container)::after { display: none; }
+  :is(.academic-topbar,.profile nav,#header-desktop .header-wrapper,#header-mobile .header-container) { background-color: #fff !important; }
+  [theme=dark] :is(#header-desktop .header-wrapper,#header-mobile .header-container) { background-color: #202731 !important; }
 }
 
 /* Opt-in material for existing windows and controls, without wrapping content. */
