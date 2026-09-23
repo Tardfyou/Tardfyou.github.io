@@ -464,6 +464,27 @@ header {
     backdrop-filter var(--ios-motion-medium) var(--ios-motion-ease);
 }
 
+button.theme-switch {
+  appearance: none; border: 0; padding: 0; background: transparent; color: inherit;
+  font: inherit; cursor: pointer; vertical-align: middle;
+}
+.theme-switch .theme-icon { display: block; width: 20px; height: 20px; pointer-events: none; }
+.theme-icon-state {
+  opacity: 0; transform-box: fill-box; transform-origin: center;
+  transform: rotate(-24deg) scale(.72);
+  transition: opacity 160ms ease, transform 300ms var(--ios-motion-ease);
+}
+body:not([cfg-theme=light]):not([cfg-theme=dark]) .theme-icon-auto,
+body[cfg-theme=light] .theme-icon-light,
+body[cfg-theme=dark] .theme-icon-dark { opacity: 1; transform: none; }
+@media (max-width: 1080px) {
+  #header-mobile .header-container #menu-mobile > button.theme-switch {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 44px; min-height: 44px; margin: 8px 6px 0; padding: 0 13px;
+    line-height: 44px; border-radius: 999px;
+  }
+}
+
 #header-desktop .header-title,
 #header-mobile .header-title,
 #header-desktop .menu .menu-item:not(.delimiter),

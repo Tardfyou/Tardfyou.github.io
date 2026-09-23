@@ -58,9 +58,7 @@
                         </span>
                     </span>
                 {{- end -}}
-                <a href="javascript:void(0);" class="menu-item theme-switch" title="{{ T "switchTheme" }}">
-                    <i class="fas fa-adjust" aria-hidden="true"></i>
-                </a>
+                {{- partial "theme-switch.html" . -}}
                 {{- if hugo.IsMultilingual -}}
                     {{- $targetURL := "" -}}
                     {{- $targetName := "" -}}
@@ -150,9 +148,7 @@
                     {{- .Pre | safeHTML }}{{ .Name }}{{ .Post | safeHTML -}}
                 </a>{{ end }}
             {{- end -}}
-            <a href="javascript:void(0);" class="menu-item theme-switch" title="{{ T "switchTheme" }}">
-                <i class="fas fa-adjust" aria-hidden="true"></i>
-            </a>
+            {{- partial "theme-switch.html" . -}}
             {{- if hugo.IsMultilingual -}}
                 {{- $targetURL := "" -}}
                 {{- $targetName := "" -}}

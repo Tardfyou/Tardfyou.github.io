@@ -86,18 +86,29 @@ class Theme {
     }
 
     initSwitchTheme() {
+        const themes = ['auto', 'light', 'dark'];
+        const updateLabels = () => {
+            const mode = document.body.getAttribute('cfg-theme');
+            const key = 'label' + (themes.includes(mode) ? mode : 'auto').replace(/^./, c => c.toUpperCase());
+            Util.forEach(document.getElementsByClassName('theme-switch'), $button => {
+                const label = $button.dataset[key];
+                if (label) {
+                    $button.setAttribute('aria-label', label);
+                    $button.title = label;
+                }
+            });
+        };
+        updateLabels();
         Util.forEach(document.getElementsByClassName('theme-switch'), $themeSwitch => {
             $themeSwitch.addEventListener('click', () => {
                 const cfgTheme = document.body.getAttribute('cfg-theme');
-                const theme = document.body.getAttribute('theme');
-
-                const themes = ['auto', 'light' ,'dark'];
                 const newTheme = themes[(themes.indexOf(cfgTheme) + 1) % themes.length];
 
                 this.isDark = newTheme === 'dark' || (newTheme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches);
                 document.body.setAttribute('theme', this.isDark ? 'dark' : 'light');
                 document.body.setAttribute('cfg-theme', newTheme);
                 window.localStorage?.setItem('theme', newTheme);
+                updateLabels();
                 for (let event of this.switchThemeEventSet) event();
             }, false);
         });
