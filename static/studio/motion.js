@@ -30,6 +30,50 @@
   new MutationObserver(() => { if (!motionAllowed()) reset(); }).observe(document.body, { attributes: true, attributeFilter: ['data-motion'] });
   addEventListener('pagehide', reset);
 
+  // Keep an explicit comments jump aligned while lazy media and the widget finish loading.
+  // Native hash navigation handles the journey; user input ends the following immediately.
+  const comments = document.getElementById('comments');
+  const main = document.getElementById('main-content');
+  if (comments && main && 'ResizeObserver' in window) {
+    let following = false, settleTimer = 0, nativeStart = 0, journeyStarted = false;
+    const destination = () => {
+      const margin = parseFloat(getComputedStyle(comments).scrollMarginTop) || 0;
+      const padding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      return Math.max(0, Math.min(scrollY + comments.getBoundingClientRect().top - margin - padding,
+        document.documentElement.scrollHeight - innerHeight));
+    };
+    const align = () => {
+      settleTimer = 0;
+      if (!following || location.hash !== '#comments') return;
+      const target = destination();
+      // A slow compositor may not have started the native journey yet.
+      if (!journeyStarted && Math.abs(scrollY - nativeStart) < 2 && Math.abs(scrollY - target) > 2) return;
+      journeyStarted = true;
+      if (Math.abs(scrollY - target) > 2) scrollTo({ top: target, behavior: 'instant' });
+    };
+    const scheduleAlignment = () => {
+      if (!following) return;
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(align, 120);
+    };
+    const observer = new ResizeObserver(scheduleAlignment);
+    const stopFollowing = () => {
+      following = false; clearTimeout(settleTimer); settleTimer = 0; observer.disconnect();
+    };
+    const follow = (initialFragment = false) => {
+      stopFollowing(); following = true; nativeStart = scrollY; journeyStarted = initialFragment;
+      observer.observe(main); scheduleAlignment();
+    };
+    document.getElementById('view-comments')?.addEventListener('click', event => {
+      if (event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey) follow();
+    });
+    addEventListener('scroll', scheduleAlignment, { passive: true });
+    addEventListener('hashchange', () => { if (location.hash !== '#comments') stopFollowing(); });
+    ['wheel', 'touchstart', 'pointerdown'].forEach(type => addEventListener(type, stopFollowing, { passive: true }));
+    ['keydown', 'blur', 'pagehide'].forEach(type => addEventListener(type, stopFollowing));
+    if (location.hash === '#comments') follow(true);
+  }
+
   // Native disclosure semantics, with height motion that can reverse mid-flight.
   document.querySelectorAll('details#toc-static, details.code-disclosure').forEach(disclosure => {
     const summary = disclosure.querySelector('summary');
