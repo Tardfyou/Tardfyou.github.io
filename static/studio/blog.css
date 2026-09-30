@@ -257,6 +257,21 @@ body[data-motion="off"] .home .home-profile .home-avatar img:hover { transform: 
   }
 }
 
+/* Reading controls share a center line; the code and table canvas stays still. */
+.page.single #content .code-block .code-disclosure > .code-header { min-height: 40px; padding-right: 46px; }
+.page.single #content .code-header .code-title { gap: 7px; padding: 4px 12px; }
+.page.single #content .code-header .code-title::after { padding-left: 0; }
+.page.single #content .code-block > .copy { top: 4px; right: 6px; width: 32px; height: 32px; }
+.page.single #content .code-block > .copy:is(:hover,:active,.is-pressed) { transform: none; translate: none; }
+.page.single #content > :is(.code-block,.article-table,table,.highlight):hover { transform: none; }
+body :is(#toc-auto,#toc-static) .toc-title { font: 600 12px/1.5 var(--type-ui); letter-spacing: .035em; color: var(--studio-copy); }
+body :is(#toc-auto,#toc-static) .toc-content a { line-height: 1.5; border-radius: 3px; }
+body :is(#toc-auto,#toc-static) .toc-content a:focus-visible { outline-offset: 2px; }
+@media (pointer: coarse) {
+  .page.single #content .code-block .code-disclosure > .code-header { min-height: 48px; padding-right: 52px; }
+  .page.single #content .code-block > .copy { top: 2px; right: 4px; width: 44px; height: 44px; }
+}
+
 /* Known local media reserves its final ratio before the browser decodes it. */
 img.native-image { object-fit: contain; }
 img.native-image.image-fluid, .featured-image img.native-image { width: 100%; }

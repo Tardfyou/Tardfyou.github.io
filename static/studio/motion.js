@@ -190,16 +190,17 @@
     let bounds = [nav.clientWidth, nav.clientHeight];
     const clamp = (n, min, max) => Math.min(Math.max(n, min), Math.max(min, max));
     const paint = () => {
+      const liveBounds = [nav.clientWidth, nav.clientHeight];
       const load = clamp(pressure, -.15, 1.15);
       const stretch = 1 + clamp(strain, -.02, .12) + load * .025;
       const depth = 1 - load * .014;
       // Conserving area keeps a moving capsule liquid instead of inflating it.
-      const width = Math.min(bounds[0], Math.max(1, current[2] * (axis === 0 ? stretch : 1 / stretch) * depth));
-      const height = Math.min(bounds[1], Math.max(1, current[3] * (axis === 1 ? stretch : 1 / stretch) * depth));
+      const width = Math.min(liveBounds[0], Math.max(1, current[2] * (axis === 0 ? stretch : 1 / stretch) * depth));
+      const height = Math.min(liveBounds[1], Math.max(1, current[3] * (axis === 1 ? stretch : 1 / stretch) * depth));
       const speed = velocity[axis] + velocity[axis + 2] / 2;
       const tail = clamp(speed * .004, -current[axis + 2] * .045, current[axis + 2] * .045);
-      const x = clamp(current[0] + (current[2] - width) / 2 - (axis === 0 ? tail : 0), 0, bounds[0] - width);
-      const y = clamp(current[1] + (current[3] - height) / 2 - (axis === 1 ? tail : 0), 0, bounds[1] - height);
+      const x = clamp(current[0] + (current[2] - width) / 2 - (axis === 0 ? tail : 0), 0, liveBounds[0] - width);
+      const y = clamp(current[1] + (current[3] - height) / 2 - (axis === 1 ? tail : 0), 0, liveBounds[1] - height);
       indicator.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       indicator.style.width = `${width}px`;
       indicator.style.height = `${height}px`;
@@ -247,14 +248,17 @@
     };
     const move = link => {
       if (!link || !link.offsetWidth) { stop(); indicator.style.opacity = '0'; return; }
-      bounds = [nav.clientWidth, nav.clientHeight];
+      const nextBounds = [nav.clientWidth, nav.clientHeight];
+      const changedBounds = nextBounds.some((size, index) => Math.abs(size - bounds[index]) > .5);
+      bounds = nextBounds;
       const first = links[0], last = links[links.length - 1];
       const nextAxis = Math.abs(last.offsetTop - first.offsetTop) > Math.abs(last.offsetLeft - first.offsetLeft) ? 1 : 0;
       const changedAxis = nextAxis !== axis; axis = nextAxis;
       target = [link.offsetLeft, link.offsetTop, link.offsetWidth, link.offsetHeight];
       indicator.style.opacity = '1';
-      if (!current || !surfaceMotionAllowed() || changedAxis) { resetSurface(); return; }
-      if (target.every((n, i) => Math.abs(n - current[i]) < .05)) return;
+      // Font/layout changes establish fresh geometry instead of springing from stale bounds.
+      if (!current || !surfaceMotionAllowed() || changedAxis || changedBounds) { resetSurface(); return; }
+      if (target.every((n, i) => Math.abs(n - current[i]) < .05)) { paint(); return; }
       wake();
     };
     const selected = () => links.find(link => link.hasAttribute('aria-current') || link.classList.contains('active') || link.classList.contains('selected'));
