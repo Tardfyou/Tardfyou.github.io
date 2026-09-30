@@ -257,6 +257,10 @@ body[data-motion="off"].academic-site .portrait::after { display: none; }
   transition: transform 380ms var(--motion-spring), box-shadow 300ms, background-color 240ms;
 }
 .academic-site .abstract[data-expanded="true"] .abstract-icon { background-color: rgba(131,161,198,.16); box-shadow: inset 0 1px 0 white, inset 0 -1px 1px #6586ad24, 0 3px 8px rgba(35,61,94,.06); }
+/* Focus follows the readable label as well as the small optical control. */
+.academic-site .abstract summary:is(:focus-visible,:active,.is-pressed) .abstract-label { color: var(--accent); }
+.academic-site .abstract summary:focus-visible .abstract-label { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+.academic-site .paper-actions a:focus-visible { outline-offset: 2px; border-color: #7194bf52; }
 .academic-site .abstract summary:focus-visible { outline: none; }
 .academic-site .abstract summary:focus-visible .abstract-icon { outline: 2px solid #557ba9; outline-offset: 3px; }
 .academic-site .content-section.is-current .section-number { color: #6386af; }

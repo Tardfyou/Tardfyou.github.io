@@ -150,7 +150,6 @@ body #content > .article-table > table {
 body #content :is(table,.article-table) :is(thead,tbody,tr,th,td) { background: transparent; }
 body #content :is(table,.article-table) thead { background: #91aac60f; }
 body #content :is(table,.article-table) th { color: var(--studio-ink); border-bottom-color: #8da6c038; }
-body #content > .article-table:focus-visible { outline: 2px solid #557ba9; outline-offset: 3px; }
 body #toc-auto.article-glass { padding: 0 14px; border-left-width: 1px; position: absolute; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   body #content > :is(.article-glass,blockquote,table), body #toc-auto.article-glass {
