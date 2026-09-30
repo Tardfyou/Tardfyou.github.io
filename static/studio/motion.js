@@ -11,8 +11,11 @@
     table.before(surface); surface.append(table);
   });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const reducedTransparency = matchMedia('(prefers-reduced-transparency: reduce)');
+  const highContrast = matchMedia('(prefers-contrast: more), (forced-colors: active)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const motionAllowed = () => !reduced.matches && document.body.dataset.motion !== 'off';
+  const surfaceMotionAllowed = () => motionAllowed() && !reducedTransparency.matches && !highContrast.matches;
   const activeAnimations = new Set();
   const resetters = new Set();
   const animate = (node, frames, options) => {
@@ -27,8 +30,10 @@
     resetters.forEach(stop => stop());
   };
   reduced.addEventListener('change', () => { if (!motionAllowed()) reset(); });
+  [reducedTransparency, highContrast].forEach(query => query.addEventListener('change', reset));
   new MutationObserver(() => { if (!motionAllowed()) reset(); }).observe(document.body, { attributes: true, attributeFilter: ['data-motion'] });
   addEventListener('pagehide', reset);
+  addEventListener('blur', reset);
 
   // Keep an explicit comments jump aligned while lazy media and the widget finish loading.
   // Native hash navigation handles the journey; user input ends the following immediately.
@@ -148,12 +153,13 @@
         entry.target.dataset.revealState = 'seen';
         const isText = entry.target.matches('p, h2, h3, h4, .section-heading');
         const immediatelyReadable = firstBatch || entry.boundingClientRect.top < innerHeight * .42;
+        if (immediatelyReadable) return;
         const frames = [
-          { opacity: immediatelyReadable ? 1 : .65, translate: `0 ${immediatelyReadable ? 6 : isText ? 9 : 12}px` },
+          { opacity: .84, translate: `0 ${isText ? 6 : 9}px` },
           { opacity: 1, translate: '0 0' }
         ];
-        if (!immediatelyReadable && document.body.classList.contains('academic-site')) frames.splice(1, 0, { opacity: 1, translate: '0 -.6px', offset: .8 });
-        animate(entry.target, frames, { duration: immediatelyReadable ? 430 : isText ? 510 : 590, delay: Math.min(order++, 3) * 28, fill: 'backwards', easing: 'cubic-bezier(.16,1,.3,1)' });
+        if (document.body.classList.contains('academic-site')) frames.splice(1, 0, { opacity: 1, translate: '0 -.35px', offset: .82 });
+        animate(entry.target, frames, { duration: isText ? 440 : 500, delay: Math.min(order++, 3) * 24, fill: 'backwards', easing: 'cubic-bezier(.16,1,.3,1)' });
       });
       firstBatch = false;
     }, { threshold: .04, rootMargin: '0px 0px -24px 0px' });
@@ -180,13 +186,16 @@
     nav.append(indicator); nav.classList.add('sliding-nav');
     let current = null, target = null, velocity = [0, 0, 0, 0];
     let frame = 0, time = 0, hover = null, axis = 0, strain = 0, strainVelocity = 0;
+    let pressure = 0, pressureTarget = 0, pressureVelocity = 0, held = null, pointerId = null;
     let bounds = [nav.clientWidth, nav.clientHeight];
     const clamp = (n, min, max) => Math.min(Math.max(n, min), Math.max(min, max));
     const paint = () => {
-      const stretch = 1 + clamp(strain, -.035, .20);
+      const load = clamp(pressure, -.15, 1.15);
+      const stretch = 1 + clamp(strain, -.02, .12) + load * .025;
+      const depth = 1 - load * .014;
       // Conserving area keeps a moving capsule liquid instead of inflating it.
-      const width = Math.min(bounds[0], Math.max(1, current[2] * (axis === 0 ? stretch : 1 / stretch)));
-      const height = Math.min(bounds[1], Math.max(1, current[3] * (axis === 1 ? stretch : 1 / stretch)));
+      const width = Math.min(bounds[0], Math.max(1, current[2] * (axis === 0 ? stretch : 1 / stretch) * depth));
+      const height = Math.min(bounds[1], Math.max(1, current[3] * (axis === 1 ? stretch : 1 / stretch) * depth));
       const speed = velocity[axis] + velocity[axis + 2] / 2;
       const tail = clamp(speed * .004, -current[axis + 2] * .045, current[axis + 2] * .045);
       const x = clamp(current[0] + (current[2] - width) / 2 - (axis === 0 ? tail : 0), 0, bounds[0] - width);
@@ -197,31 +206,44 @@
       const light = clamp(speed / 20, -34, 34);
       indicator.style.setProperty('--nav-flow-x', `${50 + (axis === 0 ? light : 0)}%`);
       indicator.style.setProperty('--nav-flow-y', `${50 + (axis === 1 ? light : -28)}%`);
-      indicator.style.setProperty('--nav-flow-light', `${Math.min(.72, .16 + Math.abs(strain) * 2.8)}`);
+      indicator.style.setProperty('--nav-flow-light', `${Math.min(.6, .16 + Math.abs(strain) * 2.8 + Math.max(0, load) * .10)}`);
     };
     const stop = () => {
       cancelAnimationFrame(frame); frame = 0; time = 0; velocity.fill(0);
       strain = 0; strainVelocity = 0;
+      pressure = pressureTarget; pressureVelocity = 0;
       if (target) { current = [...target]; paint(); }
       nav.classList.remove('is-travelling');
     };
-    resetters.add(stop);
+    const resetSurface = () => {
+      held = null; pointerId = null; pressureTarget = 0;
+      nav.classList.remove('is-pressed'); stop();
+    };
+    resetters.add(resetSurface);
     const tick = now => {
+      if (!surfaceMotionAllowed()) { resetSurface(); return; }
       const dt = Math.min((now - (time || now - 16)) / 1000, .025); time = now;
       let resting = true;
       for (let i = 0; i < 4; i++) {
-        velocity[i] += ((target[i] - current[i]) * 370 - velocity[i] * 31) * dt;
+        velocity[i] += ((target[i] - current[i]) * 430 - velocity[i] * 33) * dt;
         current[i] += velocity[i] * dt;
-        if (Math.abs(target[i] - current[i]) > .06 || Math.abs(velocity[i]) > .06) resting = false;
+        if (Math.abs(target[i] - current[i]) > .10 || Math.abs(velocity[i]) > .8) resting = false;
       }
       const speed = Math.abs(velocity[axis] + velocity[axis + 2] / 2);
-      const desiredStrain = .18 * Math.tanh(speed / 420);
-      strainVelocity += ((desiredStrain - strain) * 260 - strainVelocity * 20) * dt;
+      const desiredStrain = .11 * Math.tanh(speed / 480);
+      strainVelocity += ((desiredStrain - strain) * 300 - strainVelocity * 24) * dt;
       strain += strainVelocity * dt;
-      if (Math.abs(strain) > .0003 || Math.abs(strainVelocity) > .003) resting = false;
+      pressureVelocity += ((pressureTarget - pressure) * 420 - pressureVelocity * 27) * dt;
+      pressure += pressureVelocity * dt;
+      if (Math.abs(strain) > .0007 || Math.abs(strainVelocity) > .008
+        || Math.abs(pressureTarget - pressure) > .001 || Math.abs(pressureVelocity) > .015) resting = false;
       paint();
-      if (resting || !motionAllowed()) stop();
+      if (resting) stop();
       else frame = requestAnimationFrame(tick);
+    };
+    const wake = () => {
+      nav.classList.add('is-travelling');
+      if (!frame) frame = requestAnimationFrame(tick);
     };
     const move = link => {
       if (!link || !link.offsetWidth) { stop(); indicator.style.opacity = '0'; return; }
@@ -231,24 +253,39 @@
       const changedAxis = nextAxis !== axis; axis = nextAxis;
       target = [link.offsetLeft, link.offsetTop, link.offsetWidth, link.offsetHeight];
       indicator.style.opacity = '1';
-      if (!current || !motionAllowed() || changedAxis) { stop(); return; }
+      if (!current || !surfaceMotionAllowed() || changedAxis) { resetSurface(); return; }
       if (target.every((n, i) => Math.abs(n - current[i]) < .05)) return;
-      nav.classList.add('is-travelling');
-      if (!frame) frame = requestAnimationFrame(tick);
+      wake();
     };
     const selected = () => links.find(link => link.hasAttribute('aria-current') || link.classList.contains('active') || link.classList.contains('selected'));
-    const restore = () => move(hover || (links.includes(document.activeElement) ? document.activeElement : selected()));
+    const restore = () => move(hover || (links.includes(document.activeElement) && document.activeElement.matches(':focus-visible') ? document.activeElement : selected()));
+    const press = (link, id = null) => {
+      if (!surfaceMotionAllowed()) return;
+      held = link; pointerId = id; pressureTarget = 1;
+      nav.classList.add('is-pressed'); move(link); wake();
+    };
+    const release = event => {
+      if (!held || event?.pointerId != null && pointerId != null && event.pointerId !== pointerId) return;
+      held = null; pointerId = null; pressureTarget = 0;
+      nav.classList.remove('is-pressed'); wake();
+    };
     links.forEach(link => {
       link.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') { hover = link; move(link); } });
-      link.addEventListener('focus', () => move(link));
-      link.addEventListener('click', () => {
+      link.addEventListener('focus', () => { if (link.matches(':focus-visible')) move(link); });
+      link.addEventListener('pointerdown', event => { if (event.button === 0 && event.isPrimary !== false) press(link, event.pointerId); });
+      link.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.repeat) press(link); });
+      link.addEventListener('keyup', event => { if (event.key === 'Enter') release(); });
+      link.addEventListener('click', event => {
+        if (event.defaultPrevented || event.button > 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
         hover = null; move(link);
         const icon = link.querySelector('.nav-icon');
-        if (icon) animate(icon, [{ scale: '1' }, { scale: '1.17', offset: .36 }, { scale: '1' }], { duration: 410, easing: 'cubic-bezier(.22,1,.36,1)' });
+        if (icon && surfaceMotionAllowed()) animate(icon, [{ scale: '1' }, { scale: '1.09', offset: .4 }, { scale: '1' }], { duration: 330, easing: 'cubic-bezier(.22,1,.36,1)' });
       });
     });
-    nav.addEventListener('pointerleave', () => { hover = null; restore(); });
-    nav.addEventListener('focusout', event => { if (!nav.contains(event.relatedTarget)) move(selected()); });
+    addEventListener('pointerup', release, { passive: true });
+    addEventListener('pointercancel', event => { if (held && event.pointerId === pointerId) resetSurface(); }, { passive: true });
+    nav.addEventListener('pointerleave', event => { release(event); hover = null; restore(); });
+    nav.addEventListener('focusout', event => { if (!nav.contains(event.relatedTarget)) { release(); move(selected()); } });
     new MutationObserver(restore).observe(nav, { subtree: true, attributes: true, attributeFilter: ['aria-current'] });
     if ('ResizeObserver' in window) {
       const resize = new ResizeObserver(restore); resize.observe(nav); links.forEach(link => resize.observe(link));
@@ -265,7 +302,7 @@
     const clear = () => { cancelAnimationFrame(frame); frame = 0; surface.classList.remove('is-illuminated'); };
     resetters.add(clear);
     surface.addEventListener('pointermove', event => {
-      if (!motionAllowed() || !finePointer.matches || event.pointerType === 'touch') return;
+      if (!surfaceMotionAllowed() || !finePointer.matches || event.pointerType === 'touch') return;
       point = [event.clientX, event.clientY];
       if (frame) return;
       frame = requestAnimationFrame(() => {
@@ -280,50 +317,58 @@
 
   // Only small, existing action controls follow the pointer. Reading text stays put.
   document.querySelectorAll('.academic-site .paper-actions a, .academic-site .profile-links a').forEach(control => {
+    const icon = control.querySelector('.link-icon');
+    if (!icon) return;
     let bounds = null, frame = 0, point = null;
     const clear = () => {
       cancelAnimationFrame(frame); frame = 0; bounds = null;
-      control.style.removeProperty('translate');
+      icon.style.removeProperty('translate');
     };
     resetters.add(clear);
     control.addEventListener('pointerenter', event => {
-      if (motionAllowed() && finePointer.matches && event.pointerType !== 'touch') bounds = control.getBoundingClientRect();
+      if (surfaceMotionAllowed() && finePointer.matches && event.pointerType !== 'touch') bounds = control.getBoundingClientRect();
     });
     control.addEventListener('pointermove', event => {
-      if (!bounds || !motionAllowed() || !finePointer.matches || event.pointerType === 'touch') return;
+      if (!bounds || !surfaceMotionAllowed() || !finePointer.matches || event.pointerType === 'touch') return;
       point = [event.clientX, event.clientY];
       if (frame) return;
       frame = requestAnimationFrame(() => {
-        const x = Math.max(-2, Math.min(2, (point[0] - bounds.left - bounds.width / 2) / bounds.width * 4));
-        const y = Math.max(-1.5, Math.min(1.5, (point[1] - bounds.top - bounds.height / 2) / bounds.height * 3));
-        control.style.translate = `${x}px ${y}px`; frame = 0;
+        const x = Math.max(-1.4, Math.min(1.4, (point[0] - bounds.left - bounds.width / 2) / bounds.width * 2.8));
+        const y = Math.max(-1, Math.min(1, (point[1] - bounds.top - bounds.height / 2) / bounds.height * 2));
+        icon.style.translate = `${x}px ${y}px`; frame = 0;
       });
     }, { passive: true });
     ['pointerleave', 'pointercancel', 'blur'].forEach(event => control.addEventListener(event, clear));
     finePointer.addEventListener('change', clear);
   });
 
-  // Independent scale avoids fighting hover transforms and navigation geometry.
+  // Pressure changes the material and its glyph, leaving labels and hit areas still.
   document.querySelectorAll('.profile nav a, .site-switch a, .studio-switch a, .profile-links a, .paper-actions a, .home-salon > a, .abstract summary, #toc-static summary, .code-disclosure summary, .theme-switch, .petal-toggle, #menu-toggle-mobile, a[data-lens=chip], a[data-lens=control]').forEach(control => {
-    let animation = null, pressed = false;
-    const feedback = control.matches('.abstract summary, #toc-static summary, .code-disclosure summary') ? control.querySelector('.abstract-icon, .toc-toggle-icon, .code-toggle-icon') || control : control;
+    let animation = null, pressed = false, pointerId = null;
+    const feedback = control.closest('.sliding-nav') ? null : control.querySelector('.abstract-icon, .toc-toggle-icon, .code-toggle-icon, .link-icon, svg, i');
     const scale = () => getComputedStyle(feedback).scale === 'none' ? '1' : getComputedStyle(feedback).scale;
-    const cancel = () => { animation?.cancel(); animation = null; pressed = false; };
+    const cancel = () => { animation?.cancel(); animation = null; pressed = false; pointerId = null; control.classList.remove('is-pressed'); };
     resetters.add(cancel);
-    const press = () => {
-      if (!motionAllowed() || pressed) return;
-      const start = scale(); animation?.cancel(); pressed = true;
-      animation = animate(feedback, [{ scale: start }, { scale: feedback === control ? '.966' : '.92' }], { duration: 125, fill: 'forwards', easing: 'cubic-bezier(.2,.8,.2,1)' });
+    const press = (id = null) => {
+      if (!surfaceMotionAllowed() || pressed) return;
+      const start = feedback ? scale() : '1'; animation?.cancel(); pressed = true; pointerId = id;
+      control.classList.add('is-pressed');
+      if (feedback) animation = animate(feedback, [{ scale: start }, { scale: '.93' }], { duration: 110, fill: 'forwards', easing: 'cubic-bezier(.2,.8,.2,1)' });
     };
-    const release = () => {
-      if (!pressed) return;
-      const start = scale(); animation?.cancel(); pressed = false;
-      animation = animate(feedback, [{ scale: start }, { scale: '1.015', offset: .44 }, { scale: '1' }], { duration: 390, easing: 'cubic-bezier(.22,1,.36,1)' });
+    const release = event => {
+      if (!pressed || event?.pointerId != null && pointerId != null && event.pointerId !== pointerId) return;
+      const start = feedback ? scale() : '1'; animation?.cancel(); pressed = false; pointerId = null;
+      control.classList.remove('is-pressed');
+      if (feedback) animation = animate(feedback, [{ scale: start }, { scale: '1.012', offset: .54 }, { scale: '1' }], { duration: 330, easing: 'cubic-bezier(.22,1,.36,1)' });
     };
-    control.addEventListener('pointerdown', event => { if (event.button === 0) press(); });
-    ['pointerup', 'pointercancel', 'pointerleave', 'blur'].forEach(event => control.addEventListener(event, release));
-    control.addEventListener('keydown', event => { if (!event.repeat && ['Enter', ' '].includes(event.key)) press(); });
-    control.addEventListener('keyup', release);
+    control.addEventListener('pointerdown', event => { if (event.button === 0 && event.isPrimary !== false) press(event.pointerId); });
+    addEventListener('pointerup', release, { passive: true });
+    addEventListener('pointercancel', event => { if (pressed && event.pointerId === pointerId) cancel(); }, { passive: true });
+    control.addEventListener('pointerleave', release);
+    control.addEventListener('blur', cancel);
+    const activationKey = event => event.key === 'Enter' || event.key === ' ' && control.matches('button, summary, [role="button"]');
+    control.addEventListener('keydown', event => { if (!event.repeat && activationKey(event)) press(); });
+    control.addEventListener('keyup', event => { if (activationKey(event)) release(); });
   });
 
   const progress = document.querySelector('.reading-progress');

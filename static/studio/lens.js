@@ -159,14 +159,19 @@
   // Surface tension belongs to the decorative rim, never the text or hit box.
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const reduceTransparency = matchMedia('(prefers-reduced-transparency: reduce)');
-  const highContrast = matchMedia('(prefers-contrast: more)');
+  const highContrast = matchMedia('(prefers-contrast: more), (forced-colors: active)');
   const finePointer = matchMedia('(hover: hover) and (pointer: fine)');
   const liquidAllowed = () => !reduceMotion.matches && !reduceTransparency.matches && !highContrast.matches && document.body.dataset.motion !== 'off';
   const cancelRims = new Set();
+  const releasePressedRims = new Set();
   const stopRims = () => cancelRims.forEach(stop => stop());
   [reduceMotion, reduceTransparency, highContrast, finePointer].forEach(query => query.addEventListener('change', stopRims));
   new MutationObserver(() => { if (!liquidAllowed()) stopRims(); }).observe(document.body, { attributes: true, attributeFilter: ['data-motion'] });
   addEventListener('pagehide', stopRims); addEventListener('resize', stopRims);
+  addEventListener('blur', stopRims);
+  addEventListener('pointerup', event => releasePressedRims.forEach(release => release(event)), { passive: true });
+  addEventListener('pointercancel', stopRims, { passive: true });
+  document.addEventListener('visibilitychange', () => { if (document.hidden) stopRims(); });
 
   surfaces.forEach((state, element) => {
     if (!element.matches('.academic-topbar, #header-desktop .header-wrapper, #header-mobile .header-container, .profile nav, .studio-switch, .paper-badge, .paper-actions a, [data-lens=chip], [data-lens=control], a[data-lens=tile], .article-glass')) return;
@@ -183,8 +188,8 @@
     const caustic = make('path', { class: 'liquid-caustic', fill: 'none', stroke: `url(#${state.id}-caustic)`, 'stroke-width': .65, 'vector-effect': 'non-scaling-stroke' });
     rim.append(rimDefs, meniscus, shade, caustic, path); element.append(rim); element.classList.add('liquid-surface');
     let points = [], perimeter = 0, geometry = '', frame = 0, previousTime = 0;
-    let center = 0, targetCenter = 0, height = 0, targetHeight = 0, speed = 0, pressed = false;
-    let lastPointer = null, spread = 42;
+    let center = 0, targetCenter = 0, centerSpeed = 0, height = 0, targetHeight = 0, speed = 0, pressed = false, pointerId = null;
+    let lastPointer = null, spread = 42, targetSpread = 42;
     const borderColor = element.style.borderColor;
 
     const prepare = () => {
@@ -201,7 +206,7 @@
       const lengths = [horizontal, arc, vertical, arc, horizontal, arc, vertical, arc];
       const oldPerimeter = perimeter;
       perimeter = lengths.reduce((sum, length) => sum + length, 0);
-      if (oldPerimeter) { center *= perimeter / oldPerimeter; targetCenter *= perimeter / oldPerimeter; }
+      if (oldPerimeter) { center *= perimeter / oldPerimeter; targetCenter *= perimeter / oldPerimeter; centerSpeed *= perimeter / oldPerimeter; }
       const count = Math.max(48, Math.min(240, Math.ceil(perimeter / 10)));
       points = Array.from({ length: count }, (_, index) => {
         const distance = index / count * perimeter;
@@ -249,9 +254,10 @@
       if (state.strength) state.displacement.setAttribute('scale', (state.strength * (1 + height * .025)).toFixed(3));
     };
     const clear = () => {
-      cancelAnimationFrame(frame); frame = 0; previousTime = 0; height = 0; targetHeight = 0; speed = 0; pressed = false; lastPointer = null;
+      cancelAnimationFrame(frame); frame = 0; previousTime = 0; height = 0; targetHeight = 0; speed = 0; centerSpeed = 0; pressed = false; pointerId = null; lastPointer = null;
+      spread = targetSpread = 42;
       rim.style.opacity = '0'; element.style.borderColor = borderColor;
-      element.classList.remove('is-liquid-active');
+      element.classList.remove('is-liquid-active', 'is-pressed');
       if (state.strength) state.displacement.setAttribute('scale', state.strength);
     };
     cancelRims.add(clear);
@@ -262,10 +268,12 @@
       const dt = Math.min((now - (previousTime || now - 16)) / 1000, .025); previousTime = now;
       let gap = targetCenter - center;
       if (Math.abs(gap) > perimeter / 2) gap -= Math.sign(gap) * perimeter;
-      center = (center + gap * Math.min(1, dt * 20) + perimeter) % perimeter;
+      centerSpeed += (gap * 520 - centerSpeed * 38) * dt;
+      center = (center + centerSpeed * dt + perimeter) % perimeter;
+      spread += (targetSpread - spread) * Math.min(1, dt * 18);
       speed += ((targetHeight - height) * 240 - speed * 21) * dt;
       height += speed * dt; paint();
-      if (Math.abs(targetHeight - height) < .012 && Math.abs(speed) < .025 && Math.abs(gap) < .1) {
+      if (Math.abs(targetHeight - height) < .012 && Math.abs(speed) < .025 && Math.abs(gap) < .1 && Math.abs(centerSpeed) < .6 && Math.abs(targetSpread - spread) < .06) {
         frame = 0; previousTime = 0;
         if (!targetHeight) clear();
       } else frame = requestAnimationFrame(tick);
@@ -281,12 +289,13 @@
       const now = performance.now();
       const pointerSpeed = lastPointer ? Math.min(1, Math.hypot(x-lastPointer.x,y-lastPointer.y) / Math.max(16,now-lastPointer.time)) : 0;
       lastPointer = { x, y, time: now };
-      if (!element.classList.contains('is-liquid-active')) center = nearest.distance;
+      if (!element.classList.contains('is-liquid-active')) { center = nearest.distance; centerSpeed = 0; }
       targetCenter = nearest.distance;
       const reach = Math.max(0, 1 - distance / 42);
       const compact = state.height < 48;
       targetHeight = (pressed ? (compact ? 2.4 : 3.7) : reach * (compact ? 1.7 : 2.8)) + reach * pointerSpeed * .7;
-      spread = Math.min(64, Math.max(24, state.height * .55)) + pointerSpeed * 12;
+      targetSpread = Math.min(64, Math.max(24, state.height * .55)) + pointerSpeed * 12;
+      element.style.setProperty('--light-x', `${x}px`); element.style.setProperty('--light-y', `${y}px`);
       if (targetHeight > .08) { element.classList.add('is-liquid-active'); element.style.borderColor = 'transparent'; }
       wake();
     };
@@ -294,12 +303,33 @@
       if (liquidAllowed() && finePointer.matches && event.pointerType !== 'touch' && event.target.closest('.liquid-surface') === element) pointAt(event);
     }, { passive: true });
     element.addEventListener('pointerdown', event => {
-      if (!liquidAllowed() || event.button !== 0 || event.target.closest('.liquid-surface') !== element) return;
-      pressed = true; pointAt(event);
+      if (!liquidAllowed() || event.button !== 0 || event.isPrimary === false || event.target.closest('.liquid-surface') !== element) return;
+      pressed = true; pointerId = event.pointerId; element.classList.add('is-pressed'); pointAt(event);
       // A quick tap can begin and end before the next frame; retain its impulse.
       speed = Math.min(36, speed + 26);
     }, { passive: true });
-    const release = () => { pressed = false; targetHeight = 0; lastPointer = null; if (points.length && height) wake(); };
-    ['pointerleave','pointerup','pointercancel','blur'].forEach(type => element.addEventListener(type, release));
+    const release = event => {
+      if (event?.pointerId != null && pointerId != null && event.pointerId !== pointerId) return;
+      pressed = false; pointerId = null; targetHeight = 0; lastPointer = null;
+      targetSpread = Math.min(76, targetSpread + 8);
+      element.classList.remove('is-pressed');
+      if (points.length && (height || speed)) wake();
+    };
+    releasePressedRims.add(event => { if (pressed) release(event); });
+    ['pointerleave','pointerup'].forEach(type => element.addEventListener(type, release));
+    const activationKey = (event, control) => event.key === 'Enter' || event.key === ' ' && control.matches('button, summary, [role="button"]');
+    element.addEventListener('keydown', event => {
+      const control = event.target.closest('a[href], button, summary, [role="button"]');
+      if (!control || event.repeat || !activationKey(event, control) || !liquidAllowed() || control.closest('.liquid-surface') !== element) return;
+      const bounds = control.getBoundingClientRect();
+      pressed = true; pointerId = null; element.classList.add('is-pressed');
+      pointAt({ clientX: bounds.left + bounds.width / 2, clientY: bounds.top + bounds.height / 2 });
+      speed = Math.min(36, speed + 22);
+    });
+    element.addEventListener('keyup', event => {
+      const control = event.target.closest('a[href], button, summary, [role="button"]');
+      if (control && activationKey(event, control)) release();
+    });
+    element.addEventListener('focusout', event => { if (!element.contains(event.relatedTarget)) clear(); });
   });
 })();

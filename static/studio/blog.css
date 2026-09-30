@@ -256,3 +256,8 @@ body[data-motion="off"] .home .home-profile .home-avatar img:hover { transform: 
     background: linear-gradient(180deg,rgba(22,30,42,.2),rgba(22,30,42,.62) 12px,rgba(22,30,42,.62) calc(100% - 12px),rgba(22,30,42,.2));
   }
 }
+
+/* Known local media reserves its final ratio before the browser decodes it. */
+img.native-image { object-fit: contain; }
+img.native-image.image-fluid, .featured-image img.native-image { width: 100%; }
+.featured-image-preview img.native-image { object-fit: cover; }

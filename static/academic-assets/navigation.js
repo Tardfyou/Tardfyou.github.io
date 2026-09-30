@@ -78,7 +78,7 @@
   window.addEventListener('scroll', scheduleUpdate, { passive: true });
   window.addEventListener('resize', scheduleUpdate);
   window.addEventListener('load', scheduleUpdate, { once: true });
-  document.fonts.ready.then(scheduleUpdate);
+  document.fonts?.ready.then(scheduleUpdate);
   updateCurrentSection();
   document.querySelectorAll('details.abstract').forEach(details => {
     const summary = details.querySelector('summary');
@@ -87,7 +87,13 @@
     let contentAnimation = null;
     const label = summary.querySelector('.abstract-label');
     const paragraph = details.querySelector('p');
-    details.dataset.expanded = String(desiredOpen);
+    function syncState() {
+      details.dataset.expanded = String(desiredOpen);
+      summary.setAttribute('aria-expanded', String(desiredOpen));
+      if (label) label.textContent = desiredOpen ? 'Hide abstract' : 'Read abstract';
+      details.closest('.research-item')?.classList.toggle('is-expanded', desiredOpen);
+    }
+    syncState();
     function settle() {
       if (animation) {
         animation.onfinish = null;
@@ -97,8 +103,10 @@
       contentAnimation?.cancel();
       contentAnimation = null;
       details.open = desiredOpen;
+      if (paragraph) paragraph.inert = false;
       details.style.height = '';
       details.style.overflow = '';
+      syncState();
       scheduleUpdate();
     }
     summary.addEventListener('click', event => {
@@ -108,13 +116,10 @@
       const contentStyle = details.open && paragraph ? getComputedStyle(paragraph) : null;
       const contentStart = {
         opacity: contentStyle?.opacity ?? '0',
-        transform: contentStyle?.transform ?? 'translateY(7px)'
+        transform: contentStyle?.transform ?? 'translateY(3.5px)'
       };
       desiredOpen = !desiredOpen;
-      details.dataset.expanded = String(desiredOpen);
-      summary.setAttribute('aria-expanded', String(desiredOpen));
-      if (label) label.textContent = desiredOpen ? 'Hide abstract' : 'Read abstract';
-      details.closest('.research-item')?.classList.toggle('is-expanded', desiredOpen);
+      syncState();
       if (animation) {
         animation.onfinish = null;
         animation.cancel();
@@ -129,17 +134,25 @@
       details.style.overflow = 'hidden';
       details.style.height = `${startHeight}px`;
       contentAnimation?.cancel();
-      if (paragraph) contentAnimation = paragraph.animate([
-        contentStart,
-        { opacity: desiredOpen ? 1 : 0, transform: desiredOpen ? 'translateY(0)' : 'translateY(-3px)' }
-      ], { duration: desiredOpen ? 340 : 220, fill: 'both', easing: 'cubic-bezier(.16,1,.3,1)' });
+      const distance = Math.abs(endHeight - startHeight);
+      const duration = desiredOpen ? Math.min(460, 260 + Math.sqrt(distance) * 7) : Math.min(300, 190 + Math.sqrt(distance) * 4);
+      if (paragraph) {
+        paragraph.inert = !desiredOpen;
+        contentAnimation = paragraph.animate([
+          contentStart,
+          { opacity: desiredOpen ? 1 : 0, transform: desiredOpen ? 'translateY(0)' : 'translateY(-1.5px)' }
+        ], { duration: duration * .78, fill: 'both', easing: 'cubic-bezier(.2,.8,.2,1)' });
+      }
       const heights = desiredOpen
-        ? [{ height: `${startHeight}px` }, { height: `${endHeight + 3}px`, offset: .8 }, { height: `${endHeight}px` }]
-        : [{ height: `${startHeight}px` }, { height: `${endHeight}px` }];
-      animation = details.animate(heights, { duration: desiredOpen ? 480 : 320, easing: 'cubic-bezier(.16,1,.3,1)', fill: 'forwards' });
+        ? [{ height: `${startHeight}px`, easing: 'cubic-bezier(.18,.78,.18,1)' }, { height: `${endHeight + Math.min(1.5, distance * .008)}px`, offset: .84, easing: 'cubic-bezier(.28,0,.35,1)' }, { height: `${endHeight}px` }]
+        : [{ height: `${startHeight}px`, easing: 'cubic-bezier(.2,.8,.2,1)' }, { height: `${endHeight}px` }];
+      animation = details.animate(heights, { duration, easing: 'linear', fill: 'forwards' });
       animation.onfinish = settle;
     });
+    details.addEventListener('toggle', () => { if (!animation) { desiredOpen = details.open; syncState(); } });
     window.addEventListener('resize', settle);
+    window.addEventListener('pagehide', settle);
+    document.fonts?.ready.then(settle);
     reducedMotion.addEventListener('change', settle);
     new MutationObserver(() => { if (!motionAllowed()) settle(); }).observe(document.body, { attributes: true, attributeFilter: ['data-motion'] });
   });
