@@ -141,7 +141,9 @@
         // Keep the cached map covering an opening panel; regenerate after it settles.
         if (width && height) {
           const state = surfaces.get(entry.target);
-          if (state.width !== width || state.height !== height) state.clearRim?.();
+          // The academic dock changes height while following a native anchor jump.
+          // Its active reflection can follow that resize; opening menus still clear their old rim.
+          if ((state.width !== width || state.height !== height) && !entry.target.matches('.profile nav.is-liquid-active')) state.clearRim?.();
           const { map } = state;
           map?.setAttribute('width', width); map?.setAttribute('height', height);
         }
@@ -172,10 +174,14 @@
     const rim = make('svg', { class: 'liquid-rim', 'aria-hidden': 'true', focusable: 'false', preserveAspectRatio: 'none' });
     const gradient = make('radialGradient', { id: `${state.id}-light`, gradientUnits: 'userSpaceOnUse', r: 100 });
     [[0,'#fff',.98],[.32,'#edf5ff',.9],[.7,'#9eb6d2',.55],[1,'#bdcfe2',.28]].forEach(([offset,color,opacity]) => gradient.append(make('stop', { offset, 'stop-color': color, 'stop-opacity': opacity })));
-    const rimDefs = make('defs', {}); rimDefs.append(gradient);
+    const causticLight = make('radialGradient', { id: `${state.id}-caustic`, gradientUnits: 'userSpaceOnUse', r: 100 });
+    [[0,.32],[.5,.15],[1,0]].forEach(([offset,opacity]) => causticLight.append(make('stop', { offset, 'stop-color': '#607fa5', 'stop-opacity': opacity })));
+    const rimDefs = make('defs', {}); rimDefs.append(gradient, causticLight);
     const path = make('path', { fill: 'none', stroke: `url(#${state.id}-light)`, 'stroke-width': 1.25, 'vector-effect': 'non-scaling-stroke' });
     const shade = make('path', { fill: 'none', stroke: 'rgba(85,119,160,.22)', 'stroke-width': 1.4, transform: 'translate(0 .45)', 'vector-effect': 'non-scaling-stroke' });
-    rim.append(rimDefs, shade, path); element.append(rim); element.classList.add('liquid-surface');
+    const meniscus = make('path', { class: 'liquid-meniscus', fill: `url(#${state.id}-light)`, 'fill-rule': 'evenodd', opacity: .24 });
+    const caustic = make('path', { class: 'liquid-caustic', fill: 'none', stroke: `url(#${state.id}-caustic)`, 'stroke-width': .65, 'vector-effect': 'non-scaling-stroke' });
+    rim.append(rimDefs, meniscus, shade, caustic, path); element.append(rim); element.classList.add('liquid-surface');
     let points = [], perimeter = 0, geometry = '', frame = 0, previousTime = 0;
     let center = 0, targetCenter = 0, height = 0, targetHeight = 0, speed = 0, pressed = false;
     let lastPointer = null, spread = 42;
@@ -193,7 +199,9 @@
       const vertical = Math.max(0, height - 2 * inset - 2 * radius);
       const arc = Math.PI * radius / 2;
       const lengths = [horizontal, arc, vertical, arc, horizontal, arc, vertical, arc];
+      const oldPerimeter = perimeter;
       perimeter = lengths.reduce((sum, length) => sum + length, 0);
+      if (oldPerimeter) { center *= perimeter / oldPerimeter; targetCenter *= perimeter / oldPerimeter; }
       const count = Math.max(48, Math.min(240, Math.ceil(perimeter / 10)));
       points = Array.from({ length: count }, (_, index) => {
         const distance = index / count * perimeter;
@@ -221,11 +229,21 @@
         const wave = Math.exp(-distance * distance / (2 * spread * spread)) - .15 * Math.exp(-distance * distance / (5 * spread * spread));
         return [point.x + point.nx * rimHeight * wave, point.y + point.ny * rimHeight * wave];
       });
-      const midpoint = (a, b) => `${((a[0] + b[0]) / 2).toFixed(2)} ${((a[1] + b[1]) / 2).toFixed(2)}`;
-      let curve = `M ${midpoint(vertices.at(-1), vertices[0])}`;
-      vertices.forEach((point, index) => { curve += ` Q ${point[0].toFixed(2)} ${point[1].toFixed(2)} ${midpoint(point, vertices[(index + 1) % vertices.length])}`; });
-      path.setAttribute('d', `${curve} Z`); shade.setAttribute('d', `${curve} Z`);
-      gradient.setAttribute('cx', lightPoint.x); gradient.setAttribute('cy', lightPoint.y); gradient.setAttribute('r', spread * 2.5);
+      const curveOf = vertices => {
+        const midpoint = (a, b) => `${((a[0] + b[0]) / 2).toFixed(2)} ${((a[1] + b[1]) / 2).toFixed(2)}`;
+        let curve = `M ${midpoint(vertices.at(-1), vertices[0])}`;
+        vertices.forEach((point, index) => { curve += ` Q ${point[0].toFixed(2)} ${point[1].toFixed(2)} ${midpoint(point, vertices[(index + 1) % vertices.length])}`; });
+        return `${curve} Z`;
+      };
+      const outerCurve = curveOf(vertices);
+      // A thin inner caustic separates the moving outer reflection from the clear center.
+      const depth = 1.1 + Math.min(1.3, Math.abs(height) * .35);
+      const innerCurve = curveOf(vertices.map((point, index) => [point[0] - points[index].nx * depth, point[1] - points[index].ny * depth]));
+      path.setAttribute('d', outerCurve); shade.setAttribute('d', outerCurve);
+      meniscus.setAttribute('d', `${outerCurve} ${innerCurve}`); caustic.setAttribute('d', innerCurve);
+      [gradient, causticLight].forEach(light => {
+        light.setAttribute('cx', lightPoint.x); light.setAttribute('cy', lightPoint.y); light.setAttribute('r', spread * 2.5);
+      });
       rim.style.opacity = Math.min(.95, Math.abs(height) * .55 + Math.min(.25, Math.abs(speed) * .008));
       // The edge's optical depth responds to pressure without rebuilding its map.
       if (state.strength) state.displacement.setAttribute('scale', (state.strength * (1 + height * .025)).toFixed(3));
@@ -239,6 +257,7 @@
     cancelRims.add(clear);
     state.clearRim = clear;
     const tick = now => {
+      prepare();
       if (!liquidAllowed() || !points.length) { clear(); return; }
       const dt = Math.min((now - (previousTime || now - 16)) / 1000, .025); previousTime = now;
       let gap = targetCenter - center;
