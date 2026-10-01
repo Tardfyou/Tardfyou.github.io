@@ -52,7 +52,7 @@
     <div class="post-info-more">
         <section class="post-tags">
             {{- with .Params.tags -}}
-                <i class="fas fa-tags" aria-hidden="true"></i>&nbsp;
+                {{ partial "studio-icon.html" "tag" }}&nbsp;
                 {{- range $index, $value := . -}}
                     {{- if gt $index 0 }},&nbsp;{{ end -}}
                     {{- $tag := partialCached "function/path.html" $value $value | printf "/tags/%v" | $.Site.GetPage -}}
@@ -60,8 +60,9 @@
                 {{- end -}}
             {{- end -}}
         </section>
-        <section>
-            <span><a href="javascript:void(0);" onclick="window.history.back();">{{ T "back" }}</a></span>&nbsp;|&nbsp;<span><a href="{{ .Site.Home.RelPermalink }}">{{ T "home" }}</a></span>
+        <section class="post-return">
+            <button type="button" class="post-back" data-lens="chip" onclick="window.history.back();">{{ partial "studio-icon.html" "chevron-left" }}<span>{{ T "back" }}</span></button>
+            <a href="{{ .Site.Home.RelPermalink }}" data-lens="chip">{{ partial "studio-icon.html" "home" }}<span>{{ T "home" }}</span></a>
         </section>
     </div>
 
@@ -80,10 +81,10 @@
             {{- $nextPage = .NextInSection -}}
         {{- end -}}
         {{- with $prevPage -}}
-            <a href="{{ .RelPermalink }}" class="prev" rel="prev" title="{{ .Title }}">{{ partial "studio-icon.html" "chevron-left" }}{{ .Title | emojify }}</a>
+            <a href="{{ .RelPermalink }}" class="prev" rel="prev" title="{{ .Title }}">{{ partial "studio-icon.html" "chevron-left" }}<span class="post-nav-title">{{ .Title | emojify }}</span></a>
         {{- end -}}
         {{ with $nextPage }}
-            <a href="{{ .RelPermalink }}" class="next" rel="next" title="{{ .Title }}">{{ .Title | emojify }}{{ partial "studio-icon.html" "chevron-right" }}</a>
+            <a href="{{ .RelPermalink }}" class="next" rel="next" title="{{ .Title }}"><span class="post-nav-title">{{ .Title | emojify }}</span>{{ partial "studio-icon.html" "chevron-right" }}</a>
         {{- end -}}
     </div>
 </div>

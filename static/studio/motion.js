@@ -358,7 +358,7 @@
   });
 
   // Pressure changes the material and its glyph, leaving labels and hit areas still.
-  document.querySelectorAll('.profile nav a, .site-switch a, .studio-switch a, .profile-links a, .paper-actions a, .home-salon > a, .abstract summary, #toc-static summary, .code-disclosure summary, .theme-switch, .petal-toggle, #menu-toggle-mobile, a[data-lens=chip], a[data-lens=control]').forEach(control => {
+  document.querySelectorAll('.profile nav a, .site-switch a, .studio-switch a, .profile-links a, .paper-actions a, .home-salon > a, .abstract summary, #toc-static summary, .code-disclosure summary, .theme-switch, .petal-toggle, #menu-toggle-mobile, .post-return button, .post-nav a, a[data-lens=chip], a[data-lens=control]').forEach(control => {
     let animation = null, pressed = false, pointerId = null;
     const feedback = control.closest('.sliding-nav') ? null : control.querySelector('.abstract-icon, .toc-toggle-icon, .code-toggle-icon, .link-icon, svg, i');
     const scale = () => getComputedStyle(feedback).scale === 'none' ? '1' : getComputedStyle(feedback).scale;

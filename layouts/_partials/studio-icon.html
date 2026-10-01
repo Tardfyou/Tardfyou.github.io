@@ -7,6 +7,8 @@
   "external" `<path d="M13.5 4.5h6v6m0-6L10 14"/><path d="M9 5.5H6.5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V14"/>`
   "mail" `<rect x="3.5" y="5.5" width="17" height="13" rx="2.5"/><path d="m4.5 7 7.5 6 7.5-6"/>`
   "folder" `<path d="M3 7a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/>`
+  "tag" `<path d="M3.5 3.5h7l10 10-7 7-10-10Z"/><circle cx="7.5" cy="7.5" r="1"/>`
+  "home" `<path d="m3 10 9-7 9 7M5 9v12h14V9M9 21v-8h6v8"/>`
   "calendar" `<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4M17 3v4M3 10h18"/>`
   "edit" `<path d="m15 4 5 5M4 20l5-1L20 8a2.1 2.1 0 0 0-5-5L4 14Z"/>`
   "clock" `<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>`
@@ -22,5 +24,5 @@
   "chevron-up" `<path d="m6 15 6-6 6 6"/>`
   "ellipsis" `<circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/>`
 -}}
-{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "comment" "petals" "chevron-right" "chevron-left" "chevron-up" "ellipsis") . -}}
+{{- $action := in (slice "external" "mail" "folder" "tag" "home" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "comment" "petals" "chevron-right" "chevron-left" "chevron-up" "ellipsis") . -}}
 <svg class="{{ if $action }}link-icon link-icon--{{ . }}{{ else }}nav-icon{{ end }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ index $icons . | safeHTML }}</svg>
