@@ -300,7 +300,7 @@
     addEventListener('pointerup', release, { passive: true });
     addEventListener('pointercancel', event => { if (held && event.pointerId === pointerId) resetSurface(); }, { passive: true });
     nav.addEventListener('pointerleave', event => { release(event); hover = null; restore(); });
-    nav.addEventListener('focusout', event => { if (!nav.contains(event.relatedTarget)) { release(); move(selected()); } });
+    nav.addEventListener('focusout', event => { if (pointerId === null && !nav.contains(event.relatedTarget)) { release(); move(selected()); } });
     new MutationObserver(restore).observe(nav, { subtree: true, attributes: true, attributeFilter: ['aria-current'] });
     if ('ResizeObserver' in window) {
       const resize = new ResizeObserver(restore); resize.observe(nav); links.forEach(link => resize.observe(link));
@@ -380,7 +380,8 @@
     addEventListener('pointerup', release, { passive: true });
     addEventListener('pointercancel', event => { if (pressed && event.pointerId === pointerId) cancel(); }, { passive: true });
     control.addEventListener('pointerleave', release);
-    control.addEventListener('blur', cancel);
+    // Native anchor blur can follow pointerdown; that pointer still owns the press.
+    control.addEventListener('blur', () => { if (pointerId === null) cancel(); });
     const activationKey = event => event.key === 'Enter' || event.key === ' ' && control.matches('button, summary, [role="button"]');
     control.addEventListener('keydown', event => { if (!event.repeat && activationKey(event)) press(); });
     control.addEventListener('keyup', event => { if (activationKey(event)) release(); });

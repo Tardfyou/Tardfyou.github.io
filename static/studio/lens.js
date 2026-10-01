@@ -330,6 +330,6 @@
       const control = event.target.closest('a[href], button, summary, [role="button"]');
       if (control && activationKey(event, control)) release();
     });
-    element.addEventListener('focusout', event => { if (!element.contains(event.relatedTarget)) clear(); });
+    element.addEventListener('focusout', event => { if (pointerId === null && !element.contains(event.relatedTarget)) clear(); });
   });
 })();
