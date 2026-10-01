@@ -345,6 +345,30 @@ body .archive .categories-card .card-item-wrapper .category-label {
 body .archive .categories-card .more-single-link { gap: 7px; margin: 5px 0; }
 body .archive .single-title > .link-icon { width: 24px; height: 24px; margin-inline-end: 8px; vertical-align: -.08em; }
 
+/* Archive reading stays unframed; long titles and native targets remain complete. */
+body .archive .archive-item {
+  display: grid; grid-template-columns: minmax(0,1fr) max-content; align-items: baseline;
+  gap: 0 14px; padding: 4px 0; transform: none; border-bottom-color: var(--studio-line);
+  transition: border-color 220ms ease;
+}
+body .archive .categories-card .archive-item { grid-template-columns: minmax(0,1fr); }
+body .archive .archive-item .archive-item-link {
+  display: block; box-sizing: border-box; min-width: 0; min-height: 44px; padding: 5px 0;
+  white-space: normal; overflow: visible; overflow-wrap: anywhere; text-overflow: clip;
+  color: var(--studio-ink); transform: none; transition: color 180ms ease;
+}
+body .archive .archive-item .archive-item-date {
+  width: auto; color: var(--studio-copy); white-space: nowrap; opacity: 1; transform: none;
+}
+body .archive .archive-item:is(:hover,:focus-within) { border-bottom-color: #8299b14d; transform: none; }
+body[theme=dark] .archive .archive-item:is(:hover,:focus-within) { border-bottom-color: #a2bbd55c; }
+body .archive .group-title,
+body .archive .group-title:hover { color: var(--studio-copy); transform: none; text-shadow: none; }
+@media (max-width: 680px) {
+  body .archive .archive-item { grid-template-columns: minmax(0,1fr); row-gap: 2px; }
+  body .archive .archive-item .archive-item-date { justify-self: start; text-align: start; }
+}
+
 /* Known local media reserves its final ratio before the browser decodes it. */
 img.native-image { object-fit: contain; }
 img.native-image.image-fluid, .featured-image img.native-image { width: 100%; }
