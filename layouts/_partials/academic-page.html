@@ -15,9 +15,9 @@
   <link rel="icon" href="{{ "academic-assets/favicon.svg" | relURL }}" type="image/svg+xml">
   <link rel="stylesheet" href="{{ "academic-assets/academic.css" | relURL }}?v=mobile-menu-18">
   <link rel="stylesheet" href="{{ "studio/motion.css" | relURL }}?v=polish-batch-39">
-  <link rel="stylesheet" href="{{ "studio/academic.css" | relURL }}?v=polish-batch-40">
+  <link rel="stylesheet" href="{{ "studio/academic.css" | relURL }}?v=disclosure-glass-42">
 <link rel="stylesheet" href="{{ "studio/typography.css" | relURL }}?v=mobile-menu-18">
-  <link rel="stylesheet" href="{{ "studio/lens.css" | relURL }}?v=code-reading-41">
+  <link rel="stylesheet" href="{{ "studio/lens.css" | relURL }}?v=disclosure-glass-42">
 </head>
 <body id="top" class="academic-site" data-motion="{{ .Site.Params.studio.motion | default "soft" }}">
   <a class="skip-link" href="#main">Skip to content</a>
@@ -58,7 +58,7 @@
           <div class="item-meta paper-meta"><div class="paper-badges">{{ with .venue }}<span class="paper-badge badge-venue">{{ . }}</span>{{ end }}{{ with .rank }}<span class="paper-badge badge-rank">{{ . }}</span>{{ end }}{{ with .status }}<span class="paper-badge badge-status">{{ . }}</span>{{ end }}{{ if not .venue }}<span>{{ .kind }}</span>{{ end }}</div><span>{{ .date }}</span></div>
           <h3>{{ .title }}</h3>{{ with .authors }}<p class="authors">{{ . }}</p>{{ end }}<p>{{ .description }}</p>{{ with .note }}<p class="small-note">{{ . }}</p>{{ end }}
           {{ with .links }}<div class="paper-actions">{{ range . }}<a href="{{ .url }}">{{ .label }} {{ if strings.HasPrefix .url "mailto:" }}{{ partial "studio-icon.html" "mail" }}{{ else }}{{ partial "studio-icon.html" "external" }}{{ end }}</a>{{ end }}</div>{{ end }}
-          {{ with .abstract }}<details class="abstract"><summary><span class="abstract-label">Read abstract</span><span class="abstract-icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v12M4 10h12"/></svg></span></summary><p>{{ . }}</p></details>{{ end }}
+          {{ with .abstract }}<details class="abstract"><summary><span class="abstract-label">Read abstract</span><span class="abstract-icon" aria-hidden="true"><svg class="abstract-glyph" focusable="false" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 4v12M4 10h12"/></svg></span></summary><p>{{ . }}</p></details>{{ end }}
         </article>{{ end }}</div>
       </section>{{ end }}
       {{ with $p.experience }}<section class="content-section" id="experience" aria-labelledby="experience-title"><div class="section-heading"><span class="section-number">03 / IN PRACTICE</span><h2 id="experience-title">Experience</h2></div><div class="section-body experience-list">{{ range . }}<article class="experience"><div class="experience-top"><h3>{{ .title }}</h3><span class="date">{{ .date }}</span></div><p class="role">{{ .role }}</p><p>{{ .description }}</p></article>{{ end }}</div></section>{{ end }}

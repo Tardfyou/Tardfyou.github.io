@@ -72,8 +72,9 @@
 .abstract { border-top: 1px solid var(--line); margin-top: 19px; padding-top: 4px; }
 .abstract summary { list-style: none; display: flex; justify-content: space-between; align-items: center; width: 100%; padding: 10px 0 0; color: #6b7e94; font: 12px/1.5 var(--sans); }
 .abstract summary::-webkit-details-marker { display: none; }
-.abstract summary .abstract-icon { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 50%; font-size: 16px; transition: transform 300ms var(--motion-spring); }
-.abstract[data-expanded="true"] summary .abstract-icon { transform: rotate(45deg); }
+.abstract summary .abstract-icon { display: grid; place-items: center; width: 22px; height: 22px; border: 1px solid var(--line); border-radius: 50%; font-size: 16px; }
+.abstract[data-expanded="true"] summary .abstract-icon > .abstract-glyph,
+.abstract[open]:not([data-expanded]) summary .abstract-icon > .abstract-glyph { transform: rotate(45deg); }
 .abstract summary:hover { text-decoration: none; transform: none; }
 .abstract p { border: none; margin-top: 5px; }
 .experience-list { border-left: 1px solid #dce5ef; margin-left: 5px; padding-left: 22px; }
@@ -140,7 +141,7 @@ footer { padding-top: 24px; margin-top: 0; }
 .abstract summary { min-height: 45px; padding-top: 10px; transform-origin: right center; }
 .abstract summary .abstract-label { display: block; color: #526981; }
 .abstract summary .abstract-icon { width: 28px; height: 28px; background: #f9fbfd; box-shadow: inset 0 1px 1px #fff, 0 1px 3px rgba(45,67,93,.035); }
-.abstract-icon svg { width: 17px; height: 17px; }
+.abstract-icon > .abstract-glyph { width: 17px; height: 17px; }
 .abstract p { padding-bottom: 3px; }
 @media (max-width: 740px) {
   .academic-topbar { width: calc(100% - 24px); top: 10px; height: 58px; margin-top: 10px; padding: 0 17px; }
@@ -254,7 +255,7 @@ body[data-motion="off"].academic-site .portrait::after { display: none; }
   overflow: hidden; background: rgba(180,203,229,.045); border-color: rgba(130,154,186,.2);
   box-shadow: inset 0 1px 1px white, 0 2px 5px rgba(35,61,94,.04);
   backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-  transition: transform 380ms var(--motion-spring), box-shadow 300ms, background-color 240ms;
+  transition: box-shadow 300ms, background-color 240ms;
 }
 .academic-site .abstract[data-expanded="true"] .abstract-icon { background-color: rgba(131,161,198,.16); box-shadow: inset 0 1px 0 white, inset 0 -1px 1px #6586ad24, 0 3px 8px rgba(35,61,94,.06); }
 /* Focus follows the readable label as well as the small optical control. */

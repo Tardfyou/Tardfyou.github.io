@@ -102,9 +102,9 @@
 .code-disclosure > summary::-webkit-details-marker { display: none; }
 .code-disclosure > summary:focus-visible { outline-offset: -4px; }
 .code-disclosure .code-title { display: flex; align-items: center; min-width: 0; }
-.code-disclosure .code-toggle-icon { display: inline-flex; transition: transform 280ms var(--ios-motion-ease); }
-.code-disclosure[data-expanded=true] .code-toggle-icon,
-.code-disclosure[open]:not([data-expanded]) .code-toggle-icon { transform: rotate(90deg); }
+.code-disclosure .code-toggle-icon { display: inline-flex; }
+.code-disclosure[data-expanded=true] .code-toggle-icon > .link-icon,
+.code-disclosure[open]:not([data-expanded]) .code-toggle-icon > .link-icon { transform: rotate(90deg); }
 .single .content .code-block .code-disclosure > .highlight { max-height: none; transition: none; }
 .single .content .code-block .code-disclosure > .highlight::-webkit-scrollbar { height: .5rem; }
 .single .content .code-disclosure[open] > .code-header { background: darken($code-background-color, 3%); }
