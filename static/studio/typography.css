@@ -48,7 +48,7 @@
 @font-face { font-family: "Selected Playfair"; src: url("fonts/playfair-regular.woff2") format("woff2"); font-style: normal; font-weight: 400; font-display: swap; }
 @font-face { font-family: "Selected Playfair"; src: url("fonts/playfair-medium.woff2") format("woff2"); font-style: normal; font-weight: 500; font-display: swap; }
 @font-face { font-family: "Crimson Pro"; src: url("../academic-assets/fonts/crimson-pro-latin.woff2") format("woff2"); font-style: normal; font-weight: 400 700; font-display: swap; }
-@font-face { font-family: "Mea Culpa"; src: url("fonts/MeaCulpa-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
+@font-face { font-family: "Mea Culpa"; src: url("fonts/MeaCulpa-Regular.woff2") format("woff2"),url("fonts/MeaCulpa-Regular.ttf") format("truetype"); font-style: normal; font-weight: 400; font-display: swap; }
 
 /* Reading C03 + E07; section titles C08 + E09; display titles C09 + E08. */
 :root {
