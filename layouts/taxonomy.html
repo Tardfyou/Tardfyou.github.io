@@ -24,9 +24,9 @@
             {{- if gt (len $terms) 0 -}}
                 {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
             {{- else if eq .Data.Singular "tag" -}}
-                <i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+                {{ partial "studio-icon.html" "tag" }}{{ .Title -}}
             {{- else if eq .Data.Singular "category" -}}
-                <i class="far fa-folder-open" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+                {{ partial "studio-icon.html" "folder" }}{{ .Title -}}
             {{- else -}}
                 {{- .Title -}}
             {{- end -}}
@@ -42,8 +42,8 @@
                     <div class="card-item">
                         <div class="card-item-wrapper">
                             <h3 class="card-item-title">
-                                <a href="{{ .RelPermalink }}">
-                                    <i class="far fa-folder" aria-hidden="true"></i>&nbsp;{{ .Page.Title }}
+                                <a data-lens="chip" class="category-link" href="{{ .RelPermalink }}">
+                                    {{ partial "studio-icon.html" "folder" }}<span class="category-label">{{ .Page.Title }}</span>
                                 </a>
                             </h3>
                             {{- range first 5 $pages -}}
@@ -55,7 +55,7 @@
                             {{- end -}}
                             {{- if gt (len $pages) 5 -}}
                                 <span class="more-post">
-                                    <a href="{{ .RelPermalink }}" class="more-single-link">{{ T "more" }} >></a>
+                                    <a data-lens="chip" href="{{ .RelPermalink }}" class="more-single-link">{{ T "more" }} {{ partial "studio-icon.html" "chevron-right" }}</a>
                                 </span>
                             {{- end -}}
                         </div>

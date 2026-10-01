@@ -22,14 +22,14 @@
             {{- if gt (len $terms) 0 -}}
                 {{- .Params.Title | default (T $taxonomies) | default $taxonomies | dict "Some" | T "allSome" -}}
             {{- else -}}
-                <i class="fas fa-tag" aria-hidden="true"></i>&nbsp;{{ .Title -}}
+                {{ partial "studio-icon.html" "tag" }}{{ .Title -}}
             {{- end -}}
         </h2>
 
         {{- if gt (len $terms) 0 -}}
             <div class="tag-cloud-tags">
                 {{- range $.Site.Taxonomies.tags.ByCount -}}
-                    <a data-lens="chip" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <sup>{{ .Count }}</sup></a>
+                    <a data-lens="chip" href="{{ .Page.RelPermalink }}"><span class="tag-label">{{ .Page.Title }}</span> <sup>{{ .Count }}</sup></a>
                 {{- end -}}
             </div>
         {{- else if .Pages -}}
