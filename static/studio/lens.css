@@ -152,6 +152,35 @@ body #content > .article-table > table {
 body #content :is(table,.article-table) :is(thead,tbody,tr,th,td) { background: transparent; }
 body #content :is(table,.article-table) thead { background: #91aac60f; }
 body #content :is(table,.article-table) th { color: var(--studio-ink); border-bottom-color: #8da6c038; }
+/* Keep native scrolling and its hit area; a slim translucent thumb sits inside it. */
+body { --reading-scroll-thumb: #7893b76b; --reading-scroll-active: #456b99b8; }
+body[theme=dark] { --reading-scroll-thumb: #bed0e56b; --reading-scroll-active: #c7daf0ad; }
+body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table) {
+  --reading-scroll-color: var(--reading-scroll-thumb);
+}
+body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table):is(:hover,:focus-within) {
+  --reading-scroll-color: var(--reading-scroll-active);
+}
+body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table)::-webkit-scrollbar {
+  width: 8px; height: 8px;
+}
+body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table)::-webkit-scrollbar-track {
+  background: transparent; margin: 0 8px;
+}
+body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table)::-webkit-scrollbar-thumb {
+  border: 2px solid transparent; border-radius: 999px; background-color: var(--reading-scroll-color); background-clip: padding-box;
+}
+body #content > .article-table > table:focus-visible { outline: 2px solid #557ba9; outline-offset: -2px; }
+@supports not selector(::-webkit-scrollbar) {
+  body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table) {
+    scrollbar-width: thin; scrollbar-color: var(--reading-scroll-color) transparent;
+  }
+}
+@media (prefers-contrast: more), (prefers-reduced-transparency: reduce), (forced-colors: active) {
+  body { --reading-scroll-thumb: #526b8a; --reading-scroll-active: #244d7e; }
+  body[theme=dark] { --reading-scroll-thumb: #b9cbe1; --reading-scroll-active: #e0eaff; }
+  body #content :is(.code-block > .code-disclosure > .highlight,.article-table > table)::-webkit-scrollbar-thumb { border-width: 1px; }
+}
 body #toc-auto.article-glass { padding: 0 14px; border-left-width: 1px; position: absolute; }
 @media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
   body #content > :is(.article-glass,blockquote,table), body #toc-auto.article-glass {

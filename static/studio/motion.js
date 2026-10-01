@@ -9,6 +9,17 @@
     surface.className = 'article-glass article-table'; surface.dataset.lens = 'tile';
     surface.setAttribute('data-reveal', '');
     table.before(surface); surface.append(table);
+    // Only overflowing tables add a native keyboard stop; authored targets stay intact.
+    if (!table.hasAttribute('tabindex')) {
+      const syncKeyboardTarget = () => {
+        if (table.scrollWidth > table.clientWidth + 1) table.tabIndex = 0;
+        else table.removeAttribute('tabindex');
+      };
+      if ('ResizeObserver' in window) new ResizeObserver(syncKeyboardTarget).observe(table);
+      else addEventListener('resize', syncKeyboardTarget, { passive: true });
+      document.fonts?.ready.then(syncKeyboardTarget);
+      syncKeyboardTarget();
+    }
   });
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const reducedTransparency = matchMedia('(prefers-reduced-transparency: reduce)');
