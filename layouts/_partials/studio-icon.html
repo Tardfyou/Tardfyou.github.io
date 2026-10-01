@@ -20,6 +20,7 @@
   "chevron-right" `<path d="m9 6 6 6-6 6"/>`
   "chevron-left" `<path d="m15 6-6 6 6 6"/>`
   "chevron-up" `<path d="m6 15 6-6 6 6"/>`
+  "ellipsis" `<circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/>`
 -}}
-{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "comment" "petals" "chevron-right" "chevron-left" "chevron-up") . -}}
+{{- $action := in (slice "external" "mail" "folder" "calendar" "edit" "clock" "eye" "search" "clear" "loading" "globe" "comment" "petals" "chevron-right" "chevron-left" "chevron-up" "ellipsis") . -}}
 <svg class="{{ if $action }}link-icon link-icon--{{ . }}{{ else }}nav-icon{{ end }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">{{ index $icons . | safeHTML }}</svg>

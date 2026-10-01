@@ -21,7 +21,7 @@
     <details class="code-disclosure"{{ if le $lines $maxShownLines }} open{{ end }}>
         <summary class="code-header language-{{ $lang }}" data-pagefind-ignore aria-label="{{ if $isZh }}{{ $lang | default "文本" }}代码{{ else }}{{ $lang | default "Plain text" }} code{{ end }}">
             <span class="code-title"><span class="code-toggle-icon" aria-hidden="true">{{ partial "studio-icon.html" "chevron-right" }}</span></span>
-            <span class="ellipses" aria-hidden="true"><i class="fas fa-ellipsis-h"></i></span>
+            <span class="ellipses" aria-hidden="true">{{ partial "studio-icon.html" "ellipsis" }}</span>
         </summary>
         {{- $result -}}
     </details>

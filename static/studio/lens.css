@@ -132,7 +132,9 @@ body #content > .article-glass.lens-ready, body #toc-auto.article-glass.lens-rea
 }
 body #content > .article-glass > .code-disclosure { border-radius: inherit; }
 body #content > .article-glass :is(.code-header,.highlight,.highlight pre,.highlight code,.hl) { background: transparent; }
-body #content .code-block .highlight > pre:not(.chroma) > code { color: var(--studio-ink); }
+/* Block code inherits the reading ink; syntax tokens keep their own palette. */
+body #content .code-block .highlight pre > code { color: var(--studio-ink); }
+body #content .code-header .ellipses .link-icon { display: block; width: 16px; height: 16px; }
 body #content > .article-glass .code-header { border-bottom: 1px solid #8da6c026; color: var(--studio-copy); background: linear-gradient(180deg,#ffffff38,#91aac609); }
 body #content .code-toggle-icon { display: inline-grid; place-items: center; flex: 0 0 24px; width: 24px; height: 24px; border-radius: 50%; background: #93abc610; }
 body #content .code-toggle-icon .link-icon { width: 14px; height: 14px; opacity: .85; }
