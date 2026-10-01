@@ -332,7 +332,7 @@ body .archive .tag-cloud-tags > a[data-lens] > sup {
 }
 body .archive .categories-card { align-items: flex-start; }
 body .archive .categories-card .card-item,
-body .archive .categories-card .card-item-wrapper { overflow: visible; }
+body .archive .categories-card .card-item .card-item-wrapper { overflow: visible; }
 body .archive .categories-card .card-item:is(:hover,:active) { transform: none; }
 body .archive .categories-card .card-item::before { display: none; }
 body .archive .categories-card .card-item-title { display: block; }
